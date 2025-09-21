@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Emergence Simulator - User Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8f9fa;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            margin: 0;
+            color: #1e3c72;
+            font-size: 2.5em;
+        }
+        .header p {
+            margin: 10px 0 0;
+            color: #666;
+            font-size: 1.2em;
+        }
+        .nav-links {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .nav-links a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        .toc {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .toc h3 {
+            margin-top: 0;
+            color: #1e3c72;
+        }
+        .toc ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .toc li {
+            margin: 5px 0;
+        }
+        .toc a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        h2 {
+            color: #1e3c72;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        h3 {
+            color: #495057;
+            margin-top: 30px;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+        .highlight {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .badge {
+            background: #007bff;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .feature-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 20px;
+        }
+        .feature-card h4 {
+            margin-top: 0;
+            color: #1e3c72;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        .api-endpoint {
+            background: #f1f3f4;
+            border-left: 4px solid #34a853;
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .back-to-top:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📖 Emergence Simulator - User Guide</h1>
+            <p>Comprehensive documentation for morphic resonance research</p>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">🏠 Dashboard</a>
+            <a href="/viewer">👁️ Viewer</a>
+            <a href="/docs">📚 API Docs</a>
+        </div>
+
+        <div class="toc">
+            <h3>📋 Table of Contents</h3>
+            <ul>
+                <li><a href="#overview">🌟 Overview</a></li>
+                <li><a href="#quick-start">🚀 Quick Start</a></li>
+                <li><a href="#components">🏗️ Core Components</a></li>
+                <li><a href="#configuration">🔧 Configuration</a></li>
+                <li><a href="#usage">🎮 Usage Guide</a></li>
+                <li><a href="#api">📊 API Reference</a></li>
+                <li><a href="#research">🔬 Research Methods</a></li>
+                <li><a href="#troubleshooting">🛠️ Troubleshooting</a></li>
+            </ul>
+        </div>
+
+        <h2 id="overview">🌟 Overview</h2>
+        <p>The <strong>Emergence Simulator</strong> is a scientific research platform designed to test <strong>morphic resonance effects</strong> in artificial systems. It combines Conway's Game of Life with Large Language Model (LLM) decision-making to study emergent behaviors and memory crystal effects.</p>
+
+        <h3>What is Morphic Resonance?</h3>
+        <p>Morphic resonance is a hypothesis that suggests patterns of activity within a system are influenced by similar patterns from the system's past. In our simulator, this is implemented through:</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>🧠 Memory Crystals</h4>
+                <p>Store pattern information across simulations for persistent morphic field effects</p>
+            </div>
+            <div class="feature-card">
+                <h4>🔍 Similarity Detection</h4>
+                <p>Identifies when current patterns match stored ones using advanced algorithms</p>
+            </div>
+            <div class="feature-card">
+                <h4>⚡ Influence Mechanisms</h4>
+                <p>Allows stored patterns to affect cellular automata decisions in real-time</p>
+            </div>
+        </div>
+
+        <h2 id="quick-start">🚀 Quick Start</h2>
+
+        <h3>Prerequisites</h3>
+        <ul>
+            <li><strong>Python 3.8+</strong> (3.11-3.12 recommended, 3.13+ supported)</li>
+            <li><strong>Virtual environment support</strong></li>
+            <li><strong>Internet connection</strong> (for LLM API calls)</li>
+        </ul>
+
+        <h3>Installation & Setup</h3>
+        <div class="code-block">
+# 1. Complete environment setup
+./launcher.sh
+
+# 2. Start the server
+./run.sh
+
+# 3. Open your browser to:
+# http://localhost:8000 - Dashboard
+# http://localhost:8000/viewer - Interactive viewer
+# http://localhost:8000/docs - API documentation
+        </div>
+
+        <div class="success">
+            <strong>✅ First Run:</strong> The launcher will automatically detect your Python version and install compatible packages, including fallbacks for Python 3.13+.
+        </div>
+
+        <h3>First Simulation</h3>
+        <div class="code-block">
+# Run a quick morphic resonance test
+./training.sh --mode=morphic --generations=20 --crystal-count=3 --grid-size=15
+
+# Run a control simulation for comparison
+./training.sh --mode=control --generations=20 --grid-size=15
+
+# View results in the web interface or check results/ directory
+        </div>
+
+        <h2 id="components">🏗️ Core Components</h2>
+
+        <h3>1. Morphic Resonance Engine</h3>
+        <ul>
+            <li><strong>Memory Crystals</strong>: Persistent storage for significant patterns</li>
+            <li><strong>Pattern Matching</strong>: Identifies similarities between current and stored patterns</li>
+            <li><strong>Influence System</strong>: Enables stored patterns to affect new simulations</li>
+            <li><strong>Threshold Control</strong>: Configurable sensitivity for pattern recognition</li>
+        </ul>
+
+        <h3>2. Enhanced Conway's Game of Life</h3>
+        <ul>
+            <li><strong>Traditional Rules</strong>: Standard cellular automata foundation</li>
+            <li><strong>LLM Integration</strong>: AI-driven decisions for ambiguous situations</li>
+            <li><strong>Pattern Catalogs</strong>: Automatic identification of stable structures</li>
+            <li><strong>Adaptive Neighborhoods</strong>: Variable influence regions</li>
+        </ul>
+
+        <h3>3. LLM Decision Making</h3>
+        <ul>
+            <li><strong>OpenRouter Integration</strong>: Multiple model support (GPT-4, Claude, Llama)</li>
+            <li><strong>Context-Aware Prompts</strong>: Pattern history informs AI decisions</li>
+            <li><strong>Caching System</strong>: Optimized performance with response storage</li>
+            <li><strong>Fallback Mechanisms</strong>: Graceful degradation when LLM unavailable</li>
+        </ul>
+
+        <h2 id="configuration">🔧 Configuration</h2>
+
+        <h3>Environment File (.env)</h3>
+        <div class="code-block">
+# Database (choose one)
+DATABASE_URL=sqlite:///emergence.db                    # Local development
+# DATABASE_URL=postgresql://user:pass@host/dbname      # Production
+
+# LLM Configuration
+OPENROUTER_API_KEY=your_api_key_here                   # Required for LLM features
+DEFAULT_MODEL=meta-llama/llama-3-70b-instruct          # Default LLM model
+
+# Server Settings
+SECRET_KEY=your_secret_key_here                        # Change in production
+BASE_URL=http://localhost:8000                         # Server base URL
+LOG_LEVEL=INFO                                         # DEBUG, INFO, WARNING, ERROR
+
+# Optional
+REDIS_URL=redis://localhost:6379                       # Caching (if available)
+        </div>
+
+        <div class="highlight">
+            <strong>💡 LLM Models:</strong> Supports meta-llama/llama-3-70b-instruct ⭐ (recommended), anthropic/claude-3-sonnet, openai/gpt-4-turbo, google/gemini-pro, and more.
+        </div>
+
+        <h2 id="usage">🎮 Usage Guide</h2>
+
+        <h3>Basic Operations</h3>
+
+        <h4>Running Simulations</h4>
+        <div class="code-block">
+# Morphic simulation (with memory crystals)
+./training.sh --mode=morphic --generations=50 --crystal-count=5 --grid-size=20
+
+# Control simulation (standard Game of Life)
+./training.sh --mode=control --generations=50 --grid-size=20
+
+# Parameters:
+# --generations: Number of evolution steps (20-500)
+# --crystal-count: Number of memory crystals (3-15)
+# --grid-size: Grid dimensions (10-50)
+        </div>
+
+        <h4>Monitoring Simulations</h4>
+        <div class="code-block">
+# Watch real-time progress
+tail -f logs/*.log | grep -E "(influence|pattern|decision)"
+
+# Monitor results directory
+watch "ls -lt results/ | head -5"
+
+# Check system status
+curl http://localhost:8000/health
+        </div>
+
+        <h3>Research Workflow</h3>
+        <div class="code-block">
+#!/bin/bash
+# Create a comprehensive research study
+
+echo "🔬 Starting Morphic Resonance Research Study"
+mkdir -p research_$(date +%Y%m%d)
+cd research_$(date +%Y%m%d)
+
+# 1. Baseline Control Group (n=10)
+echo "Phase 1: Control Baseline"
+for i in {1..10}; do
+  echo "Control run $i/10"
+  ../training.sh --mode=control --generations=100 --grid-size=25
+  mv ../results/simulation_control_*.json control_$i.json
+done
+
+# 2. Morphic Test Group (n=10)
+echo "Phase 2: Morphic Tests"
+for i in {1..10}; do
+  echo "Morphic run $i/10"
+  ../training.sh --mode=morphic --generations=100 --crystal-count=8 --grid-size=25
+  mv ../results/simulation_morphic_*.json morphic_$i.json
+done
+
+echo "✅ Study complete! Results saved in $(pwd)"
+        </div>
+
+        <h2 id="api">📊 API Reference</h2>
+
+        <h3>Core Endpoints</h3>
+
+        <div class="api-endpoint">
+            <strong>POST</strong> /api/simulations/ - Create new simulation
+        </div>
+        <div class="api-endpoint">
+            <strong>GET</strong> /api/simulations/ - List all simulations
+        </div>
+        <div class="api-endpoint">
+            <strong>GET</strong> /api/simulations/{id} - Get simulation details
+        </div>
+        <div class="api-endpoint">
+            <strong>GET</strong> /api/crystals/ - List memory crystals
+        </div>
+        <div class="api-endpoint">
+            <strong>GET</strong> /api/analysis/compare - Compare simulations
+        </div>
+
+        <h3>System Endpoints</h3>
+        <div class="api-endpoint">
+            <strong>GET</strong> / - Dashboard homepage
+        </div>
+        <div class="api-endpoint">
+            <strong>GET</strong> /health - Health check
+        </div>
+        <div class="api-endpoint">
+            <strong>GET</strong> /docs - Interactive API documentation
+        </div>
+        <div class="api-endpoint">
+            <strong>GET</strong> /viewer - Interactive visualization
+        </div>
+
+        <h3>Example Usage</h3>
+        <div class="code-block">
+# Start a new morphic simulation
+curl -X POST http://localhost:8000/api/simulations/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "test_morphic",
+    "mode": "morphic",
+    "generations": 50,
+    "crystal_count": 5,
+    "grid_size": 20
+  }'
+
+# Get simulation status
+curl http://localhost:8000/api/simulations/simulation_id
+
+# List memory crystals
+curl http://localhost:8000/api/crystals/
+        </div>
+
+        <h2 id="research">🔬 Research Methods</h2>
+
+        <h3>Key Research Questions</h3>
+        <ol>
+            <li><strong>Do memory crystals influence pattern emergence?</strong><br>
+                Compare morphic vs control simulation outcomes</li>
+            <li><strong>Can artificial systems exhibit morphic resonance?</strong><br>
+                Analyze influence rates and pattern persistence</li>
+            <li><strong>What are optimal parameters for resonance detection?</strong><br>
+                Test crystal density, similarity thresholds, grid sizes</li>
+        </ol>
+
+        <h3>Expected Results</h3>
+        <div class="success">
+            <strong>Successful Morphic Implementation:</strong>
+            <ul>
+                <li>Influence Rate: 30-60% (vs 0% in control)</li>
+                <li>Similarity Correlation: 0.3-0.7</li>
+                <li>Pattern Storage: 5-50 patterns per crystal</li>
+                <li>LLM Activation: 5-20% of high-similarity events</li>
+            </ul>
+        </div>
+
+        <h2 id="troubleshooting">🛠️ Troubleshooting</h2>
+
+        <h3>Common Issues</h3>
+
+        <div class="warning">
+            <strong>⚠️ Installation Problems:</strong>
+            <div class="code-block">
+# Python 3.13+ build issues
+./launcher.sh  # Uses compatible packages automatically
+
+# Missing packages
+pip install requests  # Required for LLM calls
+
+# Permission errors
+chmod +x launcher.sh run.sh training.sh
+            </div>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Runtime Issues:</strong>
+            <div class="code-block">
+# Server won't start
+./run.sh  # Auto-detects available ports
+
+# No LLM responses
+echo $OPENROUTER_API_KEY  # Verify API key is set
+
+# Low influence rates
+# Increase crystal count or adjust similarity thresholds
+            </div>
+        </div>
+
+        <h3>Performance Optimization</h3>
+        <div class="code-block">
+# Use PostgreSQL for large studies
+export DATABASE_URL="postgresql://user:pass@host/db"
+
+# Reduce logging overhead
+export LOG_LEVEL="WARNING"
+
+# Parallel processing
+./training.sh ... &
+./training.sh ... &
+wait
+        </div>
+
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #e9ecef;">
+
+        <div style="text-align: center; color: #666; margin-top: 40px;">
+            <p><strong>🎯 Quick Reference</strong></p>
+            <p>
+                <code>./launcher.sh</code> (setup) •
+                <code>./run.sh</code> (start) •
+                <code>./training.sh --help</code> (options) •
+                <code>curl /health</code> (status)
+            </p>
+            <p style="font-size: 0.9em; margin-top: 20px;">
+                <em>Happy researching! 🧬</em>
+            </p>
+        </div>
+    </div>
+
+    <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Back to top">
+        ↑
+    </button>
+</body>
+</html>

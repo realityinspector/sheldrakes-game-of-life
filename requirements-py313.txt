@@ -1,0 +1,48 @@
+# Python 3.13+ Compatible Requirements
+# Core web framework - NO SCIPY DEPENDENCIES!
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+
+# Data validation (compatible versions for 3.13)
+pydantic==2.9.0
+pydantic-settings==2.6.0
+
+# Database (dual SQLite/PostgreSQL support)
+sqlalchemy==2.0.36
+greenlet==3.1.1
+# SQLite async support
+aiosqlite==0.20.0
+# PostgreSQL support - SKIP for 3.13+ due to build issues
+# asyncpg==0.29.0  # Comment out problematic package
+
+# HTTP and LLM
+httpx==0.27.2
+requests==2.32.3
+openai==1.51.0
+tenacity==9.0.0
+
+# Utilities
+click==8.1.7
+rich==13.9.4
+python-dotenv==1.0.1
+markdown==3.7.0
+
+# Testing (basic only)
+pytest==8.3.3
+pytest-asyncio==0.24.0
+
+# Analysis and visualization packages (for compare.sh)
+numpy==2.1.1
+matplotlib==3.9.2
+# pandas==2.2.2  # Comment out problematic package for now
+scikit-learn==1.5.2
+seaborn==0.13.2
+plotly==5.24.1
+
+# Alternative lightweight packages for Python 3.13
+polars==1.12.0  # Alternative to pandas
+duckdb==1.1.3   # Alternative database engine
+
+# NOTE: asyncpg and pandas commented out due to Python 3.13 build issues
+# Use polars instead of pandas for data manipulation
+# Use aiosqlite instead of asyncpg for async database operations

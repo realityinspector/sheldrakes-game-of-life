@@ -1,0 +1,49 @@
+{
+  "study_name": "Morphic Resonance Parameter Sweep",
+  "description": "Comparative analysis of emergence events across parameter ranges",
+  "timestamp": "auto",
+  
+  "parameter_ranges": {
+    "generations": [100, 200],
+    "crystal_count": [3, 5],
+    "grid_size": [20, 25],
+    "initial_density": [0.4, 0.5]
+  },
+  
+  "simulation_types": {
+    "morphic": {
+      "enabled": true,
+      "description": "LLM-enhanced with morphic resonance"
+    },
+    "llm_control": {
+      "enabled": true,
+      "description": "LLM-enhanced without morphic resonance"
+    },
+    "classical": {
+      "enabled": true,
+      "description": "Pure Conway's Game of Life rules"
+    }
+  },
+  
+  "sampling": {
+    "mode": "grid",
+    "max_combinations": 16,
+    "random_seed": 42
+  },
+  
+  "analysis": {
+    "emergence_threshold": 1.5,
+    "stability_window": 20,
+    "clustering": {
+      "algorithm": "kmeans",
+      "n_clusters": 5
+    }
+  },
+  
+  "output": {
+    "save_raw_data": true,
+    "generate_plots": true,
+    "create_report": true,
+    "plot_formats": ["png", "svg"]
+  }
+}

@@ -1,0 +1,1 @@
+# Core modules for pattern-based morphic resonance
