@@ -1,0 +1,42 @@
+{
+  "mode": "control",
+  "grid_size": 10,
+  "generations": 5,
+  "initial_population": 43,
+  "generation_data": [
+    {
+      "generation": 0,
+      "population": 33,
+      "timestamp": "2025-09-18T16:33:23.573802"
+    },
+    {
+      "generation": 1,
+      "population": 27,
+      "timestamp": "2025-09-18T16:33:23.574229"
+    },
+    {
+      "generation": 2,
+      "population": 33,
+      "timestamp": "2025-09-18T16:33:23.574687"
+    },
+    {
+      "generation": 3,
+      "population": 28,
+      "timestamp": "2025-09-18T16:33:23.575048"
+    },
+    {
+      "generation": 4,
+      "population": 34,
+      "timestamp": "2025-09-18T16:33:23.575449"
+    }
+  ],
+  "crystals": [],
+  "stability_score": 0,
+  "complexity_score": 0.8,
+  "emergence_events": 0,
+  "morphic_influences": [],
+  "final_population": 34,
+  "max_population": 34,
+  "min_population": 27,
+  "avg_population": 31.0
+}

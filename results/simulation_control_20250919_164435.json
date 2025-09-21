@@ -1,0 +1,267 @@
+{
+  "mode": "control",
+  "grid_size": 20,
+  "generations": 50,
+  "initial_population": 186,
+  "generation_data": [
+    {
+      "generation": 0,
+      "population": 124,
+      "timestamp": "2025-09-19T16:44:35.392647"
+    },
+    {
+      "generation": 1,
+      "population": 108,
+      "timestamp": "2025-09-19T16:44:35.395201"
+    },
+    {
+      "generation": 2,
+      "population": 113,
+      "timestamp": "2025-09-19T16:44:35.397245"
+    },
+    {
+      "generation": 3,
+      "population": 102,
+      "timestamp": "2025-09-19T16:44:35.398912"
+    },
+    {
+      "generation": 4,
+      "population": 117,
+      "timestamp": "2025-09-19T16:44:35.401004"
+    },
+    {
+      "generation": 5,
+      "population": 105,
+      "timestamp": "2025-09-19T16:44:35.402588"
+    },
+    {
+      "generation": 6,
+      "population": 105,
+      "timestamp": "2025-09-19T16:44:35.404751"
+    },
+    {
+      "generation": 7,
+      "population": 96,
+      "timestamp": "2025-09-19T16:44:35.405791"
+    },
+    {
+      "generation": 8,
+      "population": 92,
+      "timestamp": "2025-09-19T16:44:35.406732"
+    },
+    {
+      "generation": 9,
+      "population": 96,
+      "timestamp": "2025-09-19T16:44:35.407660"
+    },
+    {
+      "generation": 10,
+      "population": 80,
+      "timestamp": "2025-09-19T16:44:35.409510"
+    },
+    {
+      "generation": 11,
+      "population": 75,
+      "timestamp": "2025-09-19T16:44:35.410473"
+    },
+    {
+      "generation": 12,
+      "population": 82,
+      "timestamp": "2025-09-19T16:44:35.411375"
+    },
+    {
+      "generation": 13,
+      "population": 68,
+      "timestamp": "2025-09-19T16:44:35.412307"
+    },
+    {
+      "generation": 14,
+      "population": 60,
+      "timestamp": "2025-09-19T16:44:35.413226"
+    },
+    {
+      "generation": 15,
+      "population": 63,
+      "timestamp": "2025-09-19T16:44:35.414829"
+    },
+    {
+      "generation": 16,
+      "population": 55,
+      "timestamp": "2025-09-19T16:44:35.416006"
+    },
+    {
+      "generation": 17,
+      "population": 64,
+      "timestamp": "2025-09-19T16:44:35.417025"
+    },
+    {
+      "generation": 18,
+      "population": 51,
+      "timestamp": "2025-09-19T16:44:35.419079"
+    },
+    {
+      "generation": 19,
+      "population": 53,
+      "timestamp": "2025-09-19T16:44:35.420615"
+    },
+    {
+      "generation": 20,
+      "population": 48,
+      "timestamp": "2025-09-19T16:44:35.421551"
+    },
+    {
+      "generation": 21,
+      "population": 49,
+      "timestamp": "2025-09-19T16:44:35.423819"
+    },
+    {
+      "generation": 22,
+      "population": 49,
+      "timestamp": "2025-09-19T16:44:35.425279"
+    },
+    {
+      "generation": 23,
+      "population": 49,
+      "timestamp": "2025-09-19T16:44:35.426568"
+    },
+    {
+      "generation": 24,
+      "population": 47,
+      "timestamp": "2025-09-19T16:44:35.427767"
+    },
+    {
+      "generation": 25,
+      "population": 55,
+      "timestamp": "2025-09-19T16:44:35.428872"
+    },
+    {
+      "generation": 26,
+      "population": 58,
+      "timestamp": "2025-09-19T16:44:35.429823"
+    },
+    {
+      "generation": 27,
+      "population": 52,
+      "timestamp": "2025-09-19T16:44:35.431201"
+    },
+    {
+      "generation": 28,
+      "population": 48,
+      "timestamp": "2025-09-19T16:44:35.432531"
+    },
+    {
+      "generation": 29,
+      "population": 54,
+      "timestamp": "2025-09-19T16:44:35.433588"
+    },
+    {
+      "generation": 30,
+      "population": 50,
+      "timestamp": "2025-09-19T16:44:35.434493"
+    },
+    {
+      "generation": 31,
+      "population": 58,
+      "timestamp": "2025-09-19T16:44:35.435853"
+    },
+    {
+      "generation": 32,
+      "population": 55,
+      "timestamp": "2025-09-19T16:44:35.437527"
+    },
+    {
+      "generation": 33,
+      "population": 53,
+      "timestamp": "2025-09-19T16:44:35.438504"
+    },
+    {
+      "generation": 34,
+      "population": 63,
+      "timestamp": "2025-09-19T16:44:35.439409"
+    },
+    {
+      "generation": 35,
+      "population": 66,
+      "timestamp": "2025-09-19T16:44:35.440632"
+    },
+    {
+      "generation": 36,
+      "population": 77,
+      "timestamp": "2025-09-19T16:44:35.443323"
+    },
+    {
+      "generation": 37,
+      "population": 85,
+      "timestamp": "2025-09-19T16:44:35.445494"
+    },
+    {
+      "generation": 38,
+      "population": 70,
+      "timestamp": "2025-09-19T16:44:35.446864"
+    },
+    {
+      "generation": 39,
+      "population": 71,
+      "timestamp": "2025-09-19T16:44:35.448374"
+    },
+    {
+      "generation": 40,
+      "population": 70,
+      "timestamp": "2025-09-19T16:44:35.449965"
+    },
+    {
+      "generation": 41,
+      "population": 68,
+      "timestamp": "2025-09-19T16:44:35.452349"
+    },
+    {
+      "generation": 42,
+      "population": 67,
+      "timestamp": "2025-09-19T16:44:35.453662"
+    },
+    {
+      "generation": 43,
+      "population": 59,
+      "timestamp": "2025-09-19T16:44:35.456102"
+    },
+    {
+      "generation": 44,
+      "population": 53,
+      "timestamp": "2025-09-19T16:44:35.457332"
+    },
+    {
+      "generation": 45,
+      "population": 58,
+      "timestamp": "2025-09-19T16:44:35.459668"
+    },
+    {
+      "generation": 46,
+      "population": 53,
+      "timestamp": "2025-09-19T16:44:35.461437"
+    },
+    {
+      "generation": 47,
+      "population": 62,
+      "timestamp": "2025-09-19T16:44:35.462722"
+    },
+    {
+      "generation": 48,
+      "population": 61,
+      "timestamp": "2025-09-19T16:44:35.464206"
+    },
+    {
+      "generation": 49,
+      "population": 65,
+      "timestamp": "2025-09-19T16:44:35.465276"
+    }
+  ],
+  "crystals": [],
+  "stability_score": 0,
+  "complexity_score": 0.7,
+  "emergence_events": 0,
+  "morphic_influences": [],
+  "final_population": 65,
+  "max_population": 124,
+  "min_population": 47,
+  "avg_population": 69.64
+}

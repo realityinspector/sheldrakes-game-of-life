@@ -1,0 +1,3454 @@
+{
+  "mode": "morphic",
+  "grid_size": 10,
+  "generations": 5,
+  "initial_population": 55,
+  "generation_data": [
+    {
+      "generation": 0,
+      "population": 35,
+      "timestamp": "2025-09-20T00:52:26.078091"
+    },
+    {
+      "generation": 1,
+      "population": 34,
+      "timestamp": "2025-09-20T00:52:26.096227"
+    },
+    {
+      "generation": 2,
+      "population": 28,
+      "timestamp": "2025-09-20T00:52:26.123499"
+    },
+    {
+      "generation": 3,
+      "population": 32,
+      "timestamp": "2025-09-20T00:52:26.149146"
+    },
+    {
+      "generation": 4,
+      "population": 28,
+      "timestamp": "2025-09-20T00:52:26.162562"
+    }
+  ],
+  "crystals": [
+    {
+      "id": 1,
+      "patterns": [],
+      "strength": 0.5520425242445971,
+      "created": "2025-09-20T00:52:26.077459",
+      "activation_history": [],
+      "total_successes": 0,
+      "total_trials": 0,
+      "markov_predictor_summary": {
+        "type": "MarkovPatternPredictor",
+        "transitions_count": 4
+      }
+    },
+    {
+      "id": 2,
+      "patterns": [
+        {
+          "generation": 0,
+          "grid": [
+            [
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              1
+            ]
+          ],
+          "subpatterns": [
+            [
+              [
+                0,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ],
+              [
+                1,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                1,
+                1,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                1,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                1,
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                1,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                1,
+                1,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                1,
+                1,
+                1,
+                1,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                1,
+                1,
+                1,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                1,
+                1,
+                1,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ]
+            ]
+          ],
+          "population": 35,
+          "activity_score": 0.35,
+          "timestamp": "2025-09-20T00:52:26.078036",
+          "outcome": "dynamic"
+        }
+      ],
+      "strength": 0.2509366748644235,
+      "created": "2025-09-20T00:52:26.077473",
+      "activation_history": [
+        {
+          "timestamp": "2025-09-20T00:52:26.078087",
+          "emergent": false,
+          "posterior": 0.2509366748644235
+        },
+        {
+          "generation": 1,
+          "position": [
+            1,
+            2
+          ],
+          "similarity": 0.4894117647058823,
+          "influenced": true,
+          "decision_changed": false
+        },
+        {
+          "generation": 1,
+          "position": [
+            7,
+            7
+          ],
+          "similarity": 0.4449673202614379,
+          "influenced": true,
+          "decision_changed": false
+        },
+        {
+          "generation": 2,
+          "position": [
+            1,
+            2
+          ],
+          "similarity": 0.33385620915032677,
+          "influenced": true,
+          "decision_changed": false
+        },
+        {
+          "generation": 2,
+          "position": [
+            1,
+            5
+          ],
+          "similarity": 0.44549019607843143,
+          "influenced": true,
+          "decision_changed": false
+        },
+        {
+          "generation": 4,
+          "position": [
+            4,
+            1
+          ],
+          "similarity": 0.37777777777777777,
+          "influenced": true,
+          "decision_changed": false
+        }
+      ],
+      "total_successes": 0,
+      "total_trials": 1,
+      "markov_predictor_summary": {
+        "type": "MarkovPatternPredictor",
+        "transitions_count": 4
+      }
+    }
+  ],
+  "stability_score": 0,
+  "complexity_score": 0.8,
+  "emergence_events": 0,
+  "morphic_influences": [
+    {
+      "generation": 1,
+      "position": [
+        0,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.13399034372368587,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5339607843137254,
+      "total_influence": 0.13399034372368587,
+      "influence_probability": 0.13399034372368587,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        0,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1451430848287714,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5784052287581699,
+      "total_influence": 0.1451430848287714,
+      "influence_probability": 0.1451430848287714,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        0,
+        2
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.1451430848287714,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5784052287581699,
+      "total_influence": 0.1451430848287714,
+      "influence_probability": 0.1451430848287714,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        0,
+        3
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.15071945538131412,
+      "reason": "morphic_influence",
+      "top_similarity": 0.6006274509803922,
+      "total_influence": 0.15071945538131412,
+      "influence_probability": 0.15071945538131412,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        0,
+        4
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10730342750794561,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4276115779645191,
+      "total_influence": 0.10730342750794561,
+      "influence_probability": 0.10730342750794561,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        0,
+        5
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.12094561975255912,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4819766573295985,
+      "total_influence": 0.12094561975255912,
+      "influence_probability": 0.12094561975255912,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        1,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.13399034372368587,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5339607843137254,
+      "total_influence": 0.13399034372368587,
+      "influence_probability": 0.13399034372368587,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        1,
+        1
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.13683101248751062,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5452810457516339,
+      "total_influence": 0.13683101248751062,
+      "influence_probability": 0.13683101248751062,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        1,
+        2
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.13702782556583562,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5460653594771241,
+      "total_influence": 0.13702782556583562,
+      "influence_probability": 0.13702782556583562,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        1,
+        3
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.14684223773831084,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5851764705882352,
+      "total_influence": 0.14684223773831084,
+      "influence_probability": 0.14684223773831084,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        1,
+        4
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10537278493009046,
+      "reason": "morphic_influence",
+      "top_similarity": 0.41991783380018666,
+      "total_influence": 0.10537278493009046,
+      "influence_probability": 0.10537278493009046,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        1,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1183418295865756,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4716003734827264,
+      "total_influence": 0.1183418295865756,
+      "influence_probability": 0.1183418295865756,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        2,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.13399034372368587,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5339607843137254,
+      "total_influence": 0.13399034372368587,
+      "influence_probability": 0.13399034372368587,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        2,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.13683101248751062,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5452810457516339,
+      "total_influence": 0.13683101248751062,
+      "influence_probability": 0.13683101248751062,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        2,
+        2
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.13702782556583562,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5460653594771241,
+      "total_influence": 0.13702782556583562,
+      "influence_probability": 0.13702782556583562,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        2,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.14684223773831084,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5851764705882352,
+      "total_influence": 0.14684223773831084,
+      "influence_probability": 0.14684223773831084,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        2,
+        4
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1100330374632869,
+      "reason": "morphic_influence",
+      "top_similarity": 0.43848926237161523,
+      "total_influence": 0.1100330374632869,
+      "influence_probability": 0.1100330374632869,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        2,
+        5
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.12264360115568,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4887432306255835,
+      "total_influence": 0.12264360115568,
+      "influence_probability": 0.12264360115568,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        2,
+        7
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10013357392482121,
+      "reason": "morphic_influence",
+      "top_similarity": 0.39903921568627443,
+      "total_influence": 0.10013357392482121,
+      "influence_probability": 0.10013357392482121,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        3,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.13399034372368587,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5339607843137254,
+      "total_influence": 0.13399034372368587,
+      "influence_probability": 0.13399034372368587,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        3,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.13838583580627842,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5514771241830065,
+      "total_influence": 0.13838583580627842,
+      "influence_probability": 0.13838583580627842,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        3,
+        2
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.13853344561502218,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5520653594771241,
+      "total_influence": 0.13853344561502218,
+      "influence_probability": 0.13853344561502218,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        3,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1418644734940615,
+      "reason": "morphic_influence",
+      "top_similarity": 0.5653397358943577,
+      "total_influence": 0.1418644734940615,
+      "influence_probability": 0.1418644734940615,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        3,
+        4
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11001748432092949,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4384272820239207,
+      "total_influence": 0.11001748432092949,
+      "influence_probability": 0.11001748432092949,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        3,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1189366424455135,
+      "reason": "morphic_influence",
+      "top_similarity": 0.47397074385309673,
+      "total_influence": 0.1189366424455135,
+      "influence_probability": 0.1189366424455135,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        3,
+        7
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10224861161296421,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4074677871148459,
+      "total_influence": 0.10224861161296421,
+      "influence_probability": 0.10224861161296421,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        5,
+        7
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.11007380588665425,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4386517273576097,
+      "total_influence": 0.11007380588665425,
+      "influence_probability": 0.11007380588665425,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        5,
+        8
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10842479345183087,
+      "reason": "morphic_influence",
+      "top_similarity": 0.43208029878618104,
+      "total_influence": 0.10842479345183087,
+      "influence_probability": 0.10842479345183087,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        5,
+        9
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10421650809493088,
+      "reason": "morphic_influence",
+      "top_similarity": 0.41530999066293184,
+      "total_influence": 0.10421650809493088,
+      "influence_probability": 0.10421650809493088,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        7,
+        1
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.1005780434600386,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4008104575163398,
+      "total_influence": 0.1005780434600386,
+      "influence_probability": 0.1005780434600386,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        7,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10176641957106787,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4055462184873949,
+      "total_influence": 0.10176641957106787,
+      "influence_probability": 0.10176641957106787,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        7,
+        4
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10137607363238989,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4039906629318394,
+      "total_influence": 0.10137607363238989,
+      "influence_probability": 0.10137607363238989,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        7,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10814738073190606,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4309747899159663,
+      "total_influence": 0.10814738073190606,
+      "influence_probability": 0.10814738073190606,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        7,
+        6
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10904756626395941,
+      "reason": "morphic_influence",
+      "top_similarity": 0.43456209150326797,
+      "total_influence": 0.10904756626395941,
+      "influence_probability": 0.10904756626395941,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        7,
+        7
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10444706055811165,
+      "reason": "morphic_influence",
+      "top_similarity": 0.41622875816993465,
+      "total_influence": 0.10444706055811165,
+      "influence_probability": 0.10444706055811165,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        7,
+        8
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10453070611639975,
+      "reason": "morphic_influence",
+      "top_similarity": 0.41656209150326784,
+      "total_influence": 0.10453070611639975,
+      "influence_probability": 0.10453070611639975,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        7,
+        9
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10026232248022553,
+      "reason": "morphic_influence",
+      "top_similarity": 0.39955228758169936,
+      "total_influence": 0.10026232248022553,
+      "influence_probability": 0.10026232248022553,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        9,
+        7
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10653573935183609,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4245522875816993,
+      "total_influence": 0.10653573935183609,
+      "influence_probability": 0.10653573935183609,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 1,
+      "position": [
+        9,
+        9
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10496738513393346,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4183022875816993,
+      "total_influence": 0.10496738513393346,
+      "influence_probability": 0.10496738513393346,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        0,
+        1
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10582967243334504,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4217385620915033,
+      "total_influence": 0.10582967243334504,
+      "influence_probability": 0.10582967243334504,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        0,
+        2
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1064570141205061,
+      "reason": "morphic_influence",
+      "top_similarity": 0.42423856209150324,
+      "total_influence": 0.1064570141205061,
+      "influence_probability": 0.1064570141205061,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        0,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11526967115443526,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4593576097105509,
+      "total_influence": 0.11526967115443526,
+      "influence_probability": 0.11526967115443526,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        0,
+        5
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.112502338692415,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4483295985060691,
+      "total_influence": 0.112502338692415,
+      "influence_probability": 0.112502338692415,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        0,
+        7
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10219601097476903,
+      "reason": "morphic_influence",
+      "top_similarity": 0.40725816993464053,
+      "total_influence": 0.10219601097476903,
+      "influence_probability": 0.10219601097476903,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        1,
+        1
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10517034862095616,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4191111111111111,
+      "total_influence": 0.10517034862095616,
+      "influence_probability": 0.10517034862095616,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        1,
+        2
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10632170512915763,
+      "reason": "morphic_influence",
+      "top_similarity": 0.42369934640522877,
+      "total_influence": 0.10632170512915763,
+      "influence_probability": 0.10632170512915763,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        1,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1138910424010251,
+      "reason": "morphic_influence",
+      "top_similarity": 0.45386367880485523,
+      "total_influence": 0.1138910424010251,
+      "influence_probability": 0.1138910424010251,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        1,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11324999408876642,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4513090569561158,
+      "total_influence": 0.11324999408876642,
+      "influence_probability": 0.11324999408876642,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        2,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10088064356796334,
+      "reason": "morphic_influence",
+      "top_similarity": 0.402016339869281,
+      "total_influence": 0.10088064356796334,
+      "influence_probability": 0.10088064356796334,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        2,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10622329858999512,
+      "reason": "morphic_influence",
+      "top_similarity": 0.42330718954248364,
+      "total_influence": 0.10622329858999512,
+      "influence_probability": 0.10622329858999512,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        2,
+        2
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10553445281585748,
+      "reason": "morphic_influence",
+      "top_similarity": 0.42056209150326795,
+      "total_influence": 0.10553445281585748,
+      "influence_probability": 0.10553445281585748,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        2,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1117401566164729,
+      "reason": "morphic_influence",
+      "top_similarity": 0.44529225023342667,
+      "total_influence": 0.1117401566164729,
+      "influence_probability": 0.1117401566164729,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        2,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1100236654119381,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4384519140989729,
+      "total_influence": 0.1100236654119381,
+      "influence_probability": 0.1100236654119381,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        3,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10132874477307839,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4038020541549953,
+      "total_influence": 0.10132874477307839,
+      "influence_probability": 0.10132874477307839,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        3,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10694026051817918,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4261643323996265,
+      "total_influence": 0.10694026051817918,
+      "influence_probability": 0.10694026051817918,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        3,
+        2
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10672938936283093,
+      "reason": "morphic_influence",
+      "top_similarity": 0.42532399626517275,
+      "total_influence": 0.10672938936283093,
+      "influence_probability": 0.10672938936283093,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        3,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11023643329196409,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4392998088124138,
+      "total_influence": 0.11023643329196409,
+      "influence_probability": 0.11023643329196409,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        3,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10760496210288964,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4288132141745587,
+      "total_influence": 0.10760496210288964,
+      "influence_probability": 0.10760496210288964,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        4,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.123256767615176,
+      "reason": "morphic_influence",
+      "top_similarity": 0.49118674136321194,
+      "total_influence": 0.123256767615176,
+      "influence_probability": 0.123256767615176,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        4,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11613611730163287,
+      "reason": "morphic_influence",
+      "top_similarity": 0.46281045751633987,
+      "total_influence": 0.11613611730163287,
+      "influence_probability": 0.11613611730163287,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        4,
+        2
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11331747285847786,
+      "reason": "morphic_influence",
+      "top_similarity": 0.451577964519141,
+      "total_influence": 0.11331747285847786,
+      "influence_probability": 0.11331747285847786,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        4,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11467476903786547,
+      "reason": "morphic_influence",
+      "top_similarity": 0.45698688364234585,
+      "total_influence": 0.11467476903786547,
+      "influence_probability": 0.11467476903786547,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        4,
+        4
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10920753825472042,
+      "reason": "morphic_influence",
+      "top_similarity": 0.43519959094749006,
+      "total_influence": 0.10920753825472042,
+      "influence_probability": 0.10920753825472042,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        5,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10134959758732949,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4038851540616246,
+      "total_influence": 0.10134959758732949,
+      "influence_probability": 0.10134959758732949,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        8,
+        4
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10821907692472447,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4312605042016806,
+      "total_influence": 0.10821907692472447,
+      "influence_probability": 0.10821907692472447,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        9,
+        7
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10122916672749727,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4034052287581699,
+      "total_influence": 0.10122916672749727,
+      "influence_probability": 0.10122916672749727,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 2,
+      "position": [
+        9,
+        8
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10401735200376865,
+      "reason": "morphic_influence",
+      "top_similarity": 0.41451633986928105,
+      "total_influence": 0.10401735200376865,
+      "influence_probability": 0.10401735200376865,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        0,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10198689707904866,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4064248366013072,
+      "total_influence": 0.10198689707904866,
+      "influence_probability": 0.10198689707904866,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        0,
+        2
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10018359724889551,
+      "reason": "morphic_influence",
+      "top_similarity": 0.39923856209150327,
+      "total_influence": 0.10018359724889551,
+      "influence_probability": 0.10018359724889551,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        0,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10720384946236451,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4272147525676938,
+      "total_influence": 0.10720384946236451,
+      "influence_probability": 0.10720384946236451,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        0,
+        4
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10720384946236451,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4272147525676938,
+      "total_influence": 0.10720384946236451,
+      "influence_probability": 0.10720384946236451,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        0,
+        5
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.112581063923745,
+      "reason": "morphic_influence",
+      "top_similarity": 0.44864332399626516,
+      "total_influence": 0.112581063923745,
+      "influence_probability": 0.112581063923745,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        0,
+        6
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10451524223167424,
+      "reason": "morphic_influence",
+      "top_similarity": 0.416500466853408,
+      "total_influence": 0.10451524223167424,
+      "influence_probability": 0.10451524223167424,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        1,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10190817184771865,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4061111111111111,
+      "total_influence": 0.10190817184771865,
+      "influence_probability": 0.10190817184771865,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        1,
+        1
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10070269174297779,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4013071895424836,
+      "total_influence": 0.10070269174297779,
+      "influence_probability": 0.10070269174297779,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        1,
+        4
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10122330919540426,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4033818860877684,
+      "total_influence": 0.10122330919540426,
+      "influence_probability": 0.10122330919540426,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        1,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10442714494899541,
+      "reason": "morphic_influence",
+      "top_similarity": 0.41614939309056953,
+      "total_influence": 0.10442714494899541,
+      "influence_probability": 0.10442714494899541,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        2,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10629956365784606,
+      "reason": "morphic_influence",
+      "top_similarity": 0.42361111111111105,
+      "total_influence": 0.10629956365784606,
+      "influence_probability": 0.10629956365784606,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        2,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10225751506174559,
+      "reason": "morphic_influence",
+      "top_similarity": 0.40750326797385616,
+      "total_influence": 0.10225751506174559,
+      "influence_probability": 0.10225751506174559,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        2,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10174767546837024,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4054715219421101,
+      "total_influence": 0.10174767546837024,
+      "influence_probability": 0.10174767546837024,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        2,
+        4
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10409115690814054,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4148104575163399,
+      "total_influence": 0.10409115690814054,
+      "influence_probability": 0.10409115690814054,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        2,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10693651169763965,
+      "reason": "morphic_influence",
+      "top_similarity": 0.42614939309056954,
+      "total_influence": 0.10693651169763965,
+      "influence_probability": 0.10693651169763965,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        2,
+        6
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10177438581471437,
+      "reason": "morphic_influence",
+      "top_similarity": 0.40557796451914097,
+      "total_influence": 0.10177438581471437,
+      "influence_probability": 0.10177438581471437,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        3,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10674766486296111,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4253968253968254,
+      "total_influence": 0.10674766486296111,
+      "influence_probability": 0.10674766486296111,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        3,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1033329579540217,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4117889822595705,
+      "total_influence": 0.1033329579540217,
+      "influence_probability": 0.1033329579540217,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        3,
+        4
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1000350892852308,
+      "reason": "morphic_influence",
+      "top_similarity": 0.39864674758792407,
+      "total_influence": 0.1000350892852308,
+      "influence_probability": 0.1000350892852308,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        3,
+        5
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10105932061120805,
+      "reason": "morphic_influence",
+      "top_similarity": 0.40272838024098534,
+      "total_influence": 0.10105932061120805,
+      "influence_probability": 0.10105932061120805,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        4,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10107171626483724,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4027777777777778,
+      "total_influence": 0.10107171626483724,
+      "influence_probability": 0.10107171626483724,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        5,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11228232978700164,
+      "reason": "morphic_influence",
+      "top_similarity": 0.447452847805789,
+      "total_influence": 0.11228232978700164,
+      "influence_probability": 0.11228232978700164,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        5,
+        4
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10160405993865372,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4048992041260949,
+      "total_influence": 0.10160405993865372,
+      "influence_probability": 0.10160405993865372,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        7,
+        7
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10004172782160287,
+      "reason": "morphic_influence",
+      "top_similarity": 0.39867320261437905,
+      "total_influence": 0.10004172782160287,
+      "influence_probability": 0.10004172782160287,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        7,
+        8
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1031366134782641,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4110065359477124,
+      "total_influence": 0.1031366134782641,
+      "influence_probability": 0.1031366134782641,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        7,
+        9
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.11524881834018413,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4592745098039215,
+      "total_influence": 0.11524881834018413,
+      "influence_probability": 0.11524881834018413,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        8,
+        1
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10041075234346233,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4001437908496732,
+      "total_influence": 0.10041075234346233,
+      "influence_probability": 0.10041075234346233,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        9,
+        3
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10180578218673289,
+      "reason": "morphic_influence",
+      "top_similarity": 0.405703081232493,
+      "total_influence": 0.10180578218673289,
+      "influence_probability": 0.10180578218673289,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        9,
+        4
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10997118192438476,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4382427637721755,
+      "total_influence": 0.10997118192438476,
+      "influence_probability": 0.10997118192438476,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        9,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10449438941742314,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4164173669467787,
+      "total_influence": 0.10449438941742314,
+      "influence_probability": 0.10449438941742314,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        9,
+        6
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11534839638576527,
+      "reason": "morphic_influence",
+      "top_similarity": 0.459671335200747,
+      "total_influence": 0.11534839638576527,
+      "influence_probability": 0.11534839638576527,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        9,
+        7
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11203338467304884,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4464607843137255,
+      "total_influence": 0.11203338467304884,
+      "influence_probability": 0.11203338467304884,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 3,
+      "position": [
+        9,
+        8
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.12164360327676184,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4847581699346405,
+      "total_influence": 0.12164360327676184,
+      "influence_probability": 0.12164360327676184,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        4,
+        0
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11795827838512551,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4700718954248366,
+      "total_influence": 0.11795827838512551,
+      "influence_probability": 0.11795827838512551,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        4,
+        1
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11027952241376066,
+      "reason": "morphic_influence",
+      "top_similarity": 0.43947152194211014,
+      "total_influence": 0.11027952241376066,
+      "influence_probability": 0.11027952241376066,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": true,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        4,
+        2
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.10284982870699046,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4098636788048552,
+      "total_influence": 0.10284982870699046,
+      "influence_probability": 0.10284982870699046,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        6,
+        5
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10320261949704931,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4112695744964653,
+      "total_influence": 0.10320261949704931,
+      "influence_probability": 0.10320261949704931,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        6,
+        7
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.1040860022798987,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4147899159663866,
+      "total_influence": 0.1040860022798987,
+      "influence_probability": 0.1040860022798987,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        6,
+        9
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10979287864747364,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4375322128851541,
+      "total_influence": 0.10979287864747364,
+      "influence_probability": 0.10979287864747364,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        7,
+        4
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.10351243273735143,
+      "reason": "morphic_influence",
+      "top_similarity": 0.41250420168067226,
+      "total_influence": 0.10351243273735143,
+      "influence_probability": 0.10351243273735143,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        7,
+        9
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1148215699493202,
+      "reason": "morphic_influence",
+      "top_similarity": 0.45757189542483656,
+      "total_influence": 0.1148215699493202,
+      "influence_probability": 0.1148215699493202,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        9,
+        3
+      ],
+      "conway_decision": 1,
+      "morphic_decision": 1,
+      "influence_strength": 0.1017849293724818,
+      "reason": "morphic_influence",
+      "top_similarity": 0.40561998132586374,
+      "total_influence": 0.1017849293724818,
+      "influence_probability": 0.1017849293724818,
+      "markov_decision": 1,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        9,
+        5
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.11273851438640503,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4492707749766573,
+      "total_influence": 0.11273851438640503,
+      "influence_probability": 0.11273851438640503,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    },
+    {
+      "generation": 4,
+      "position": [
+        9,
+        7
+      ],
+      "conway_decision": 0,
+      "morphic_decision": 0,
+      "influence_strength": 0.1210949868209308,
+      "reason": "morphic_influence",
+      "top_similarity": 0.4825718954248366,
+      "total_influence": 0.1210949868209308,
+      "influence_probability": 0.1210949868209308,
+      "markov_decision": 0,
+      "llm_decision": null,
+      "decision_source": "markov",
+      "applied_influence": false,
+      "num_matches": 1,
+      "pattern_scale": 10,
+      "adaptive_neighborhood": 10
+    }
+  ],
+  "final_population": 28,
+  "max_population": 35,
+  "min_population": 28,
+  "avg_population": 31.4
+}

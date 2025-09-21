@@ -1,0 +1,124 @@
+{
+  "factoids": [
+    {
+      "title": "Conway's Life Origins",
+      "text": "Conway's Game of Life was invented by John Conway in 1970 as a zero-player game that demonstrates cellular automaton behavior."
+    },
+    {
+      "title": "Simple Rules, Complex Behavior",
+      "text": "Despite having only 4 simple rules, Conway's Life can create incredibly complex patterns including gliders, oscillators, and even universal computers."
+    },
+    {
+      "title": "The Birth Rule",
+      "text": "A dead cell becomes alive if it has exactly 3 living neighbors - this mimics biological reproduction requiring multiple 'parents'."
+    },
+    {
+      "title": "Survival Conditions",
+      "text": "Living cells survive only with 2 or 3 neighbors - too few (loneliness) or too many (overcrowding) causes death."
+    },
+    {
+      "title": "Glider Discovery",
+      "text": "The glider, a 5-cell pattern that moves diagonally, was one of the first moving patterns discovered and became an icon of cellular automata."
+    },
+    {
+      "title": "Universal Computation",
+      "text": "Conway's Life is Turing complete - it can simulate any computer program given enough space and time."
+    },
+    {
+      "title": "The R-pentomino",
+      "text": "This 5-cell pattern takes 1103 generations to stabilize, producing 6 gliders, 8 blocks, 4 blinkers, 1 beehive, and 1 loaf."
+    },
+    {
+      "title": "Still Life Patterns",
+      "text": "Some patterns never change once formed - the simplest is the 'block' (2×2 square), followed by the 'beehive' and 'loaf'."
+    },
+    {
+      "title": "Oscillators",
+      "text": "Patterns that repeat their shape after a fixed number of generations - the 'blinker' has period 2, the 'toad' has period 2."
+    },
+    {
+      "title": "Spaceships",
+      "text": "Self-replicating patterns that move across the grid - gliders move at c/4 speed (1 cell every 4 generations diagonally)."
+    },
+    {
+      "title": "Garden of Eden",
+      "text": "Some configurations can never be reached from any previous generation - they can only exist as initial conditions."
+    },
+    {
+      "title": "Methuselahs",
+      "text": "Small patterns that take a very long time to stabilize - the 'acorn' pattern takes 5206 generations to settle."
+    },
+    {
+      "title": "Gosper Glider Gun",
+      "text": "Discovered by Bill Gosper in 1970, this was the first known pattern that creates an infinite number of gliders."
+    },
+    {
+      "title": "Population Dynamics",
+      "text": "Random initial configurations typically stabilize around 3-5% living cells, showing emergence of order from chaos."
+    },
+    {
+      "title": "Edge Effects",
+      "text": "Finite grids create edge effects that can dramatically change pattern behavior compared to infinite grids."
+    },
+    {
+      "title": "Generation 0",
+      "text": "The initial configuration is called 'Generation 0' - every subsequent step increases the generation count by 1."
+    },
+    {
+      "title": "Conway's Conjecture",
+      "text": "Conway originally conjectured that no finite pattern could grow without bound - this was disproven by the glider gun."
+    },
+    {
+      "title": "Density Classification",
+      "text": "Random grids with ~37% initial density tend to produce the most interesting long-term dynamics."
+    },
+    {
+      "title": "Reflection Symmetry",
+      "text": "Many stable patterns exhibit reflection symmetry, suggesting deep mathematical relationships in cellular automata."
+    },
+    {
+      "title": "Speed Limits",
+      "text": "Information cannot travel faster than 1 cell per generation (speed of light 'c'), limiting spaceship velocities."
+    },
+    {
+      "title": "Binary Counting",
+      "text": "Complex Life patterns can implement binary counters, demonstrating computational capabilities within the cellular automaton."
+    },
+    {
+      "title": "The Conway Notation",
+      "text": "Patterns are often described using 'b' for birth and 's' for survive conditions - Life is B3/S23."
+    },
+    {
+      "title": "Periodic Patterns",
+      "text": "Oscillators can have any period ≥2 - periods 1 (still life), 2, 3, 4, 5, 6... up to arbitrarily large periods exist."
+    },
+    {
+      "title": "Conway's Legacy",
+      "text": "John Conway (1937-2020) created this 'game' as a mathematical exploration that became foundational to complexity science."
+    },
+    {
+      "title": "Cellular Neighborhoods",
+      "text": "Each cell considers its 8 neighbors (Moore neighborhood) - this simple local rule creates global patterns."
+    },
+    {
+      "title": "Zero-Player Game",
+      "text": "Life requires no human input after the initial setup - the rules alone determine all future evolution."
+    },
+    {
+      "title": "Mathematical Beauty",
+      "text": "Life demonstrates how simple deterministic rules can create patterns of stunning complexity and unexpected beauty."
+    },
+    {
+      "title": "Emergence Principle",
+      "text": "Complex behaviors emerge from simple interactions - a key principle in complexity theory and systems science."
+    },
+    {
+      "title": "Digital Physics",
+      "text": "Some theorists suggest our universe might operate like a cellular automaton, making Life a model of reality itself."
+    },
+    {
+      "title": "Pattern Libraries",
+      "text": "Thousands of Life patterns have been catalogued, from tiny oscillators to massive computational structures."
+    }
+  ]
+}
