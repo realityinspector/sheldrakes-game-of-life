@@ -1,0 +1,117 @@
+{
+  "mode": "control",
+  "grid_size": 10,
+  "generations": 20,
+  "initial_population": 52,
+  "generation_data": [
+    {
+      "generation": 0,
+      "population": 23,
+      "timestamp": "2025-10-03T15:16:16.049494"
+    },
+    {
+      "generation": 1,
+      "population": 21,
+      "timestamp": "2025-10-03T15:16:16.050173"
+    },
+    {
+      "generation": 2,
+      "population": 23,
+      "timestamp": "2025-10-03T15:16:16.051342"
+    },
+    {
+      "generation": 3,
+      "population": 21,
+      "timestamp": "2025-10-03T15:16:16.052289"
+    },
+    {
+      "generation": 4,
+      "population": 18,
+      "timestamp": "2025-10-03T15:16:16.053406"
+    },
+    {
+      "generation": 5,
+      "population": 19,
+      "timestamp": "2025-10-03T15:16:16.054222"
+    },
+    {
+      "generation": 6,
+      "population": 16,
+      "timestamp": "2025-10-03T15:16:16.054928"
+    },
+    {
+      "generation": 7,
+      "population": 16,
+      "timestamp": "2025-10-03T15:16:16.055815"
+    },
+    {
+      "generation": 8,
+      "population": 16,
+      "timestamp": "2025-10-03T15:16:16.056430"
+    },
+    {
+      "generation": 9,
+      "population": 15,
+      "timestamp": "2025-10-03T15:16:16.057111"
+    },
+    {
+      "generation": 10,
+      "population": 13,
+      "timestamp": "2025-10-03T15:16:16.057925"
+    },
+    {
+      "generation": 11,
+      "population": 12,
+      "timestamp": "2025-10-03T15:16:16.058608"
+    },
+    {
+      "generation": 12,
+      "population": 10,
+      "timestamp": "2025-10-03T15:16:16.059372"
+    },
+    {
+      "generation": 13,
+      "population": 10,
+      "timestamp": "2025-10-03T15:16:16.060317"
+    },
+    {
+      "generation": 14,
+      "population": 10,
+      "timestamp": "2025-10-03T15:16:16.061177"
+    },
+    {
+      "generation": 15,
+      "population": 10,
+      "timestamp": "2025-10-03T15:16:16.061906"
+    },
+    {
+      "generation": 16,
+      "population": 10,
+      "timestamp": "2025-10-03T15:16:16.062668"
+    },
+    {
+      "generation": 17,
+      "population": 10,
+      "timestamp": "2025-10-03T15:16:16.063465"
+    },
+    {
+      "generation": 18,
+      "population": 10,
+      "timestamp": "2025-10-03T15:16:16.064155"
+    },
+    {
+      "generation": 19,
+      "population": 10,
+      "timestamp": "2025-10-03T15:16:16.064851"
+    }
+  ],
+  "crystals": [],
+  "stability_score": 0,
+  "complexity_score": 0.45,
+  "emergence_events": 0,
+  "morphic_influences": [],
+  "final_population": 10,
+  "max_population": 23,
+  "min_population": 10,
+  "avg_population": 14.65
+}
