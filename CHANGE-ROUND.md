@@ -1,3 +1,11 @@
+# CHANGE-ROUND.md - Integrated Runs Feature Planning
+
+> **✅ IMPLEMENTATION STATUS (Oct 2025)**: This feature has been successfully implemented. Integrated runs are functional at `/integrated-runs/gallery`, with API endpoints at `/api/integrated-runs`, and slug-based viewing at `/integrated-runs/{slug}`. This document is preserved for historical context and future enhancement planning.
+
+---
+
+## Original Planning Document
+
 Based on the user's detailed request, here is a revised and more explicit AI coding prompt for a coding agent.
 
 ### 🌟 Project: Enhanced Emergence Simulator - Integrated Runs & Morphic Analysis

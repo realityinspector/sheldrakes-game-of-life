@@ -17,8 +17,8 @@ The Emergence Simulator implements and tests Rupert Sheldrake's morphic resonanc
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **Python 3.8+** (3.11-3.12 recommended)
-- **OpenRouter API key** (optional for LLM features)
+- **Python 3.13+** (tested on 3.13.4)
+- **OpenRouter API key** (optional for LLM features, app degrades gracefully without it)
 
 ### One-Command Setup
 ```bash
@@ -82,14 +82,18 @@ export OPENROUTER_API_KEY="your-key-here"
 
 ### Web Interface
 ```bash
-# Main application server (auto-detects port)
+# Main application server (auto-detects port 8000-8010)
 ./run.sh
+# Access at: http://localhost:8000
 
-# Enhanced historical viewer
-python simple_viewer.py  # Access: http://localhost:8009/viewer
+# Available endpoints:
+#   http://localhost:8000/              - Main dashboard
+#   http://localhost:8000/viewer        - Historical simulation viewer
+#   http://localhost:8000/docs          - Interactive API documentation
+#   http://localhost:8000/integrated-runs/gallery - Research runs gallery
 
-# Direct FastAPI server
-python main.py  # Access: http://localhost:8000
+# Standalone historical viewer (port 8005)
+python simple_viewer.py
 ```
 
 ## 🎯 Key Research Applications
@@ -148,10 +152,10 @@ emergence-simulator/
 - **Advanced Analytics** - Pattern analysis and statistical comparison tools
 - **FastAPI Backend** - RESTful API for simulation control and data access
 
-### 🔄 Active Development
-- **Enhanced Pattern Genealogy** - Track pattern evolution and relationships
-- **Real-time Monitoring** - Live simulation progress tracking
-- **Mobile Optimization** - Responsive design improvements
+### 🔄 Known Limitations
+- **PostgreSQL Support** - Drivers (asyncpg/psycopg) in requirements.txt but not installed
+- **LLM Integration** - Requires OpenRouter API key (graceful fallback to Markov/Conway without)
+- **Frontend Polish** - Web interface functional but could benefit from UX improvements
 
 ## 🧪 Testing & Validation
 
@@ -188,9 +192,10 @@ DATABASE_URL="sqlite:///..."      # Database configuration
 - **Computationally Bounded** - Top-20 recent patterns checked
 - **API Rate Limited** - 100ms delays between LLM calls
 - **Statistically Valid** - Correlation tracking and validation
-- **Database Backend** - SQLite for development, PostgreSQL ready
+- **Database Backend** - SQLite (PostgreSQL-ready but drivers not installed)
 - **Scalable Architecture** - FastAPI with async support
 - **Caching System** - Intelligent visualization caching
+- **Tested Configuration** - Python 3.13.4 on macOS, 146 simulation results stored
 
 ## 🤝 Research Applications
 
