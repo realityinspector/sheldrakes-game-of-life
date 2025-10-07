@@ -1,0 +1,9 @@
+{
+  "generations": 30,
+  "crystal_count": 3,
+  "grid_size": 15,
+  "field_strength": 0.6,
+  "temporal_decay": 0.1,
+  "similarity_threshold": 0.7,
+  "influence_exponent": 2.0
+}

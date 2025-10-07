@@ -11,10 +11,16 @@ import itertools
 import json
 import subprocess
 import sys
+import time
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 from typing import List
+
+from rich.console import Console
+from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn, TextColumn
+from rich.live import Live
+from rich.table import Table
 
 from morphic_config import MorphicFieldConfig
 
@@ -133,53 +139,94 @@ def generate_focused_experiments() -> List[dict]:
     return experiments
 
 
-def run_experiment(experiment: dict, output_dir: Path, python_cmd: str = './venv/bin/python') -> bool:
-    """Execute a single simulation experiment"""
+def run_experiment(experiment: dict, output_dir: Path, console: Console, verbose: bool = False) -> bool:
+    """Execute a single simulation experiment with real-time logging"""
 
     run_id = experiment['run_id']
     mode = experiment['mode']
     config = experiment['config']
 
-    print(f"🧬 Running: {run_id}")
-    print(f"   Mode: {mode}")
-    print(f"   Field: {config['field_strength']:.2f}, Decay: {config['temporal_decay']:.2f}")
+    # Print experiment header
+    console.print(f"\n[bold cyan]{'='*60}[/bold cyan]")
+    console.print(f"[bold green]▶ Starting:[/bold green] {run_id}")
+    console.print(f"[cyan]  Mode:[/cyan] {mode}")
+    console.print(f"[cyan]  Generations:[/cyan] {config['generations']}")
+    console.print(f"[cyan]  Grid:[/cyan] {config['grid_size']}×{config['grid_size']}")
+
+    if mode == 'morphic':
+        console.print(f"[yellow]  Field Strength:[/yellow] {config['field_strength']}")
+        console.print(f"[yellow]  Temporal Decay:[/yellow] {config['temporal_decay']}")
+        console.print(f"[yellow]  Similarity Threshold:[/yellow] {config['similarity_threshold']}")
+
+    console.print(f"[bold cyan]{'='*60}[/bold cyan]\n")
+
+    start_time = time.time()
 
     try:
         # Build command
         cmd = [
-            python_cmd,
-            'scripts/run_simulation.py',
-            mode,
-            str(config['generations']),
-            str(config['crystal_count']),
-            str(config['grid_size']),
-            str(config['field_strength']),
-            str(config['temporal_decay']),
-            str(config['similarity_threshold']),
-            str(config.get('influence_exponent', 2.0))
+            './training.sh',
+            f'--mode={mode}',
+            f'--generations={config["generations"]}',
+            f'--grid-size={config["grid_size"]}',
+            f'--crystal-count={config["crystal_count"]}',
         ]
 
-        # Run simulation
-        result = subprocess.run(
+        if mode == 'morphic':
+            cmd.extend([
+                f'--field-strength={config["field_strength"]}',
+                f'--temporal-decay={config["temporal_decay"]}',
+                f'--similarity-threshold={config["similarity_threshold"]}',
+            ])
+
+        # Run with live output streaming
+        process = subprocess.Popen(
             cmd,
-            capture_output=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             text=True,
-            timeout=300  # 5 minute timeout
+            bufsize=1
         )
 
-        if result.returncode == 0:
-            print(f"   ✅ Success")
+        # Stream output in real-time
+        for line in process.stdout:
+            line = line.rstrip()
+            if not line:
+                continue
 
-            # Find the output file (most recent in results/)
-            results_dir = Path('results')
-            pattern = f'simulation_{mode}_*.json'
+            # Color-code output based on content
+            # ALWAYS show generation progress (not just in verbose mode)
+            if 'Generation' in line or '🔄' in line:
+                # Use print with flush for real-time updates
+                print(line, flush=True)
+            elif 'ERROR' in line or '❌' in line or 'Failed' in line:
+                console.print(f"[bold red]{line}[/bold red]")
+            elif 'SUCCESS' in line or '✅' in line or 'Complete' in line:
+                console.print(f"[green]{line}[/green]")
+            elif 'WARNING' in line or '⚠️' in line:
+                console.print(f"[yellow]{line}[/yellow]")
+            elif '💎' in line or '📊' in line or '💾' in line:
+                print(line, flush=True)
+            elif verbose:
+                print(line, flush=True)
+
+        process.wait()
+        elapsed = time.time() - start_time
+
+        if process.returncode == 0:
+            console.print(f"\n[bold green]✅ Completed:[/bold green] {run_id}")
+            console.print(f"[green]   Duration:[/green] {elapsed:.1f}s\n")
+
+            # Find the output file (most recent in timeseries_data/)
+            timeseries_dir = Path('timeseries_data')
+            pattern = f'{mode}_*.json'
 
             # Get most recent matching file
-            files = list(results_dir.glob(pattern))
+            files = list(timeseries_dir.glob(pattern))
             if files:
                 latest_file = max(files, key=lambda p: p.stat().st_mtime)
 
-                # Copy to timeseries directory with run_id
+                # Copy to output directory with run_id
                 output_file = output_dir / f'{run_id}.json'
 
                 # Load, add metadata, and save
@@ -192,7 +239,7 @@ def run_experiment(experiment: dict, output_dir: Path, python_cmd: str = './venv
                 with open(output_file, 'w') as f:
                     json.dump(data, f, indent=2)
 
-                print(f"   📁 Saved to: {output_file}")
+                console.print(f"[dim]   📁 Saved to: {output_file}[/dim]")
 
                 # Save config separately for easy reference
                 config_file = output_dir / f'{run_id}_config.json'
@@ -201,15 +248,21 @@ def run_experiment(experiment: dict, output_dir: Path, python_cmd: str = './venv
 
             return True
         else:
-            print(f"   ❌ Failed")
-            print(f"   Error: {result.stderr[:200]}")
+            console.print(f"\n[bold red]❌ Failed:[/bold red] {run_id}")
+            console.print(f"[red]   Exit code:[/red] {process.returncode}")
+            console.print(f"[red]   Duration:[/red] {elapsed:.1f}s\n")
             return False
 
     except subprocess.TimeoutExpired:
-        print(f"   ⏰ Timeout")
+        elapsed = time.time() - start_time
+        console.print(f"\n[bold red]⏰ Timeout:[/bold red] {run_id}")
+        console.print(f"[red]   Duration:[/red] {elapsed:.1f}s\n")
         return False
     except Exception as e:
-        print(f"   ❌ Exception: {e}")
+        elapsed = time.time() - start_time
+        console.print(f"\n[bold red]❌ Exception:[/bold red] {run_id}")
+        console.print(f"[red]   Error:[/red] {str(e)}")
+        console.print(f"[red]   Duration:[/red] {elapsed:.1f}s\n")
         return False
 
 
@@ -275,22 +328,24 @@ def main():
                         help='Type of experiment sweep to run')
     parser.add_argument('--output-dir', type=str, default='timeseries_data',
                         help='Output directory for results')
-    parser.add_argument('--python', type=str, default='./venv/bin/python',
-                        help='Python interpreter to use')
     parser.add_argument('--dry-run', action='store_true',
                         help='Generate experiment list without running')
     parser.add_argument('--limit', type=int, default=None,
                         help='Limit number of experiments (for testing)')
+    parser.add_argument('--verbose', action='store_true',
+                        help='Show all output including generation progress (default: condensed)')
 
     args = parser.parse_args()
 
-    print("🚀 Morphic Field Parameter Sweep")
-    print("=" * 60)
+    console = Console()
+
+    console.print("\n[bold magenta]🚀 Morphic Field Parameter Sweep[/bold magenta]")
+    console.print("[bold magenta]============================================================[/bold magenta]\n")
 
     # Create output directory
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    print(f"📁 Output directory: {output_dir}")
+    console.print(f"[cyan]📁 Output directory:[/cyan] {output_dir}")
 
     # Generate experiment list
     experiments = []
@@ -308,46 +363,69 @@ def main():
     if args.limit:
         experiments = experiments[:args.limit]
 
-    print(f"📊 Generated {len(experiments)} experiments")
+    console.print(f"[cyan]📊 Total experiments:[/cyan] {len(experiments)}")
+
+    # Estimate time (rough: 1 minute per 100 generations)
+    avg_generations = sum(exp['config']['generations'] for exp in experiments) / len(experiments) if experiments else 0
+    estimated_time = len(experiments) * (avg_generations / 100)
+    console.print(f"[cyan]⏱️  Estimated time:[/cyan] {estimated_time:.0f}min (rough)\n")
 
     # Generate manifest
     manifest = generate_manifest(experiments, output_dir)
 
     if args.dry_run:
-        print("\n🔍 Dry run - showing first 5 experiments:")
-        for exp in experiments[:5]:
-            print(f"  - {exp['run_id']}: {exp['mode']}, field={exp['config']['field_strength']:.2f}")
-        print(f"\n✅ Would run {len(experiments)} experiments")
-        return
+        console.print("[yellow]🔍 DRY RUN - No simulations will execute[/yellow]\n")
+        for i, exp in enumerate(experiments[:10], 1):
+            console.print(f"  [{i}] {exp['run_id']}: {exp['mode']}, field={exp['config']['field_strength']:.2f}")
+        if len(experiments) > 10:
+            console.print(f"  ... and {len(experiments) - 10} more")
+        console.print(f"\n[bold]Would run {len(experiments)} experiments[/bold]")
+        sys.exit(0)
 
-    # Run experiments
-    print(f"\n🏃 Running {len(experiments)} experiments...")
-    print("=" * 60)
+    # Run experiments with real-time output
+    console.print("[bold green]▶ Starting batch execution...[/bold green]\n")
 
-    success_count = 0
-    fail_count = 0
+    successful = 0
+    failed = 0
+    start_time = time.time()
 
     for i, exp in enumerate(experiments, 1):
-        print(f"\n[{i}/{len(experiments)}]")
-        success = run_experiment(exp, output_dir, args.python)
+        # Clear progress header
+        console.print(f"\n[bold magenta]{'━' * 60}[/bold magenta]")
+        console.print(f"[bold blue]📍 Experiment {i}/{len(experiments)}[/bold blue] [dim]({successful}✅ {failed}❌ so far)[/dim]")
+        console.print(f"[bold magenta]{'━' * 60}[/bold magenta]")
+
+        success = run_experiment(exp, output_dir, console, verbose=args.verbose)
 
         if success:
-            success_count += 1
+            successful += 1
         else:
-            fail_count += 1
+            failed += 1
+
+        # Show updated stats after each experiment
+        elapsed = time.time() - start_time
+        remaining = len(experiments) - i
+        avg_time = elapsed / i if i > 0 else 0
+        eta = remaining * avg_time
+
+        console.print(f"\n[bold cyan]Progress:[/bold cyan] {i}/{len(experiments)} complete")
+        console.print(f"[dim]Stats: ✅ {successful} succeeded, ❌ {failed} failed | "
+                     f"Elapsed: {elapsed/60:.1f}min | ETA: {eta/60:.1f}min[/dim]")
 
         # Brief pause between runs
         if i < len(experiments):
-            import time
-            time.sleep(1)
+            time.sleep(0.5)
 
-    # Summary
-    print("\n" + "=" * 60)
-    print("🏁 Batch Run Complete!")
-    print(f"   ✅ Successful: {success_count}")
-    print(f"   ❌ Failed: {fail_count}")
-    print(f"   📁 Results: {output_dir}")
-    print(f"   📋 Manifest: {output_dir / 'manifest.json'}")
+    # Final summary
+    total_time = time.time() - start_time
+    console.print("\n[bold magenta]{'='*60}[/bold magenta]")
+    console.print("[bold magenta]🏁 BATCH COMPLETE[/bold magenta]")
+    console.print(f"[green]✅ Successful:[/green] {successful}/{len(experiments)}")
+    console.print(f"[red]❌ Failed:[/red] {failed}/{len(experiments)}")
+    console.print(f"[cyan]⏱️  Total time:[/cyan] {total_time/60:.1f} minutes")
+    console.print(f"[cyan]📁 Data saved to:[/cyan] {output_dir}")
+    console.print(f"[cyan]📋 Manifest:[/cyan] {output_dir / 'manifest.json'}")
+    console.print("[bold magenta]{'='*60}[/bold magenta]\n")
 
 
 if __name__ == '__main__':

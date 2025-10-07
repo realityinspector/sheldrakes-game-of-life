@@ -11,8 +11,13 @@ import json
 import time
 from datetime import datetime
 
+from rich.console import Console
+
 # Add project root to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Initialize Rich console
+console = Console()
 
 async def run_conway_simulation():
     try:
@@ -113,8 +118,10 @@ async def run_conway_simulation():
             'population_volatility': []  # Population change rate
         }
 
-        print('🔄 Running simulation generations...')
+        print('🔄 Running simulation generations...', flush=True)
+        print(f'⏱️  Simulation started at {time.strftime("%H:%M:%S")}', flush=True)
 
+        sim_start_time = time.time()
         prev_alive_count = alive_count  # Initialize for first generation
 
         for gen in range(generations):
@@ -324,10 +331,23 @@ async def run_conway_simulation():
 
             stats['generation_data'].append(gen_data)
 
-            # Progress indicator
-            if gen % max(1, generations // 10) == 0:
+            # Progress indicator - more frequent updates with explicit flushing
+            if gen % max(1, generations // 20) == 0 or gen == generations - 1:
                 progress = (gen / generations) * 100
-                print(f'  🔄 Generation {gen:4d}/{generations} ({progress:5.1f}%) - Population: {alive_count:4d}')
+                elapsed = time.time() - sim_start_time
+                rate = (gen + 1) / elapsed if elapsed > 0 else 0
+                eta = (generations - gen - 1) / rate if rate > 0 else 0
+
+                # Use print with flush for immediate output
+                progress_line = f'  🔄 Generation {gen:4d}/{generations} ({progress:5.1f}%) - Population: {alive_count:4d} ({rate:.1f} gen/s, ETA: {eta:.0f}s)'
+                if gen < generations - 1:
+                    print(progress_line, end='\r', flush=True)
+                else:
+                    print(progress_line, flush=True)
+
+        # Simulation timing
+        sim_elapsed = time.time() - sim_start_time
+        console.print(f'\n[green]⏱️  Simulation completed in {sim_elapsed:.1f}s ({sim_elapsed/generations:.2f}s per generation)[/green]')
 
         # Calculate final metrics
         populations = [int(g['population']) for g in stats['generation_data']]
@@ -349,32 +369,32 @@ async def run_conway_simulation():
         stats['emergence_events'] = sum(1 for i in range(1, len(populations))
                                        if populations[i] > populations[i-1] * 1.5)
 
-        print('')
-        print('📊 Simulation Complete!')
-        print(f'   Final Population: {stats["final_population"]}')
-        print(f'   Max Population: {stats["max_population"]}')
-        print(f'   Avg Population: {stats["avg_population"]:.1f}')
-        print(f'   Stability Score: {stats["stability_score"]:.3f}')
-        print(f'   Complexity Score: {stats["complexity_score"]:.3f}')
-        print(f'   Emergence Events: {stats["emergence_events"]}')
+        console.print('')
+        console.print('[bold green]📊 Simulation Complete![/bold green]')
+        console.print(f'[cyan]   Final Population:[/cyan] {stats["final_population"]}')
+        console.print(f'[cyan]   Max Population:[/cyan] {stats["max_population"]}')
+        console.print(f'[cyan]   Avg Population:[/cyan] {stats["avg_population"]:.1f}')
+        console.print(f'[cyan]   Stability Score:[/cyan] {stats["stability_score"]:.3f}')
+        console.print(f'[cyan]   Complexity Score:[/cyan] {stats["complexity_score"]:.3f}')
+        console.print(f'[cyan]   Emergence Events:[/cyan] {stats["emergence_events"]}')
 
         if mode == 'morphic':
             total_patterns = sum(len(c['patterns']) for c in crystals)
             avg_strength = sum(c['strength'] for c in crystals) / len(crystals) if crystals else 0
             total_activations = sum(len(c.get('activation_history', [])) for c in crystals)
-            print(f'   💎 Crystal Patterns: {total_patterns}')
-            print(f'   💎 Avg Crystal Strength: {avg_strength:.3f}')
-            print(f'   💎 Total Activations: {total_activations}')
+            console.print(f'[yellow]   💎 Crystal Patterns:[/yellow] {total_patterns}')
+            console.print(f'[yellow]   💎 Avg Crystal Strength:[/yellow] {avg_strength:.3f}')
+            console.print(f'[yellow]   💎 Total Activations:[/yellow] {total_activations}')
 
             # Run validation with morphic influence data
             try:
                 valid, message = validate_morphic_implementation(crystals, stats.get('morphic_influences', []))
                 if valid:
-                    print(f'   ✅ {message}')
+                    console.print(f'[green]   ✅ {message}[/green]')
                 else:
-                    print(f'   ⚠️  Validation warning: {message}')
+                    console.print(f'[yellow]   ⚠️  Validation warning: {message}[/yellow]')
             except Exception as e:
-                print(f'   ⚠️  Validation error: {e}')
+                console.print(f'[red]   ⚠️  Validation error: {e}[/red]')
 
         # Save results
         import os
@@ -419,7 +439,7 @@ async def run_conway_simulation():
         with open(filename, 'w') as f:
             json.dump(stats_copy, f, indent=2, cls=NumpyEncoder)
 
-        print(f'💾 Results saved to: {filename}')
+        console.print(f'[dim]💾 Results saved to: {filename}[/dim]')
 
         # Save enhanced time series format for ML training
         save_timeseries_format(stats_copy, mode, morphic_config if mode == 'morphic' else None, timestamp)
@@ -427,7 +447,7 @@ async def run_conway_simulation():
         return True
 
     except Exception as e:
-        print(f'❌ Simulation error: {e}')
+        console.print(f'[bold red]❌ Simulation error: {e}[/bold red]')
         import traceback
         traceback.print_exc()
         return False
@@ -511,10 +531,10 @@ def save_timeseries_format(stats: dict, mode: str, morphic_config, timestamp: st
         with open(ts_filename, 'w') as f:
             json.dump(timeseries_data, f, indent=2, cls=NumpyEncoder)
 
-        print(f'📊 Time series data saved to: {ts_filename}')
+        console.print(f'[dim]📊 Time series data saved to: {ts_filename}[/dim]')
 
     except Exception as e:
-        print(f'⚠️  Failed to save time series format: {e}')
+        console.print(f'[yellow]⚠️  Failed to save time series format: {e}[/yellow]')
 
 if __name__ == '__main__':
     # Run the simulation
