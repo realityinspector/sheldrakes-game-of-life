@@ -1,0 +1,12 @@
+{
+  "field_strength": 0.3,
+  "temporal_decay": 0.0,
+  "cross_system_coupling": 0.0,
+  "similarity_threshold": 0.7,
+  "influence_exponent": 2.0,
+  "crystal_count": 5,
+  "crystal_capacity": 50,
+  "generations": 200,
+  "grid_size": 25,
+  "initial_density": 0.4
+}
