@@ -1,0 +1,97 @@
+{
+  "run_id": "morphic_20251007_092434",
+  "mode": "morphic",
+  "config": {
+    "field_strength": 0.8,
+    "temporal_decay": 0.2,
+    "cross_system_coupling": 0.0,
+    "similarity_threshold": 0.6,
+    "influence_exponent": 2.0,
+    "crystal_count": 3,
+    "crystal_capacity": 50,
+    "generations": 10,
+    "grid_size": 15,
+    "initial_density": 0.4
+  },
+  "timeseries": {
+    "population": [
+      79,
+      73,
+      74,
+      75,
+      76,
+      68,
+      67,
+      57,
+      56,
+      56
+    ],
+    "complexity": [
+      0.12557737027795227,
+      0.14417041313907425,
+      0.1515098904810516,
+      0.18724262170434394,
+      0.22178776975932377,
+      0.2212435044732499,
+      0.19982631347136331,
+      0.19592688860647062,
+      0.183732729935041,
+      0.183732729935041
+    ],
+    "volatility": [
+      0.2818181818181818,
+      0.0759493670886076,
+      0.0136986301369863,
+      0.013513513513513514,
+      0.013333333333333334,
+      0.10526315789473684,
+      0.014705882352941176,
+      0.14925373134328357,
+      0.017543859649122806,
+      0.0
+    ],
+    "morphic_influence_rate": [
+      0.0,
+      0.017777777777777778,
+      0.0044444444444444444,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pattern_diversity": [
+      112,
+      122,
+      121,
+      127,
+      119,
+      107,
+      114,
+      108,
+      98,
+      94
+    ],
+    "resonance_event_count": 0
+  },
+  "summary_stats": {
+    "final_population": 56,
+    "max_population": 79,
+    "min_population": 56,
+    "avg_population": 68.1,
+    "std_population": 8.395832299420945,
+    "avg_complexity": 0.18147502317829117,
+    "avg_volatility": 0.06850796571307069,
+    "stability_score": 0,
+    "emergence_events": 0,
+    "avg_influence_rate": 0.0022222222222222222,
+    "max_influence_rate": 0.017777777777777778,
+    "avg_pattern_diversity": 112.2,
+    "resonance_events": 0
+  },
+  "metadata": {
+    "grid_size": 15,
+    "generations": 10,
+    "initial_population": 

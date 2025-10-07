@@ -1,223 +1,138 @@
-# 🌟 Emergence Simulator
+# 🌊 Morphic Field Phenomenology Lab
 
-> A scientific platform for studying morphic resonance effects in artificial systems using LLM-driven cellular automata
+**A computational laboratory for characterizing what morphic fields would look like if they existed**
 
-The Emergence Simulator implements and tests Rupert Sheldrake's morphic resonance hypothesis through Conway's Game of Life enhanced with intelligent decision-making. Successful patterns form "memory crystals" that create measurable collective memory effects, enabling scientific comparison between morphic and control simulations.
+Rather than trying to prove or disprove Rupert Sheldrake's morphic resonance hypothesis, this project takes a different approach: *What patterns and signatures would morphic fields produce in measurable systems?* Can we build detectors for those signatures?
 
-## ✨ Key Features
+## 🎯 Core Concept
 
-- 🧬 **True Pattern-Based Morphic Resonance** - Structural pattern storage with multi-scale similarity analysis
-- 🤖 **LLM Integration** - OpenRouter API integration for high-similarity pattern decisions (>0.8 similarity)
-- 🎯 **Enhanced Conway's Game of Life** - Cell-level morphic influence with uncapped pattern override
-- 📊 **Comprehensive Analysis** - Real-time visualization, animation, and statistical comparison
-- 🌐 **Interactive Web Interface** - Historical simulation viewer with comparison tools
-- 📈 **Scientific Rigor** - Bayesian learning, Markov chain predictions, and adaptive neighborhoods
-- 🔗 **Research Tools** - Batch processing, parameter sweeping, and exportable results
+This is **phenomenology, not metaphysics**. We're not claiming morphic fields are real—we're creating "toy morphic fields" in cellular automata to:
+
+1. **Generate synthetic morphic data** with known parameters (field strength, decay rates, cross-system coupling)
+2. **Characterize morphic signatures** (temporal autocorrelation, pattern recurrence, influence clustering)
+3. **Train ML detectors** to recognize morphic-like patterns in time series data
+4. **Compare against controls** to understand what makes morphic dynamics distinctive
+
+Think of it as: *"If physicists can predict gravitational wave signatures before detecting them, can we predict morphic field signatures before looking for them in real systems?"*
+
+## 🧬 What We've Found So Far
+
+**Key Finding**: Pattern memory can destabilize systems. Our initial experiments show:
+
+- **Morphic simulations** (with pattern memory) experience 22% population collapse
+- **Classical simulations** (pure Conway rules) remain stable
+- **Implication**: Memory without exploration leads to premature convergence
+
+This suggests morphic-like mechanisms create distinctive dynamics—memory constrains the search space, preventing discovery of stable attractors that pure evolution finds naturally.
+
+## 🔬 Current Implementation
+
+### Three Simulation Modes
+
+1. **Morphic** - Pattern memory influences cell decisions via "crystals" (successful pattern storage)
+2. **LLM-Control** - AI consultation for high-similarity patterns (>0.8 similarity threshold)
+3. **Classical** - Pure Conway's Game of Life baseline
+
+### Pattern Memory Mechanism
+
+- **Multi-scale analysis**: 3×3 → 5×5 → 7×7 adaptive neighborhoods
+- **Similarity metrics**: Hamming distance + convolution + subpattern matching
+- **Bayesian learning**: Crystal strength updates based on success rates
+- **Influence system**: Perfect pattern matches can achieve 100% rule override
+
+### Visualization & Analysis
+
+- Real-time animated comparisons (morphic vs control vs classical)
+- Frame-by-frame analysis with morphic influence markers
+- Population dynamics, complexity evolution, pattern diversity tracking
+- Statistical summaries and correlation analysis
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- **Python 3.13+** (tested on 3.13.4)
-- **OpenRouter API key** (optional for LLM features, app degrades gracefully without it)
-
-### One-Command Setup
 ```bash
 # Complete setup + validation
 ./launcher.sh
-```
 
-### Start Research Platform
-```bash
-# Start main application
+# Run comparative simulation
+./training.sh --mode=morphic --generations=50
+
+# Start web interface
 ./run.sh
+# Visit: http://localhost:8000
 
-# Enhanced visualization viewer
+# View historical results
 python simple_viewer.py
+# Visit: http://localhost:8005
 ```
 
-## 🔬 Scientific Implementation
+## 📊 Research Applications
 
-### Morphic Resonance Mechanism
+This framework enables investigation of:
 
-The simulator implements genuine morphic resonance through:
+- **Memory vs exploration tradeoffs** in evolutionary systems
+- **Pattern emergence** under different influence regimes
+- **Cross-system resonance** (do independent runs converge?)
+- **Temporal dynamics** of collective memory formation
+- **Threshold effects** in pattern-influenced systems
 
-1. **Structural Pattern Storage** - Full 2D grids stored with subpatterns (3x3, 5x5, 7x7)
-2. **Multi-Metric Similarity** - Hamming distance, convolution, and subpattern analysis
-3. **Adaptive Neighborhoods** - Automatic scaling (3x3 → 7x7) based on pattern complexity
-4. **Bayesian Learning** - Crystal strength updates based on actual success rates
-5. **Uncapped Influence** - Perfect patterns can achieve 100% Conway rule override
-6. **LLM Decision Points** - AI consultation for high-similarity patterns (>0.8)
+Relevant to:
+- Machine learning (overfitting, catastrophic forgetting)
+- Evolutionary algorithms (exploitation vs exploration)
+- Self-organizing systems (stigmergy, collective intelligence)
+- Cultural evolution (tradition vs innovation)
 
-### Decision Hierarchy
-1. **LLM Decisions** (95%+ influence for similarity > 0.8)
-2. **Markov Predictions** (Historical transition learning)
-3. **Conway Rules** (Baseline cellular automata)
+## 🎯 Roadmap
 
-### Validation Results
-- **33-85% Decision Influence Rate** - Significant portion of cells affected by morphic fields
-- **0.45+ Similarity-Influence Correlation** - Strong evidence of pattern-based influence
-- **Measurable vs Control** - Clear statistical differences from pure Conway simulations
+**Phase 1** (Current): Comparative simulation framework with visualization
+**Phase 2**: Time series data generation and feature extraction
+**Phase 3**: ML detector training ("morphic field signature" classifier)
+**Phase 4**: Cross-domain application (other cellular automata, real data)
 
-## 📖 Usage
+See [ROADMAP.md](ROADMAP.md) for detailed vision and [PLAN.md](PLAN.md) for implementation specifics.
 
-### Basic Morphic Simulation
-```bash
-./training.sh --mode=morphic --generations=50 --crystal-count=5 --grid-size=20
-```
+## 🛠️ Technical Stack
 
-### With LLM Integration
-```bash
-export OPENROUTER_API_KEY="your-key-here"
-./training.sh --mode=morphic --generations=30 --crystal-count=3 --grid-size=15
-```
+- **Core**: Python 3.13+, NumPy, pattern similarity engine
+- **Visualization**: Matplotlib, Pillow (GIF generation)
+- **Web**: FastAPI, SQLite (PostgreSQL-ready)
+- **ML Ready**: Data structures prepared for PyTorch/TensorFlow integration
+- **API**: Optional OpenRouter integration for LLM decisions
 
-### Comparative Analysis
-```bash
-# Parameter sweeping study
-./compare.sh
+## 📈 Current Status
 
-# Comprehensive research pipeline
-./comprehensive_study.sh
-```
-
-### Web Interface
-```bash
-# Main application server (auto-detects port 8000-8010)
-./run.sh
-# Access at: http://localhost:8000
-
-# Available endpoints:
-#   http://localhost:8000/              - Main dashboard
-#   http://localhost:8000/viewer        - Historical simulation viewer
-#   http://localhost:8000/docs          - Interactive API documentation
-#   http://localhost:8000/integrated-runs/gallery - Research runs gallery
-
-# Standalone historical viewer (port 8005)
-python simple_viewer.py
-```
-
-## 🎯 Key Research Applications
-
-### Morphic Resonance Studies
-- Test genuine morphic field effects in artificial systems
-- Measure pattern memory and collective intelligence emergence
-- Compare morphic vs control vs classical Conway simulations
-
-### AI Behavior Analysis
-- Study LLM decision patterns in cellular automata contexts
-- Analyze emergence of complex behaviors from simple rules
-- Research collective memory formation in artificial systems
-
-### Consciousness Research
-- Investigate memory and awareness phenomena
-- Study self-organization and pattern recognition
-- Explore collective intelligence in distributed systems
-
-## 🛠️ Technical Architecture
-
-```
-emergence-simulator/
-├── core/                    # Pattern similarity and morphic logic
-│   ├── pattern_similarity.py  # Multi-metric pattern analysis
-│   └── __init__.py
-├── storage/                # Database models and SQLite backend
-│   ├── database.py         # Database connection and setup
-│   ├── models.py           # Data models for runs and results
-│   └── migrations/         # Database schema migrations
-├── web/                    # Frontend assets and templates
-│   ├── static/             # CSS, JS, and static files
-│   └── templates/          # HTML templates
-├── main.py                 # FastAPI application server
-├── integrated_runs.py      # Core simulation engine
-├── analysis_engine.py      # Data analysis and visualization
-├── simple_viewer.py        # Enhanced historical viewer
-├── training.sh             # Simulation orchestrator
-├── compare.sh              # Parameter sweeping
-├── run.sh                  # Application launcher
-└── launcher.sh             # Environment setup
-```
-
-## 📊 Current Development Status
-
-### ✅ Completed Features
-- **True Pattern-Based Morphic Resonance** - Structural storage, multi-scale analysis
-- **LLM Integration** - Working OpenRouter API with error handling
-- **Uncapped Influence** - Perfect patterns achieve 100% override capability
-- **Adaptive Neighborhoods** - Automatic 3x3 to 7x7 scaling
-- **Web Visualization** - Real-time charts, animations, comparison tools
-- **Scientific Validation** - Comprehensive testing and correlation analysis
-- **Batch Processing** - Parameter sweeping and comparative analysis
-- **Historical Viewer** - Load past runs, visualize results, cache management
-- **Integrated Research Platform** - Single-page research notebook interface
-- **Advanced Analytics** - Pattern analysis and statistical comparison tools
-- **FastAPI Backend** - RESTful API for simulation control and data access
-
-### 🔄 Known Limitations
-- **PostgreSQL Support** - Drivers (asyncpg/psycopg) in requirements.txt but not installed
-- **LLM Integration** - Requires OpenRouter API key (graceful fallback to Markov/Conway without)
-- **Frontend Polish** - Web interface functional but could benefit from UX improvements
-
-## 🧪 Testing & Validation
-
-### System Validation
-```bash
-./launcher.sh     # Complete setup + 24 comprehensive tests
-./training.sh     # Core simulation validation
-./test.sh         # Basic functionality tests
-```
-
-### Research Pipeline
-```bash
-./comprehensive_study.sh    # Full research workflow
-./quick_test.sh            # Rapid validation
-```
+- ✅ Pattern-based morphic resonance with multi-scale analysis
+- ✅ Comparative analysis framework (morphic vs control)
+- ✅ Web interface with historical viewer
+- ✅ Animation and statistical visualization
+- ✅ Initial findings on memory-induced instability
+- 🔄 Time series dataset generation (in progress)
+- 🔄 ML detector training pipeline (planned)
 
 ## 🔧 Configuration
 
-### Environment Variables
 ```bash
-OPENROUTER_API_KEY="your-key"     # Enable LLM integration
-DATABASE_URL="sqlite:///..."      # Database configuration
+# Simulation parameters
+GENERATIONS=50              # Evolution steps
+GRID_SIZE=25               # Arena dimensions
+CRYSTAL_COUNT=5            # Pattern memory capacity
+INITIAL_DENSITY=0.4        # Starting cell density
+
+# Morphic field parameters (future)
+FIELD_STRENGTH=0.6         # Influence magnitude
+TEMPORAL_DECAY=0.1         # How fast influence fades
+CROSS_SYSTEM_COUPLING=0.3  # Inter-run resonance
 ```
-
-### Simulation Parameters
-- **Generations**: 50-5000 (default: 1000)
-- **Grid Size**: 10-100 (default: 25)
-- **Crystal Count**: 3-16 (default: 5)
-- **Initial Density**: 0.1-0.8 (default: 0.4)
-
-## 📈 Performance Characteristics
-
-- **Memory Efficient** - 50 patterns per crystal limit
-- **Computationally Bounded** - Top-20 recent patterns checked
-- **API Rate Limited** - 100ms delays between LLM calls
-- **Statistically Valid** - Correlation tracking and validation
-- **Database Backend** - SQLite (PostgreSQL-ready but drivers not installed)
-- **Scalable Architecture** - FastAPI with async support
-- **Caching System** - Intelligent visualization caching
-- **Tested Configuration** - Python 3.13.4 on macOS, 146 simulation results stored
-
-## 🤝 Research Applications
-
-Perfect for studying:
-- **Emergence Studies** with parameter sweeping across multiple scales
-- **Collective Intelligence** through morphic vs classical comparison
-- **AI Behavior Analysis** via LLM decision pattern research
-- **Consciousness Studies** investigating memory and awareness phenomena
-- **Scientific Methodology** with reproducible comparative studies
 
 ## 📄 License
 
-MIT License - see LICENSE file for details.
+MIT License - This is research infrastructure, not a claim about reality.
 
 ## 🙏 Acknowledgments
 
-- Rupert Sheldrake for morphic resonance theory
-- Conway's Game of Life community
-- OpenRouter for LLM API access
+Rupert Sheldrake for the provocative hypothesis that inspired this computational exploration. This project neither proves nor disproves morphic resonance—it explores what such phenomena would look like if instantiated in artificial systems.
+
+**Built with Claude Code** - An experiment in AI-assisted scientific infrastructure development.
 
 ---
 
-**Ready to explore artificial emergence and collective memory in cellular automata.** 🚀
-
-*Built with Claude Code*
+*"The question is not whether morphic fields exist, but what patterns they would produce if they did—and whether those patterns appear in nature."*

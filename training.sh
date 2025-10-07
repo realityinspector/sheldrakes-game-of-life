@@ -370,7 +370,8 @@ run_simulation() {
     # Run the Python simulation
     print_info "Launching simulation engine..."
 
-    $PYTHON_CMD scripts/run_simulation.py "$mode" "$generations" "$crystal_count" "$grid_size"
+    $PYTHON_CMD scripts/run_simulation.py "$mode" "$generations" "$crystal_count" "$grid_size" \
+        "$FIELD_STRENGTH" "$TEMPORAL_DECAY" "$SIMILARITY_THRESHOLD" "$INFLUENCE_EXPONENT"
     
     if [[ $? -eq 0 ]]; then
         print_success "Simulation completed successfully"
@@ -409,6 +410,12 @@ GRID_SIZE=25
 CHECK_ONLY=false
 AUTOPILOT_RUNS=10
 
+# Morphic field parameters
+FIELD_STRENGTH=0.6
+TEMPORAL_DECAY=0.1
+SIMILARITY_THRESHOLD=0.7
+INFLUENCE_EXPONENT=2.0
+
 parse_argument() {
     local arg="$1"
     # Remove any leading/trailing whitespace and validate format
@@ -446,6 +453,22 @@ parse_argument() {
             AUTOPILOT_RUNS="${arg#*=}"
             AUTOPILOT_RUNS=$(echo "$AUTOPILOT_RUNS" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
             ;;
+        --field-strength=*)
+            FIELD_STRENGTH="${arg#*=}"
+            FIELD_STRENGTH=$(echo "$FIELD_STRENGTH" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            ;;
+        --temporal-decay=*)
+            TEMPORAL_DECAY="${arg#*=}"
+            TEMPORAL_DECAY=$(echo "$TEMPORAL_DECAY" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            ;;
+        --similarity-threshold=*)
+            SIMILARITY_THRESHOLD="${arg#*=}"
+            SIMILARITY_THRESHOLD=$(echo "$SIMILARITY_THRESHOLD" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            ;;
+        --influence-exponent=*)
+            INFLUENCE_EXPONENT="${arg#*=}"
+            INFLUENCE_EXPONENT=$(echo "$INFLUENCE_EXPONENT" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            ;;
         --*)
             print_error "Unknown option: $arg"
             echo "Use --help for usage information"
@@ -477,6 +500,12 @@ show_help() {
     echo "  --grid-size=N                 Grid size NxN (default: 25)"
     echo "  --runs=N                      Number of autopilot runs (default: 10, autopilot mode only)"
     echo ""
+    echo "Morphic Field Parameters (morphic mode only):"
+    echo "  --field-strength=F            Master influence multiplier, 0.0-1.0 (default: 0.6)"
+    echo "  --temporal-decay=D            Crystal aging rate, 0.0-1.0 (default: 0.1)"
+    echo "  --similarity-threshold=T      Min similarity for influence, 0.0-1.0 (default: 0.7)"
+    echo "  --influence-exponent=E        Similarity non-linearity, 0.5-5.0 (default: 2.0)"
+    echo ""
     echo "IMPORTANT: All arguments must be on the same line!"
     echo "  ✅ Correct:   $0 --mode=control --generations=100 --crystal-count=5"
     echo "  ❌ Incorrect: $0 --mode=control \\"
@@ -492,6 +521,7 @@ show_help() {
     echo "  $0 --check-only                                       # Just verify configuration"
     echo "  $0 --mode=control --generations=100                   # Run control simulation"
     echo "  $0 --mode=morphic --generations=100 --crystal-count=5 # Run morphic simulation"
+    echo "  $0 --mode=morphic --field-strength=0.8 --temporal-decay=0.0 # Strong, no-decay field"
     echo "  $0 --mode=autopilot --runs=20 --generations=50        # Run 20 automated simulations"
 }
 

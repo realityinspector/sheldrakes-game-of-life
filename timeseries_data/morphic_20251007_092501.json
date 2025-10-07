@@ -1,0 +1,100 @@
+{
+  "run_id": "morphic_20251007_092501",
+  "mode": "morphic",
+  "config": {
+    "field_strength": 0.8,
+    "temporal_decay": 0.2,
+    "cross_system_coupling": 0.0,
+    "similarity_threshold": 0.6,
+    "influence_exponent": 2.0,
+    "crystal_count": 3,
+    "crystal_capacity": 50,
+    "generations": 10,
+    "grid_size": 15,
+    "initial_density": 0.4
+  },
+  "timeseries": {
+    "population": [
+      76,
+      52,
+      46,
+      40,
+      37,
+      41,
+      32,
+      31,
+      31,
+      35
+    ],
+    "complexity": [
+      0.20114928274944777,
+      0.16996164236833913,
+      0.21234562293639797,
+      0.2238439091845305,
+      0.17444245398722874,
+      0.1943203969393503,
+      0.13447858840997975,
+      0.14632852434517693,
+      0.1777289429454129,
+      0.23146990711804108
+    ],
+    "volatility": [
+      0.2692307692307692,
+      0.3157894736842105,
+      0.11538461538461539,
+      0.13043478260869565,
+      0.075,
+      0.10810810810810811,
+      0.21951219512195122,
+      0.03125,
+      0.0,
+      0.12903225806451613
+    ],
+    "morphic_influence_rate": [
+      0.0,
+      0.013333333333333334,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pattern_diversity": [
+      107,
+      80,
+      73,
+      65,
+      66,
+      70,
+      67,
+      58,
+      57,
+      56
+    ],
+    "resonance_event_count": 0
+  },
+  "summary_stats": {
+    "final_population": 35,
+    "max_population": 76,
+    "min_population": 31,
+    "avg_population": 42.1,
+    "std_population": 13.011149065320865,
+    "avg_complexity": 0.1866069270983905,
+    "avg_volatility": 0.13937422022028662,
+    "stability_score": 0,
+    "emergence_events": 0,
+    "avg_influence_rate": 0.0013333333333333335,
+    "max_influence_rate": 0.013333333333333334,
+    "avg_pattern_diversity": 69.9,
+    "resonance_events": 0
+  },
+  "metadata": {
+    "grid_size": 15,
+    "generations": 10,
+    "initial_population": 104,
+    "timestamp": "20251007_092501"
+  }
+}
