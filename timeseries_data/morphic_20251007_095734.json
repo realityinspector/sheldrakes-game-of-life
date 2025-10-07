@@ -1,0 +1,100 @@
+{
+  "run_id": "morphic_20251007_095734",
+  "mode": "morphic",
+  "config": {
+    "field_strength": 0.8,
+    "temporal_decay": 0.2,
+    "cross_system_coupling": 0.0,
+    "similarity_threshold": 0.6,
+    "influence_exponent": 2.0,
+    "crystal_count": 3,
+    "crystal_capacity": 50,
+    "generations": 10,
+    "grid_size": 15,
+    "initial_density": 0.4
+  },
+  "timeseries": {
+    "population": [
+      80,
+      53,
+      50,
+      42,
+      29,
+      28,
+      33,
+      23,
+      25,
+      22
+    ],
+    "complexity": [
+      0.17988658120817524,
+      0.13871516913498735,
+      0.20114928274944777,
+      0.17988658120817524,
+      0.15651982874423118,
+      0.17333311075484284,
+      0.1821510701195,
+      0.16418875579912345,
+      0.19332515148715354,
+      0.1892918495894307
+    ],
+    "volatility": [
+      0.2982456140350877,
+      0.3375,
+      0.05660377358490566,
+      0.16,
+      0.30952380952380953,
+      0.034482758620689655,
+      0.17857142857142858,
+      0.30303030303030304,
+      0.08695652173913043,
+      0.12
+    ],
+    "morphic_influence_rate": [
+      0.0,
+      0.013333333333333334,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pattern_diversity": [
+      121,
+      84,
+      81,
+      72,
+      55,
+      54,
+      58,
+      56,
+      46,
+      51
+    ],
+    "resonance_event_count": 0
+  },
+  "summary_stats": {
+    "final_population": 22,
+    "max_population": 80,
+    "min_population": 22,
+    "avg_population": 38.5,
+    "std_population": 17.327723451163457,
+    "avg_complexity": 0.1758447380795067,
+    "avg_volatility": 0.18849142091053545,
+    "stability_score": 0,
+    "emergence_events": 0,
+    "avg_influence_rate": 0.0013333333333333335,
+    "max_influence_rate": 0.013333333333333334,
+    "avg_pattern_diversity": 67.8,
+    "resonance_events": 0
+  },
+  "metadata": {
+    "grid_size": 15,
+    "generations": 10,
+    "initial_population": 114,
+    "timestamp": "20251007_095734"
+  }
+}
