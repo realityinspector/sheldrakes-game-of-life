@@ -1,0 +1,107 @@
+{
+  "generated_at": "2025-10-07T09:40:01.074177",
+  "total_experiments": 5,
+  "experiment_types": {
+    "morphic": 5
+  },
+  "parameters": {
+    "field_strength": [
+      0.1,
+      0.6
+    ],
+    "temporal_decay": [
+      0.0,
+      0.1,
+      0.5,
+      0.9
+    ],
+    "similarity_threshold": [
+      0.7
+    ],
+    "influence_exponent": [
+      2.0
+    ]
+  },
+  "experiments": [
+    {
+      "run_id": "decay_study_00",
+      "mode": "morphic",
+      "config": {
+        "field_strength": 0.6,
+        "temporal_decay": 0.0,
+        "cross_system_coupling": 0.0,
+        "similarity_threshold": 0.7,
+        "influence_exponent": 2.0,
+        "crystal_count": 5,
+        "crystal_capacity": 50,
+        "generations": 200,
+        "grid_size": 25,
+        "initial_density": 0.4
+      }
+    },
+    {
+      "run_id": "decay_study_01",
+      "mode": "morphic",
+      "config": {
+        "field_strength": 0.6,
+        "temporal_decay": 0.1,
+        "cross_system_coupling": 0.0,
+        "similarity_threshold": 0.7,
+        "influence_exponent": 2.0,
+        "crystal_count": 5,
+        "crystal_capacity": 50,
+        "generations": 200,
+        "grid_size": 25,
+        "initial_density": 0.4
+      }
+    },
+    {
+      "run_id": "decay_study_05",
+      "mode": "morphic",
+      "config": {
+        "field_strength": 0.6,
+        "temporal_decay": 0.5,
+        "cross_system_coupling": 0.0,
+        "similarity_threshold": 0.7,
+        "influence_exponent": 2.0,
+        "crystal_count": 5,
+        "crystal_capacity": 50,
+        "generations": 200,
+        "grid_size": 25,
+        "initial_density": 0.4
+      }
+    },
+    {
+      "run_id": "decay_study_09",
+      "mode": "morphic",
+      "config": {
+        "field_strength": 0.6,
+        "temporal_decay": 0.9,
+        "cross_system_coupling": 0.0,
+        "similarity_threshold": 0.7,
+        "influence_exponent": 2.0,
+        "crystal_count": 5,
+        "crystal_capacity": 50,
+        "generations": 200,
+        "grid_size": 25,
+        "initial_density": 0.4
+      }
+    },
+    {
+      "run_id": "strength_study_01",
+      "mode": "morphic",
+      "config": {
+        "field_strength": 0.1,
+        "temporal_decay": 0.0,
+        "cross_system_coupling": 0.0,
+        "similarity_threshold": 0.7,
+        "influence_exponent": 2.0,
+        "crystal_count": 5,
+        "crystal_capacity": 50,
+        "generations": 200,
+        "grid_size": 25,
+        "initial_density": 0.4
+      }
+    }
+  ]
+}

@@ -243,13 +243,36 @@ def get_adaptive_neighborhood(grid, i, j, grid_size, pattern_scale=None):
 
     return neighborhood, actual_size
 
-def get_morphic_influence_for_cell(neighborhood, crystals, conway_decision, grid=None, i=None, j=None, grid_size=None):
+def get_morphic_influence_for_cell(neighborhood, crystals, conway_decision, grid=None, i=None, j=None, grid_size=None, morphic_config=None, current_generation=0):
     """
     Calculate morphic influence for a single cell based on pattern similarity
+
+    Args:
+        neighborhood: Current cell neighborhood
+        crystals: List of memory crystals
+        conway_decision: Decision from Conway's rules
+        grid: Full grid (optional, for adaptive neighborhoods)
+        i, j: Cell position (optional, for adaptive neighborhoods)
+        grid_size: Grid dimensions (optional)
+        morphic_config: MorphicFieldConfig object with field parameters
+        current_generation: Current generation number for temporal decay
+
     Returns: (influenced_decision, influence_strength, debug_info)
     """
     if not crystals:
         return conway_decision, 0.0, {'reason': 'no_crystals'}
+
+    # Use default field parameters if config not provided
+    if morphic_config is None:
+        field_strength = 0.6
+        temporal_decay = 0.1
+        similarity_threshold = 0.7
+        influence_exponent = 2.0
+    else:
+        field_strength = morphic_config.field_strength
+        temporal_decay = morphic_config.temporal_decay
+        similarity_threshold = morphic_config.similarity_threshold
+        influence_exponent = morphic_config.influence_exponent
 
     try:
         # Find patterns similar to current neighborhood
@@ -275,14 +298,31 @@ def get_morphic_influence_for_cell(neighborhood, crystals, conway_decision, grid
                     else:
                         sim = calculate_pattern_similarity(neighborhood, pattern)
 
-                    if sim > 0.3:  # Only consider meaningful similarities
+                    # Apply similarity threshold from config
+                    if sim > similarity_threshold * 0.5:  # Lower bound for consideration
+                        # Calculate crystal age and apply temporal decay
+                        pattern_generation = pattern.get('generation', 0)
+                        crystal_age = current_generation - pattern_generation if current_generation > pattern_generation else 0
+
+                        # Apply exponential temporal decay
+                        time_factor = np.exp(-temporal_decay * crystal_age) if temporal_decay > 0 else 1.0
+
+                        # Apply influence exponent to similarity
+                        similarity_transformed = sim ** influence_exponent
+
+                        # Calculate weighted score with all factors
+                        weighted_score = similarity_transformed * crystal['strength'] * time_factor
+
                         similarities.append({
                             'similarity': sim,
                             'strength': crystal['strength'],
                             'crystal': crystal,
                             'pattern': pattern,
-                            'weighted_score': sim * crystal['strength'],
-                            'pattern_scale': pattern_scale
+                            'weighted_score': weighted_score,
+                            'pattern_scale': pattern_scale,
+                            'crystal_age': crystal_age,
+                            'time_factor': time_factor,
+                            'similarity_transformed': similarity_transformed
                         })
 
                         # Track the best pattern scale for potential LLM context
@@ -345,18 +385,18 @@ def get_morphic_influence_for_cell(neighborhood, crystals, conway_decision, grid
             predicted_decision = markov_decision
             decision_source = 'markov'
 
-        # Calculate final influence probability - NO CAP for perfect patterns
-        base_influence = total_influence
+        # Calculate final influence probability with field strength
+        base_influence = total_influence * field_strength
 
         # Boost influence for LLM decisions and very high similarity
         if llm_decision is not None:
             # LLM decisions get 95% minimum influence when available
-            influence_probability = max(0.95, base_influence)
+            influence_probability = max(0.95 * field_strength, base_influence)
         elif best_match['similarity'] > 0.9:
             # Near-perfect matches get 90% minimum influence
-            influence_probability = max(0.9, base_influence)
+            influence_probability = max(0.9 * field_strength, base_influence)
         else:
-            # Normal morphic influence - no arbitrary cap
+            # Normal morphic influence with field strength applied
             influence_probability = min(1.0, base_influence)
 
         # Apply morphic influence probabilistically
@@ -379,7 +419,12 @@ def get_morphic_influence_for_cell(neighborhood, crystals, conway_decision, grid
             'applied_influence': applied_influence,
             'num_matches': len(similarities),
             'pattern_scale': best_match.get('pattern_scale', 3),
-            'adaptive_neighborhood': best_pattern_scale
+            'adaptive_neighborhood': best_pattern_scale,
+            'field_strength': field_strength,
+            'temporal_decay': temporal_decay,
+            'crystal_age': best_match.get('crystal_age', 0),
+            'time_factor': best_match.get('time_factor', 1.0),
+            'similarity_transformed': best_match.get('similarity_transformed', best_match['similarity'])
         }
 
         return final_decision, total_influence, debug_info

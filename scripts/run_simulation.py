@@ -51,6 +51,26 @@ async def run_conway_simulation():
         alive_count = np.sum(grid)
         print(f'🌱 Initial population: {alive_count} cells')
 
+        # Import morphic config
+        from morphic_config import MorphicFieldConfig
+
+        # Parse morphic field parameters from command line
+        field_strength = float(sys.argv[5]) if len(sys.argv) > 5 else 0.6
+        temporal_decay = float(sys.argv[6]) if len(sys.argv) > 6 else 0.1
+        similarity_threshold = float(sys.argv[7]) if len(sys.argv) > 7 else 0.7
+        influence_exponent = float(sys.argv[8]) if len(sys.argv) > 8 else 2.0
+
+        # Create morphic config
+        morphic_config = MorphicFieldConfig(
+            field_strength=field_strength,
+            temporal_decay=temporal_decay,
+            similarity_threshold=similarity_threshold,
+            influence_exponent=influence_exponent,
+            crystal_count=crystal_count,
+            generations=generations,
+            grid_size=grid_size
+        )
+
         # Memory crystals for morphic mode
         crystals = []
         if mode == 'morphic':
@@ -60,6 +80,7 @@ async def run_conway_simulation():
                     'patterns': [],
                     'strength': random.uniform(0.1, 0.8),
                     'created': datetime.now().isoformat(),
+                    'generation_created': 0,  # NEW: track when crystal was created
                     'activation_history': [],
                     'total_successes': 0,
                     'total_trials': 0,
@@ -67,8 +88,9 @@ async def run_conway_simulation():
                 }
                 crystals.append(crystal)
             print(f'💎 Initialized {len(crystals)} memory crystals with pattern recognition')
+            print(f'⚙️  Field config: strength={field_strength:.2f}, decay={temporal_decay:.2f}, threshold={similarity_threshold:.2f}')
 
-        # Simulation metrics
+        # Simulation metrics with enhanced tracking
         stats = {
             'mode': mode,
             'grid_size': grid_size,
@@ -79,7 +101,16 @@ async def run_conway_simulation():
             'stability_score': 0,
             'complexity_score': 0,
             'emergence_events': 0,
-            'morphic_influences': []  # Track morphic decision influences
+            'morphic_influences': [],  # Track morphic decision influences
+
+            # Enhanced metrics for time series analysis
+            'morphic_config': morphic_config.to_dict() if mode == 'morphic' else {},
+            'influence_rate_history': [],  # % of cells influenced each generation
+            'pattern_diversity_history': [],  # Unique pattern count
+            'crystal_utilization_history': [],  # Crystal usage per generation
+            'resonance_events': [],  # High-influence events
+            'complexity_evolution': [],  # Complexity over time
+            'population_volatility': []  # Population change rate
         }
 
         print('🔄 Running simulation generations...')
@@ -90,6 +121,11 @@ async def run_conway_simulation():
             # Conway's Game of Life rules
             new_grid = np.zeros((grid_size, grid_size), dtype=int)
             prev_grid = grid.copy()  # Store for Markov chain updates
+
+            # Track metrics for this generation
+            gen_influenced_cells = 0
+            gen_total_cells = grid_size * grid_size
+            gen_crystal_activations = {c['id']: 0 for c in crystals} if mode == 'morphic' else {}
 
             for i in range(grid_size):
                 for j in range(grid_size):
@@ -126,7 +162,8 @@ async def run_conway_simulation():
                         # Get morphic influence for this specific cell with adaptive neighborhood
                         morphic_decision, influence_strength, debug_info = get_morphic_influence_for_cell(
                             neighborhood, crystals, decision,
-                            grid=grid, i=i, j=j, grid_size=grid_size
+                            grid=grid, i=i, j=j, grid_size=grid_size,
+                            morphic_config=morphic_config, current_generation=gen
                         )
 
                         # Store influence data for analysis
@@ -139,6 +176,19 @@ async def run_conway_simulation():
                                 'influence_strength': influence_strength,
                                 **debug_info
                             })
+
+                            # Track influenced cells
+                            if debug_info.get('applied_influence', False):
+                                gen_influenced_cells += 1
+
+                            # Track high-influence resonance events
+                            if influence_strength > 0.8:
+                                stats['resonance_events'].append({
+                                    'generation': gen,
+                                    'position': [i, j],
+                                    'strength': influence_strength,
+                                    'similarity': debug_info.get('top_similarity', 0)
+                                })
 
                         # Apply the morphic decision
                         decision = morphic_decision
@@ -222,14 +272,56 @@ async def run_conway_simulation():
                         if len(selected_crystal['patterns']) > 50:
                             selected_crystal['patterns'] = selected_crystal['patterns'][-50:]
 
+            # Calculate pattern diversity (unique 3x3 patterns in grid)
+            pattern_diversity = 0
+            if mode == 'morphic' and alive_count > 0:
+                unique_patterns = set()
+                for i in range(grid_size - 2):
+                    for j in range(grid_size - 2):
+                        pattern = tuple(grid[i:i+3, j:j+3].flatten())
+                        unique_patterns.add(pattern)
+                pattern_diversity = len(unique_patterns)
+
+            # Calculate complexity (variety in local densities)
+            complexity = 0
+            if alive_count > 0:
+                local_densities = []
+                for i in range(0, grid_size - 3, 3):
+                    for j in range(0, grid_size - 3, 3):
+                        block = grid[i:i+3, j:j+3]
+                        density = np.sum(block) / 9.0
+                        local_densities.append(density)
+                if local_densities:
+                    complexity = np.std(local_densities)
+
+            # Calculate population volatility
+            volatility = abs(alive_count - prev_alive_count) / max(1, prev_alive_count)
+
+            # Store enhanced metrics
+            if mode == 'morphic':
+                influence_rate = gen_influenced_cells / gen_total_cells if gen_total_cells > 0 else 0
+                stats['influence_rate_history'].append(influence_rate)
+                stats['pattern_diversity_history'].append(pattern_diversity)
+                stats['crystal_utilization_history'].append(gen_crystal_activations)
+
+            stats['complexity_evolution'].append(complexity)
+            stats['population_volatility'].append(volatility)
+
             prev_alive_count = alive_count
 
             # Record generation data
             gen_data = {
                 'generation': int(gen),
                 'population': int(alive_count),
-                'timestamp': datetime.now().isoformat()
+                'timestamp': datetime.now().isoformat(),
+                'complexity': float(complexity),
+                'volatility': float(volatility)
             }
+
+            if mode == 'morphic':
+                gen_data['influence_rate'] = float(influence_rate)
+                gen_data['pattern_diversity'] = int(pattern_diversity)
+
             stats['generation_data'].append(gen_data)
 
             # Progress indicator
@@ -287,6 +379,7 @@ async def run_conway_simulation():
         # Save results
         import os
         os.makedirs('results', exist_ok=True)
+        os.makedirs('timeseries_data', exist_ok=True)
 
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         filename = f'results/simulation_{mode}_{timestamp}.json'
@@ -328,6 +421,9 @@ async def run_conway_simulation():
 
         print(f'💾 Results saved to: {filename}')
 
+        # Save enhanced time series format for ML training
+        save_timeseries_format(stats_copy, mode, morphic_config if mode == 'morphic' else None, timestamp)
+
         return True
 
     except Exception as e:
@@ -335,6 +431,90 @@ async def run_conway_simulation():
         import traceback
         traceback.print_exc()
         return False
+
+
+def save_timeseries_format(stats: dict, mode: str, morphic_config, timestamp: str):
+    """Save data in structured time series format for ML training"""
+    try:
+        import numpy as np
+
+        # Custom JSON encoder for numpy types
+        class NumpyEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, (np.integer, np.int64)):
+                    return int(obj)
+                elif isinstance(obj, (np.floating, np.float64)):
+                    return float(obj)
+                elif isinstance(obj, (np.bool_, bool)):
+                    return bool(obj)
+                elif isinstance(obj, np.ndarray):
+                    return obj.tolist()
+                return super().default(obj)
+
+        # Extract time series data
+        timeseries = {
+            'population': [g['population'] for g in stats['generation_data']],
+            'complexity': [g.get('complexity', 0) for g in stats['generation_data']],
+            'volatility': [g.get('volatility', 0) for g in stats['generation_data']]
+        }
+
+        # Add morphic-specific time series
+        if mode == 'morphic':
+            timeseries['morphic_influence_rate'] = stats.get('influence_rate_history', [])
+            timeseries['pattern_diversity'] = stats.get('pattern_diversity_history', [])
+            timeseries['resonance_event_count'] = len(stats.get('resonance_events', []))
+
+        # Calculate summary statistics
+        populations = timeseries['population']
+        summary_stats = {
+            'final_population': int(populations[-1]) if populations else 0,
+            'max_population': int(max(populations)) if populations else 0,
+            'min_population': int(min(populations)) if populations else 0,
+            'avg_population': float(np.mean(populations)) if populations else 0.0,
+            'std_population': float(np.std(populations)) if populations else 0.0,
+            'avg_complexity': float(np.mean(timeseries['complexity'])) if timeseries['complexity'] else 0.0,
+            'avg_volatility': float(np.mean(timeseries['volatility'])) if timeseries['volatility'] else 0.0,
+            'stability_score': stats.get('stability_score', 0.0),
+            'emergence_events': stats.get('emergence_events', 0)
+        }
+
+        # Add morphic-specific summary stats
+        if mode == 'morphic':
+            influence_rates = timeseries.get('morphic_influence_rate', [])
+            if influence_rates:
+                summary_stats['avg_influence_rate'] = float(np.mean(influence_rates))
+                summary_stats['max_influence_rate'] = float(max(influence_rates))
+
+            pattern_divs = timeseries.get('pattern_diversity', [])
+            if pattern_divs:
+                summary_stats['avg_pattern_diversity'] = float(np.mean(pattern_divs))
+
+            summary_stats['resonance_events'] = timeseries.get('resonance_event_count', 0)
+
+        # Build complete time series dataset
+        timeseries_data = {
+            'run_id': f'{mode}_{timestamp}',
+            'mode': mode,
+            'config': morphic_config.to_dict() if morphic_config else {},
+            'timeseries': timeseries,
+            'summary_stats': summary_stats,
+            'metadata': {
+                'grid_size': stats.get('grid_size', 0),
+                'generations': stats.get('generations', 0),
+                'initial_population': stats.get('initial_population', 0),
+                'timestamp': timestamp
+            }
+        }
+
+        # Save to timeseries_data directory
+        ts_filename = f'timeseries_data/{mode}_{timestamp}.json'
+        with open(ts_filename, 'w') as f:
+            json.dump(timeseries_data, f, indent=2, cls=NumpyEncoder)
+
+        print(f'📊 Time series data saved to: {ts_filename}')
+
+    except Exception as e:
+        print(f'⚠️  Failed to save time series format: {e}')
 
 if __name__ == '__main__':
     # Run the simulation
