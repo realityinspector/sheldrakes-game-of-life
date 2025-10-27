@@ -6,6 +6,33 @@ This showcase demonstrates the core capabilities of the Morphic Field Phenomenol
 
 ---
 
+## 🎬 Visual Comparison
+
+### Side-by-Side Evolution
+
+![Side-by-Side Comparison](side_by_side_comparison.gif)
+
+*Real-time comparison of morphic (left) vs. classical (right) Conway's Game of Life evolution over 100 generations*
+
+### Classical Conway Evolution
+
+![Classical Evolution](classical_evolution.gif)
+
+*Pure Conway's Game of Life - deterministic rules, no pattern memory*
+
+### Morphic Field Evolution
+
+![Morphic Evolution](morphic_evolution.gif)
+
+*Morphic resonance mode - pattern memory influences cell decisions*
+
+**Key Visual Differences:**
+- **Classical**: Follows strict Conway rules, predictable patterns
+- **Morphic**: Pattern memory creates distinctive dynamics, influenced by stored "crystals"
+- **Convergence**: Morphic systems show faster stabilization but different final states
+
+---
+
 ## 📊 Experimental Setup
 
 ### Simulation Parameters
