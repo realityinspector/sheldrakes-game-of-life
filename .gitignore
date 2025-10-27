@@ -188,3 +188,16 @@ web_cache/
 .DS_Store
 .DS_Store
 .DS_Store
+
+# Generated data and results (should not be committed)
+results/
+timeseries_data/
+batch_results/
+logs/
+emergence.db
+emergence.db-journal
+
+# Environment files with sensitive data
+.env
+.env.local
+.env.production

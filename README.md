@@ -50,17 +50,21 @@ This suggests morphic-like mechanisms create distinctive dynamics—memory const
 ## 🚀 Quick Start
 
 ```bash
-# Complete setup + validation
+# 1. Set up environment variables (optional)
+cp .env.example .env
+# Edit .env with your API keys if using LLM features
+
+# 2. Complete setup + validation
 ./launcher.sh
 
-# Run comparative simulation
+# 3. Run comparative simulation
 ./training.sh --mode=morphic --generations=50
 
-# Start web interface
+# 4. Start web interface
 ./run.sh
 # Visit: http://localhost:8000
 
-# View historical results
+# 5. View historical results
 python simple_viewer.py
 # Visit: http://localhost:8005
 ```
@@ -105,8 +109,8 @@ See [ROADMAP.md](ROADMAP.md) for detailed vision and [PLAN.md](PLAN.md) for impl
 - ✅ Web interface with historical viewer
 - ✅ Animation and statistical visualization
 - ✅ Initial findings on memory-induced instability
-- 🔄 Time series dataset generation (in progress)
-- 🔄 ML detector training pipeline (planned)
+- ✅ Time series dataset generation and batch processing
+- 🔄 ML detector training pipeline (Phase 3 - ready to begin)
 
 ## 🔧 Configuration
 
