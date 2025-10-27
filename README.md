@@ -17,13 +17,18 @@ Think of it as: *"If physicists can predict gravitational wave signatures before
 
 ## 🧬 What We've Found So Far
 
-**Key Finding**: Pattern memory can destabilize systems. Our initial experiments show:
+**Key Finding**: Pattern memory can destabilize systems. Our experiments show:
 
-- **Morphic simulations** (with pattern memory) experience 22% population collapse
-- **Classical simulations** (pure Conway rules) remain stable
+- **Morphic simulations** (with pattern memory) show 9-14% decision influence rates
+- **Stronger fields** → higher max populations but lower final populations
+- **Memory constrains exploration**: Systems converge faster but to less optimal states
 - **Implication**: Memory without exploration leads to premature convergence
 
 This suggests morphic-like mechanisms create distinctive dynamics—memory constrains the search space, preventing discovery of stable attractors that pure evolution finds naturally.
+
+### 📊 Live Showcase Results
+
+See our [**Showcase Results**](showcase/RESULTS.md) for a detailed analysis of three comparative simulations demonstrating morphic field effects, complete with data files and scientific interpretation.
 
 ## 🔬 Current Implementation
 
