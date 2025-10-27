@@ -184,10 +184,7 @@ cython_debug/
 start_server_temp.py
 web_cache/
 .DS_Store
-.DS_Store
-.DS_Store
-.DS_Store
-.DS_Store
+**/.DS_Store
 
 # Generated data and results (should not be committed)
 results/

@@ -87,12 +87,12 @@ Relevant to:
 
 ## 🎯 Roadmap
 
-**Phase 1** (Current): Comparative simulation framework with visualization
-**Phase 2**: Time series data generation and feature extraction
-**Phase 3**: ML detector training ("morphic field signature" classifier)
-**Phase 4**: Cross-domain application (other cellular automata, real data)
+**Phase 1** ✅ Complete: Comparative simulation framework with visualization
+**Phase 2** ✅ Complete: Time series data generation and feature extraction
+**Phase 3** (Next): ML detector training ("morphic field signature" classifier)
+**Phase 4** (Future): Cross-domain application (other cellular automata, real data)
 
-See [ROADMAP.md](ROADMAP.md) for detailed vision and [PLAN.md](PLAN.md) for implementation specifics.
+See [ROADMAP.md](ROADMAP.md) for detailed vision and [PHASE2_IMPLEMENTATION.md](PHASE2_IMPLEMENTATION.md) for Phase 2 details.
 
 ## 🛠️ Technical Stack
 
