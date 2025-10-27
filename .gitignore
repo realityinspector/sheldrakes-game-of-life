@@ -197,6 +197,12 @@ logs/
 emergence.db
 emergence.db-journal
 
+# Large JSON files (over 100KB) - simulation outputs
+**/*_20[0-9][0-9][0-9][0-9][0-9][0-9]_*.json
+**/simulation_*.json
+**/morphic_*.json
+**/decay_study_*.json
+
 # Environment files with sensitive data
 .env
 .env.local
