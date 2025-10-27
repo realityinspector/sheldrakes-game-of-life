@@ -285,6 +285,70 @@ This framework now enables:
 
 ---
 
+## 🚀 Quick Start Guide
+
+### Run Your First Experiment
+
+```bash
+# 1. Verify setup
+./venv/bin/python morphic_config.py
+
+# 2. Run single morphic simulation
+./training.sh --mode=morphic --generations=50 --field-strength=0.8
+
+# 3. Check output
+ls timeseries_data/morphic_*.json
+```
+
+### Generate Research Datasets
+
+**Small test batch** (3 experiments):
+```bash
+./venv/bin/python batch_runner.py --experiment-type=focused --limit=3
+```
+
+**Focused studies** (decay, strength, threshold):
+```bash
+./venv/bin/python batch_runner.py --experiment-type=focused
+```
+
+**Full parameter sweep** (240+ runs):
+```bash
+./venv/bin/python batch_runner.py --experiment-type=full
+```
+
+### Analyze Results
+
+```bash
+# Count experiments
+ls timeseries_data/*.json | wc -l
+
+# View manifest
+cat timeseries_data/manifest.json | jq '.total_experiments'
+
+# Examine single run
+cat timeseries_data/morphic_*.json | jq '.summary_stats'
+```
+
+### Parameter Guide
+
+**Field Strength** (0.0-1.0):
+- 0.0 = Pure Conway, no morphic influence
+- 0.6 = Moderate field (default)
+- 0.9 = Strong morphic control
+
+**Temporal Decay** (0.0-1.0):
+- 0.0 = No aging, crystals remain potent forever
+- 0.1 = Slow decay (default)
+- 0.9 = Rapid decay, crystals age quickly
+
+**Similarity Threshold** (0.0-1.0):
+- 0.5 = Loose matching, frequent influence
+- 0.7 = Strict matching (default)
+- 0.9 = Very strict, rare matches
+
+---
+
 **Phase 2 Status**: ✅ **COMPLETE AND TESTED**
 
 Ready to proceed to Phase 3: ML Morphic Field Detector training.

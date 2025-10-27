@@ -92,7 +92,7 @@ Relevant to:
 **Phase 3** (Next): ML detector training ("morphic field signature" classifier)
 **Phase 4** (Future): Cross-domain application (other cellular automata, real data)
 
-See [ROADMAP.md](ROADMAP.md) for detailed vision and [PHASE2_IMPLEMENTATION.md](PHASE2_IMPLEMENTATION.md) for Phase 2 details.
+See [ROADMAP.md](ROADMAP.md) for project vision and [PHASE2_IMPLEMENTATION.md](PHASE2_IMPLEMENTATION.md) for technical details and quick start.
 
 ## 🛠️ Technical Stack
 
