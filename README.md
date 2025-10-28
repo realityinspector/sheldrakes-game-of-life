@@ -28,7 +28,11 @@ This suggests morphic-like mechanisms create distinctive dynamics—memory const
 
 ### 📊 Live Showcase Results
 
-See our [**Showcase Results**](showcase/RESULTS.md) for a detailed analysis of three comparative simulations demonstrating morphic field effects, complete with data files and scientific interpretation.
+![Morphic vs Classical Comparison](showcase/side_by_side_comparison.gif)
+
+*Live comparison: Morphic field (left) vs. Pure Conway (right) - Watch how pattern memory influences evolution*
+
+See our [**Showcase Results**](showcase/RESULTS.md) for detailed analysis of three comparative simulations, complete with more visualizations, data files, and scientific interpretation.
 
 ## 🔬 Current Implementation
 

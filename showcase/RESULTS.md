@@ -10,19 +10,19 @@ This showcase demonstrates the core capabilities of the Morphic Field Phenomenol
 
 ### Side-by-Side Evolution
 
-![Side-by-Side Comparison](side_by_side_comparison.gif)
+![Side-by-Side Comparison](./side_by_side_comparison.gif)
 
 *Real-time comparison of morphic (left) vs. classical (right) Conway's Game of Life evolution over 100 generations*
 
 ### Classical Conway Evolution
 
-![Classical Evolution](classical_evolution.gif)
+![Classical Evolution](./classical_evolution.gif)
 
 *Pure Conway's Game of Life - deterministic rules, no pattern memory*
 
 ### Morphic Field Evolution
 
-![Morphic Evolution](morphic_evolution.gif)
+![Morphic Evolution](./morphic_evolution.gif)
 
 *Morphic resonance mode - pattern memory influences cell decisions*
 
