@@ -10,6 +10,8 @@ import {
   censusCounts,
   dStar,
   dice,
+  erfc,
+  pageTest,
   mulberry32,
   normalizeMask,
   objectShape,
@@ -300,5 +302,44 @@ describe("statistics", () => {
       if (a !== b) d++;
     }
     assert.ok(Math.abs(dStar(d / n, p / n, q / n) - 1) < 0.03);
+  });
+});
+
+describe("Page's trend test", () => {
+  it("matches the textbook mean and variance", () => {
+    const t = pageTest([[1, 2, 3, 4]]);
+    assert.equal(t.L, 30);
+    // E[L] = n k (k+1)^2 / 4 = 25, Var[L] = n k^2 (k+1)(k^2-1) / 144 = 25/3
+    assert.ok(Math.abs(t.z - 5 / Math.sqrt(25 / 3)) < 1e-12);
+  });
+
+  it("is calibrated under the null and ignores fully tied rows", () => {
+    const rng = mulberry32(17);
+    let hits = 0;
+    for (let rep = 0; rep < 2000; rep++) {
+      const rows = Array.from({ length: 64 }, () => [rng(), rng(), rng(), rng()]);
+      if (pageTest(rows).p < 0.05) hits++;
+    }
+    // Binomial(2000, 0.05): mean 100, sd 9.7.
+    assert.ok(hits > 70 && hits < 130, `false positives ${hits}/2000`);
+    assert.deepEqual(pageTest([[2, 2, 2, 2]]), { n: 1, L: 25, z: 0, p: 1 });
+  });
+
+  it("detects a monotone shift and not a decreasing one", () => {
+    const rng = mulberry32(3);
+    const up = Array.from({ length: 64 }, () => [0, 0.1, 0.2, 0.3].map((m) => m + rng() - 0.5));
+    const down = up.map((row) => row.slice().reverse());
+    assert.ok(pageTest(up).p < 1e-4);
+    assert.ok(pageTest(down).p > 0.99);
+  });
+
+  it("erfc is accurate in the tail", () => {
+    const cases: [number, number][] = [
+      [0, 1],
+      [1, 0.157299207050285],
+      [3, 2.209049699858544e-5],
+      [-1, 1.842700792949715],
+    ];
+    for (const [x, v] of cases) assert.ok(Math.abs(erfc(x) - v) / v < 2e-7, `erfc(${x})`);
   });
 });

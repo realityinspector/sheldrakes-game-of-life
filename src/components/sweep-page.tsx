@@ -488,6 +488,8 @@ export function SweepPage() {
 }
 
 function megaProgress(mega: MegaState): string {
+  if (mega.stage === "screen")
+    return `Screen ${mega.screened + 1} · ${mega.ladderDone}/${mega.ladderTotal} · no α spent`;
   if (mega.stage === "confirm") return `64-seed sign test · ${mega.ladderDone}/${mega.ladderTotal}`;
   if (mega.stage === "naive")
     return `Naive 64 · innate off · ${mega.ladderDone}/${mega.ladderTotal}`;
@@ -696,9 +698,10 @@ function DoseBlock({ dose }: { dose: DoseCurve }) {
       ) : null}
       {dose.trend ? (
         <p className="mt-1 text-sm text-mist tabular-nums">
-          Dose 100 vs dose 0, paired by test seed: {dose.trend.pos} up, {dose.trend.neg} down, p{" "}
-          {dose.trend.p < 0.001 ? "< 0.001" : dose.trend.p.toFixed(3)} against α ={" "}
-          {formatAlpha(dose.alpha)}.
+          Page&apos;s trend test across doses, paired by {dose.trend.n} test seeds: z ={" "}
+          {dose.trend.z.toFixed(2)}, one-sided p{" "}
+          {dose.trend.p < 0.001 ? dose.trend.p.toExponential(2) : dose.trend.p.toFixed(3)} against α
+          = {formatAlpha(dose.alpha)}.
         </p>
       ) : null}
     </aside>

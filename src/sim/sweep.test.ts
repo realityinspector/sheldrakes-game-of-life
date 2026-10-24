@@ -210,13 +210,13 @@ describe("mega ladder", () => {
     assert.equal(r.mega.dose.points.length, 4);
     assert.equal(r.mega.dose.alpha, alphaForAttempt(3));
     assert.ok(r.mega.dose.trend);
-    assert.equal(r.mega.dose.trend.pos + r.mega.dose.trend.neg <= 16, true);
+    assert.equal(r.mega.dose.trend.n, 64);
     if (r.mega.dose.learned)
-      assert.ok(r.mega.dose.rising && r.mega.dose.trend.p < alphaForAttempt(3));
+      assert.ok(r.mega.dose.trend.z > 0 && r.mega.dose.trend.p < alphaForAttempt(3));
     const train = runs.filter((run) => run.phase === "train");
     const test = runs.filter((run) => run.phase === "test");
     assert.equal(train.length, 111);
-    assert.equal(test.length, 64);
+    assert.equal(test.length, 4 * 64);
     const trainSeeds = new Set(train.map((run) => run.seed));
     assert.ok(test.every((run) => !trainSeeds.has(run.seed)));
     const byDose = (dose: number) => test.filter((run) => run.dose === dose).map((run) => run.seed);
@@ -228,5 +228,54 @@ describe("mega lattice", () => {
   it("does not walk coupling, which is inert with an empty archive", () => {
     const { dims } = megaLattice(25);
     assert.ok(!dims.some((dim) => dim.key === "coupling"));
+  });
+});
+
+describe("mega screen", () => {
+  it("screens a candidate on its own seeds before any α is spent", () => {
+    const runner = new SweepRunner();
+    runner.setPlan({
+      mode: "seek",
+      goal: "gap",
+      generations: 80,
+      granularity: 25,
+      seedCount: 16,
+      axes: [],
+      sweepSize: false,
+      sweepInnate: false,
+      ignoreArchive: true,
+      preset: "garden",
+      baseline: small,
+      archive: [],
+      seed: 1,
+    });
+    runner.startMega();
+    const r = runner as any;
+    r.rememberCandidate({ ...small, wrap: false }, "garden", 0.5, "test recipe");
+    const seeds: number[] = [];
+    let last: unknown = null;
+    for (let guard = 0; guard < 100000; guard++) {
+      runner.tick(1);
+      if (r.lab && r.lab !== last) {
+        last = r.lab;
+        if (r.ladder?.mode === "screen") seeds.push(r.lab.seed);
+      }
+      if (r.mega.screened > 0) break;
+    }
+    assert.equal(r.mega.screened, 1);
+    assert.equal(seeds.length, 16);
+    assert.equal(new Set(seeds).size, 16);
+    const s = r.mega.lastScreen;
+    assert.equal(s.passed, s.yoked >= 11 && s.scrambled >= 11);
+    if (s.passed) {
+      assert.equal(r.ladder.mode, "confirm");
+      assert.equal(r.confirmAttempts, 1);
+      // Screen seeds are never confirm seeds.
+      for (let i = 0; i < 64; i++)
+        assert.ok(!seeds.includes(ladderSeed({ ...r.ladder, index: i })));
+    } else {
+      assert.equal(r.confirmAttempts, 0, "a failed screen spends no α");
+      assert.equal(r.mega.stage, "search");
+    }
   });
 });

@@ -458,7 +458,7 @@ export function scoreResonance(book: Book, snap: RunSnapshot | null, _filed: str
   } else if (verdict === "loud") {
     line = `The table rewrote ${pct(rate)} of the neighborhoods it read. Above 12% it is replacing Conway, not biasing it.`;
   } else {
-    line = `The table rewrote ${pct(rate)} of the neighborhoods it read. Under 1% the term is not armed. The rate is among the eight patches read each generation, not the whole board.`;
+    line = `The table rewrote ${pct(rate)} of the neighborhoods it read. Under 1% the term is not armed. The rate is among the patches read each generation (one per 32 cells, at least eight), not the whole board.`;
   }
   if (snap.exploratory)
     line += " This run was touched after generation 0, so it cannot enter a confirmatory ledger.";

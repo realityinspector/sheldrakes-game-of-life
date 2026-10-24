@@ -1,7 +1,7 @@
 import {
   ACCEPT_CAP,
   ANALYSIS_VERSION,
-  CANDIDATES_PER_GEN,
+  CANDIDATES_PER_SAMPLE,
   CENSUS_EVERY,
   CENSUS_UNTIL,
   CENTER_BIT,
@@ -12,6 +12,7 @@ import {
   ECHO_RECUR,
   PATCH,
   PATCH_CELLS,
+  samplesFor,
   SAMPLES_PER_GEN,
   WINDOW_GENS,
   bestDice,
@@ -90,6 +91,10 @@ export type RunSnapshot = {
   meanDiverge: number;
   dStar: number;
   boardShare: number;
+  /** Effective flips in generations 1–80 on Field, Yoked and Scrambled. Nulls should match Field. */
+  flipsField: number;
+  flipsYoked: number;
+  flipsScrambled: number;
   gap: number;
   specField: number;
   specYoked: number;
@@ -184,7 +189,7 @@ type Choice = {
 export const DEFAULT_CONFIG: FieldConfig = {
   fieldStrength: 0.72,
   temporalDecay: 0.08,
-  similarityThreshold: 0.74,
+  similarityThreshold: 0.55,
   influenceExponent: 2,
   crystalCount: 14,
   coupling: 0.45,
@@ -194,6 +199,11 @@ export const DEFAULT_CONFIG: FieldConfig = {
   innate: true,
   cells: 48,
 };
+
+/** Extra sites Scrambled may consult per generation to match Field's flip count. */
+export const SCRAMBLE_EXTRA = 512;
+/** Scrambled gathers this many writable sites per flip it owes, then writes the best-scoring ones. */
+export const SCRAMBLE_POOL = 4;
 
 /** The eight installed habits, in seeding order. Periods are checked in the tests. */
 export const INNATE_FORMS: { name: string; rows: string[] }[] = [
@@ -383,11 +393,21 @@ export class MorphicLab {
   private nextS: Uint8Array;
   /** Field's Conway successor before any overwrite; crystals are scored against this. */
   private conwayF: Uint8Array;
-  private candX = new Int32Array(CANDIDATES_PER_GEN);
-  private candY = new Int32Array(CANDIDATES_PER_GEN);
-  private candCoin = new Float64Array(CANDIDATES_PER_GEN);
+  /** Eligible patches the field consults each generation (scales with board area). */
+  readonly samples: number;
+  private readonly candidates: number;
+  private candX: Int32Array;
+  private candY: Int32Array;
+  private candCoin: Float64Array;
   private siteStamp: Int32Array;
   private siteEpoch = 0;
+  private siteStampS: Int32Array;
+  private siteEpochS = 0;
+  private tracedGen = -1;
+  private tracedCount = 0;
+  private rngScramble: () => number = Math.random;
+  private windowFlipsY = 0;
+  private windowFlipsS = 0;
   private yokePool: Int32Array;
   private pendingEchoes: { mask: number; nextMask: number }[] = [];
   private targetOverride: number[] | null = null;
@@ -444,7 +464,13 @@ export class MorphicLab {
     this.nextY = new Uint8Array(cells);
     this.nextS = new Uint8Array(cells);
     this.conwayF = new Uint8Array(cells);
+    this.samples = samplesFor(cells);
+    this.candidates = this.samples * CANDIDATES_PER_SAMPLE;
+    this.candX = new Int32Array(this.candidates);
+    this.candY = new Int32Array(this.candidates);
+    this.candCoin = new Float64Array(this.candidates);
     this.siteStamp = new Int32Array(cells);
+    this.siteStampS = new Int32Array(cells);
     this.yokePool = new Int32Array(cells);
     this.influenced = new Uint8Array(cells);
     this.influencedY = new Uint8Array(cells);
@@ -545,6 +571,9 @@ export class MorphicLab {
       meanDiverge: this.divergeRate,
       dStar: this.dStarNow,
       boardShare: this.windowOccupied ? this.windowFlips / this.windowOccupied : 0,
+      flipsField: this.windowFlips,
+      flipsYoked: this.windowFlipsY,
+      flipsScrambled: this.windowFlipsS,
       gap: this.gapNow,
       specField: this.specF,
       specYoked: this.specY,
@@ -607,10 +636,12 @@ export class MorphicLab {
     this.rngPatch = mulberry32(mixSeed(this.seed, 0xa11ce));
     this.rngAccept = mulberry32(mixSeed(this.seed, 0xacce97));
     this.rngYoke = mulberry32(mixSeed(this.seed, 0x70ce11));
+    this.rngScramble = mulberry32(mixSeed(this.seed, 0x5c3a3b1e));
     this.perm = permutation(this.seed);
     this.gen = 0;
     this.history = [];
     this.traces = [];
+    this.tracedGen = -1;
     this.pendingEchoes = [];
     this.saveEvery = 0;
     this.censusC.clear();
@@ -622,6 +653,8 @@ export class MorphicLab {
     this.influencedS.fill(0);
     this.glow.fill(0);
     this.windowFlips = 0;
+    this.windowFlipsY = 0;
+    this.windowFlipsS = 0;
     this.windowConsulted = 0;
     this.windowOccupied = 0;
     this.firstFlipGen = -1;
@@ -668,8 +701,11 @@ export class MorphicLab {
     this.gen = 0;
     this.history = [];
     this.traces = [];
+    this.tracedGen = -1;
     this.pendingEchoes = [];
     this.windowFlips = 0;
+    this.windowFlipsY = 0;
+    this.windowFlipsS = 0;
     this.windowConsulted = 0;
     this.windowOccupied = 0;
     this.firstFlipGen = -1;
@@ -719,13 +755,15 @@ export class MorphicLab {
     this.influencedS.fill(0);
 
     let fieldFlips = 0;
+    let scrambledFlips = 0;
     let consulted = 0;
     if (this.config.fieldStrength > 0.001) {
       // One list of candidate sites and coins per generation, drawn whatever the boards
-      // hold. Field and Scrambled each consult their own first SAMPLES_PER_GEN eligible
-      // sites from it. Identical boards therefore make identical draws, but neither
-      // board's sampling depends on the other board's cells.
-      for (let k = 0; k < CANDIDATES_PER_GEN; k++) {
+      // hold. Field consults its first `samples` eligible sites from it; Scrambled
+      // walks the same list (then its own stream) until it has made as many effective
+      // flips as Field. Identical boards make identical draws, and Field's sampling never
+      // depends on the Scrambled board.
+      for (let k = 0; k < this.candidates; k++) {
         this.candX[k] = Math.floor(this.rngPatch() * w);
         this.candY[k] = Math.floor(this.rngPatch() * h);
         this.candCoin[k] = this.rngAccept();
@@ -734,14 +772,9 @@ export class MorphicLab {
       // scoring and echoes are folded in by learn(), after the pass.
       const twins = this.twins();
       let takenF = 0;
-      let takenS = 0;
       // Monotone across runs, so a stamp left by an earlier run can never match.
       const stamp = ++this.siteEpoch;
-      for (
-        let k = 0;
-        k < CANDIDATES_PER_GEN && (takenF < SAMPLES_PER_GEN || takenS < SAMPLES_PER_GEN);
-        k++
-      ) {
+      for (let k = 0; k < this.candidates && takenF < this.samples; k++) {
         const x = this.candX[k];
         const y = this.candY[k];
         const coin = this.candCoin[k];
@@ -750,7 +783,7 @@ export class MorphicLab {
         const site = y * w + x;
         if (this.siteStamp[site] === stamp) continue;
         this.siteStamp[site] = stamp;
-        if (takenF < SAMPLES_PER_GEN) {
+        if (takenF < this.samples) {
           const patchF = this.pack(this.field, x, y);
           if (eligible(patchF)) {
             takenF++;
@@ -762,17 +795,11 @@ export class MorphicLab {
             this.considerEcho(patchF, conwayPatch);
           }
         }
-        if (takenS < SAMPLES_PER_GEN) {
-          const patchS = this.pack(this.scrambled, x, y);
-          if (eligible(patchS)) {
-            takenS++;
-            const choice = this.choose(patchS, twins);
-            this.apply(choice, coin, this.nextS, this.influencedS, x, y, null);
-          }
-        }
       }
+      scrambledFlips = this.scrambledPass(fieldFlips, twins);
     }
 
+    let yokedFlips = 0;
     if (fieldFlips > 0) {
       // Exactly fieldFlips distinct cells, uniform over Yoked's own eligible neighbourhoods
       // (fewer only if Yoked has fewer eligible cells than that). Rejection sampling with a
@@ -792,6 +819,7 @@ export class MorphicLab {
         this.nextY[idx] ^= 1;
         this.influencedY[idx] = 1;
       }
+      yokedFlips = take;
     }
 
     this.swap();
@@ -800,6 +828,8 @@ export class MorphicLab {
     this.influenceRate = consulted ? fieldFlips / consulted : 0;
     if (inWindow) {
       this.windowFlips += fieldFlips;
+      this.windowFlipsY += yokedFlips;
+      this.windowFlipsS += scrambledFlips;
       this.windowConsulted += consulted;
       this.windowOccupied += occF;
     }
@@ -814,6 +844,65 @@ export class MorphicLab {
       this.saveEvery = 0;
       this.archive = this.toArchive();
     }
+  }
+
+  /**
+   * Scrambled's memory pass, rate-matched to Field. It consults eligible sites (the shared
+   * candidate list first, then its own stream) and, at each, finds its best permuted
+   * crystal by the same score Field uses (Dice × strength × recency) with no threshold.
+   * It then writes the predicted centre at the `target` best-scoring sites where that
+   * prediction differs from Conway. Permuted shapes rarely clear Field's similarity bar,
+   * so with the bar kept the null fired about a third as often, and "Field beats
+   * Scrambled" partly meant "Field wrote more cells". This keeps the machinery and the
+   * count, and removes the content.
+   */
+  private scrambledPass(target: number, twins: Crystal[]): number {
+    if (target <= 0 || twins.length === 0) return 0;
+    const { w, h } = this;
+    const stamp = ++this.siteEpochS;
+    const decay = this.config.temporalDecay;
+    const found: { idx: number; score: number; value: number }[] = [];
+    const want = target * SCRAMBLE_POOL;
+    const visit = (x: number, y: number) => {
+      const site = y * w + x;
+      if (this.siteStampS[site] === stamp) return;
+      this.siteStampS[site] = stamp;
+      const patch = this.pack(this.scrambled, x, y);
+      if (!eligible(patch)) return;
+      let best = -1;
+      let value = 0;
+      for (const twin of twins) {
+        const score =
+          bestDice(patch, twin.forms).score * twin.strength * Math.exp(-decay * twin.age);
+        if (score > best) {
+          best = score;
+          value = twin.nextCenter;
+        }
+      }
+      if (best > 0 && value !== this.nextS[site]) found.push({ idx: site, score: best, value });
+    };
+    for (let k = 0; k < this.candidates && found.length < want; k++)
+      visit(this.candX[k], this.candY[k]);
+    for (let k = 0; k < SCRAMBLE_EXTRA && found.length < want; k++) {
+      visit(Math.floor(this.rngScramble() * w), Math.floor(this.rngScramble() * h));
+    }
+    if (found.length < target) {
+      // Sparse board: sweep every remaining site once, from a random start.
+      const n = w * h;
+      const start = Math.floor(this.rngScramble() * n);
+      for (let k = 0; k < n && found.length < target; k++) {
+        const site = (start + k) % n;
+        visit(site % w, (site / w) | 0);
+      }
+    }
+    // Stable on ties: earlier-consulted sites win.
+    found.sort((a, b) => b.score - a.score);
+    const take = Math.min(target, found.length);
+    for (let i = 0; i < take; i++) {
+      this.nextS[found[i].idx] = found[i].value;
+      this.influencedS[found[i].idx] = 1;
+    }
+    return take;
   }
 
   private flipRate(): number {
@@ -920,8 +1009,17 @@ export class MorphicLab {
         break;
       }
     }
-    this.traces.push({ mask, forms: orientations(mask), gen: this.gen });
-    if (this.traces.length > 240) this.traces.splice(0, 80);
+    // Recurrence memory keeps the first SAMPLES_PER_GEN consulted patches of each generation,
+    // so "seen in the last ECHO_MEMORY generations" means the same on every board size.
+    if (this.tracedGen !== this.gen) {
+      this.tracedGen = this.gen;
+      this.tracedCount = 0;
+    }
+    if (this.tracedCount < SAMPLES_PER_GEN) {
+      this.tracedCount++;
+      this.traces.push({ mask, forms: orientations(mask), gen: this.gen });
+      if (this.traces.length > 240) this.traces.splice(0, 80);
+    }
     if (persisted || recurred) this.pendingEchoes.push({ mask, nextMask });
   }
 

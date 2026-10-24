@@ -228,6 +228,20 @@ function readMega(mega: MegaState): Verdict {
       : "No card was armed, so the memory term did not stay in the band where a memory effect could even be discussed.";
   const frozen = mega.frozen ? ` Frozen recipe: ${mega.frozen}.` : "";
 
+  if (stage === "screen" && going) {
+    return megaVerdict(
+      true,
+      "Not yet",
+      `Morphic resonance has not been found. A candidate is being screened on ${mega.ladderTotal || 16} seeds of its own before it may spend a 64-seed test (${mega.ladderDone}/${mega.ladderTotal || 16}).`,
+      `A single armed seed is mostly noise, so a recipe has to keep the field ahead of both nulls on most of a small separate batch first. The screen spends no α and its seeds are never test seeds.${frozen} ${mega.screened} screened so far, ${mega.screenPassed} promoted. ${loudNote}`,
+      "Screening",
+      "no α spent",
+      `${mega.ladderDone}/${mega.ladderTotal || 16}`,
+      "screen open",
+      loud,
+    );
+  }
+
   if (stage === "confirm" && going) {
     return megaVerdict(
       true,

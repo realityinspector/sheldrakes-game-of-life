@@ -139,7 +139,7 @@ describe("boards", () => {
       l.step();
       const seen = new Set<number>();
       let expected = 0;
-      for (let k = 0; k < r.candX.length && expected < 8; k++) {
+      for (let k = 0; k < r.candX.length && expected < l.samples; k++) {
         const site = r.candY[k] * w + r.candX[k];
         if (seen.has(site)) {
           repeats++;
@@ -224,4 +224,36 @@ describe("targets", () => {
     // (It also stamps a ship, a comparison form, so comparison counts start above zero.)
     assert.ok(l.targets().filter((id) => keys.has(id)).length >= 3);
   });
+});
+
+describe("rate-matched Scrambled", () => {
+  // Floor: the share of Field's flips Scrambled must match. A sparse board can leave the
+  // permuted table nowhere it would change a cell, even after sweeping every site.
+  for (const [preset, cells, floor] of [
+    ["soup", 48, 0.95],
+    ["gliders", 28, 0.9],
+    ["rpen", 64, 0.7],
+  ] as [PresetId, number, number][]) {
+    it(`writes as many cells as Field, each a real departure from Conway (${preset} ${cells}²)`, () => {
+      const l = lab({ fieldStrength: 1, similarityThreshold: 0.6 }, 31, preset, cells);
+      let field = 0;
+      let scrambled = 0;
+      for (let t = 0; t < 80; t++) {
+        const conwayS = conway(l.scrambled, l.w, l.config.wrap);
+        l.step();
+        const f = count(l.influenced);
+        const s = count(l.influencedS);
+        assert.ok(s <= f, `generation ${t + 1}: scrambled ${s} > field ${f}`);
+        for (let i = 0; i < l.scrambled.length; i++)
+          assert.equal(l.scrambled[i] !== conwayS[i], l.influencedS[i] === 1);
+        field += f;
+        scrambled += s;
+      }
+      assert.ok(field > 0);
+      assert.ok(scrambled >= floor * field, `scrambled ${scrambled} vs field ${field}`);
+      const snap = l.snapshot();
+      assert.equal(snap.flipsField, field);
+      assert.equal(snap.flipsScrambled, scrambled);
+    });
+  }
 });
