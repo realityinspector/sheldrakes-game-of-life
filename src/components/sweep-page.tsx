@@ -450,7 +450,12 @@ function megaProgress(mega: MegaState): string {
   if (mega.stage === "confirm") return `64-seed sign test · ${mega.ladderDone}/${mega.ladderTotal}`;
   if (mega.stage === "naive") return `Naive 64 · innate off · ${mega.ladderDone}/${mega.ladderTotal}`;
   if (mega.stage === "dose") return `Dose curve · ${mega.ladderDone}/${mega.ladderTotal}`;
-  if (mega.stage === "done") return `Won the ladder · ${formatCount(mega.done)} illustration tries`;
+  if (mega.stage === "done") {
+    // "done" is also where a stop during the ladder lands; only a learned dose curve won.
+    return mega.dose?.learned
+      ? `Won the ladder · ${formatCount(mega.done)} illustration tries`
+      : `Stopped · ${formatCount(mega.done)} illustration tries`;
+  }
   const hunt = mega.queued > 0 ? ` · ${mega.queued} waiting for a 64-seed test` : mega.trials > 0 ? " · still open" : "";
   const motion = mega.phase === "fan" ? "fanning out" : mega.phase === "grid" ? "combing the grid" : "bouncing";
   return `${formatCount(mega.done)} tried · ${mega.hits} scored · ${motion}${hunt}`;
@@ -589,7 +594,10 @@ function ConfirmBlock({
         {result.yoked.lo.toFixed(3)} to {result.yoked.hi.toFixed(3)}). Scrambled {result.scrambled.pos} favoring the
         field, {result.scrambled.neg} against ({result.scrambled.n} non-ties), p {result.scrambled.p < 0.001 ? "< 0.001" : result.scrambled.p.toFixed(3)},
         median {result.scrambled.median.toFixed(3)} (CI {result.scrambled.lo.toFixed(3)} to {result.scrambled.hi.toFixed(3)}
-        ). Ties are dropped. Both must pass, two-sided, α = 0.05, and the median has to favor the field.
+        ). Ties are dropped, and medians are of the non-tied differences. Both must pass an exact two-sided sign test at α ={" "}
+        {formatAlpha(result.alpha)}
+        {result.alpha < 0.05 ? " (this run's share of 0.05, spent across its attempts)" : ""}, with more seeds favoring the field than
+        against it.
       </p>
       <p className="mt-2 text-sm text-pretty text-bone">{result.learnedReason}</p>
       <p className="mt-2 text-xs break-all text-mist">
@@ -790,4 +798,8 @@ function Range({
 
 function pct(n: number) {
   return `${(n * 100).toFixed(1)}%`;
+}
+
+function formatAlpha(alpha: number) {
+  return alpha >= 0.01 ? alpha.toFixed(3) : alpha.toPrecision(2);
 }

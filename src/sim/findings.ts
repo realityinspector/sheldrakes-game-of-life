@@ -1,4 +1,4 @@
-import type { HabitCandidate, PresetId, RunSnapshot } from "@/sim/engine";
+import type { HabitCandidate, PresetId, RunSnapshot } from "./engine.ts";
 
 export const RULES = {
   driftGens: 40,
@@ -39,7 +39,6 @@ export type FindingKind =
   | "loud"
   | "habit"
   | "armed"
-  | "loud"
   | "unarmed"
   | "off"
   | "dstar"
@@ -103,12 +102,6 @@ export type Question = {
   meter: number;
   reading: string;
 };
-
-export const POINT = {
-  moved: 3,
-  measured: 2,
-  loud: 1,
-} as const;
 
 export type ResonanceVerdict = "off" | "unarmed" | "armed" | "loud" | "window";
 
@@ -429,12 +422,6 @@ export function pointsFor(kind: FindingKind): number {
   return 0;
 }
 
-export function ledgerPoints(book: Book): number {
-  return book.findings
-    .filter((item) => item.kind === "armed" || item.kind === "loud" || item.kind === "unarmed" || item.kind === "off")
-    .reduce((sum, item) => sum + item.times, 0);
-}
-
 export function scoreResonance(book: Book, snap: RunSnapshot | null, _filed: string[]): Resonance {
   const armedRuns = book.findings.find((item) => item.kind === "armed")?.times ?? 0;
   if (!snap) {
@@ -504,7 +491,8 @@ export function exportDocument(book: Book) {
       off: "Field strength under 0.20 and no effective flips in generations 1–80.",
       dStar: "Descriptive. Not a pass condition.",
       habit: `A learned form is kept when it is right ≥ ${RULES.habitRate} across ≥ ${RULES.habitCalls} calls`,
-      specific: "Batch only. Field specificity exceeds yoked and scrambled, paired sign test, two-sided, α = 0.05.",
+      specific:
+        "Batch only. Field specificity exceeds yoked and scrambled, paired exact sign test, two-sided, α = 0.05 for one pre-registered batch. A mega run spends α = 0.05·6/(π²k²) on its k-th attempt, so all attempts together stay under 0.05.",
     },
     exportedAt: new Date().toISOString(),
     findings: book.findings,

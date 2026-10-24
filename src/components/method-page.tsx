@@ -63,10 +63,10 @@ export function MethodPage() {
           <p>
             <strong className="font-medium text-bone">Scrambled.</strong> The same memory pass as
             Field, with every crystal’s cells permuted inside its 5×5 frame. Live count is kept,
-            and the same permutation is applied to the mask it expects next. Innate and archived
-            forms are scrambled once, at the start of the run, from the run seed. Strength and
-            recency are copied from the field’s table, so the null keeps the machinery and loses
-            the shape.
+            and the same permutation is applied to the mask it expects next. One permutation is
+            drawn from the run seed and applied to every crystal in the field’s table, including
+            echoes learned mid-run. Strength and recency are copied from the field’s table, so the
+            null keeps the machinery and loses the shape.
           </p>
           <p>
             A cell is binary, so a remembered form can do one thing to it: flip it or leave it.
@@ -78,9 +78,12 @@ export function MethodPage() {
           </p>
           <p>
             Each memory pass draws from named streams derived from the seed: one for patch
-            sampling, one for acceptance, one for Yoked positions. Field and Scrambled consume the
-            same draws in the same order, so their difference is mask content, not luck. Control
-            reads none. The initial pattern uses a fourth stream, and only at generation 0.
+            sampling, one for acceptance, one for Yoked positions. Every generation the field
+            draws 48 candidate sites, each with its coin, whatever the boards hold. Field and
+            Scrambled each consult their own first eight eligible sites from that one list, so
+            identical boards make identical draws, their difference is mask content rather than
+            luck, and neither board’s sampling depends on the other board’s cells. Control reads
+            none. The initial pattern uses a fourth stream, and only at generation 0.
           </p>
         </Section>
 
@@ -88,7 +91,9 @@ export function MethodPage() {
           <p>
             A crystal is a 5×5 mask, the mask it expects next, and a strength. Eight are innate:
             block, blinker, tub, boat, beehive, glider, toad, beacon. Innate forms can be switched
-            off. Others are echoes, or forms carried in from the archive on this device. The
+            off. Others are echoes, or forms carried in from the archive on this device. Echoes are
+            observed on every consulted patch whether or not any crystal matched it, so a table
+            that starts empty still learns from the board. The
             Past-run coupling slider is how hard those old forms are allowed to push. A later run
             is not independent until the archive is empty and coupling is 0.
           </p>
@@ -109,15 +114,20 @@ export function MethodPage() {
           </p>
           <p>
             Census identity is stricter than a near-miss. An isolated object that fits in 5×5 is
-            named by the minimum mask over the same eight symmetries. A near-miss is not the same
-            form. A dense soup fuses into one blob and the census stays empty. That is a property
+            named by its shape: shifted into the corner of its bounding box, then the minimum
+            mask over the eight symmetries, so a boat is the same boat wherever it sits and
+            whichever way it faces. Trained and comparison forms are named the same way, which is
+            what lets the census count them. On a torus an object is followed across the edge and
+            counted once. A near-miss is not the same form. A dense soup fuses into one blob and the census stays empty. That is a property
             of the soup, not a quiet field.
           </p>
           <p>
             A crystal is eligible only if its score clears the Similarity slider. Among those, one
-            winner is chosen. Its claim on the center cell is accepted with a probability built
-            from how far it cleared the bar, its strength, how recently it was seen, and the Field
-            strength slider, and never above 0.8. An accepted claim that changes the cell is an
+            winner is chosen. The winner is the highest clearance^Sharpen × strength × recency.
+            Its claim on the center cell is accepted with a probability built from how far it
+            cleared the bar, its strength, how recently it was seen, and the Field strength
+            slider, and never above 0.8. Sharpen only picks the winner; it is not in that
+            probability. A cell is written at most once a generation. An accepted claim that changes the cell is an
             effective flip, drawn in amber. A claim that agrees with Conway is logged and not
             counted.
           </p>
@@ -126,6 +136,9 @@ export function MethodPage() {
             toward the prior each generation the crystal goes unseen. It is scored against what
             Conway would have done to the patch before any overwrite, never against the board after
             the field has written into it. Scored after the write, a crystal grades its own work.
+            Calls and echoes are folded in at the end of the generation, so during a pass Field
+            and Scrambled read the same table. An echo nudges strength; it is not counted as a
+            correct call.
           </p>
           <p>None of this is hidden. It is a table in the same process, read by address and written into the next grid.</p>
         </Section>
@@ -141,8 +154,11 @@ export function MethodPage() {
             <strong className="font-medium text-bone">Census.</strong> Every 10 generations, from 10
             through 300, each board’s isolated objects are counted by form. For form X on board B,
             n(X, B) is that count. Facilitation is ln[(n(X, B) + 0.5) / (n(X, Control) + 0.5)].
-            Trained forms are the crystals in the table at generation 0. Comparison forms are loaf,
-            pond, ship, and long boat. Specificity is mean facilitation over trained forms minus
+            Trained forms are the shapes of the crystals in the table at generation 0. If the table
+            starts empty, they are the innate forms it would have held, so innate off changes what
+            the field knows, not what it is scored on. A frozen recipe fixes its trained forms at
+            the confirm stage, and the naive retest and every dose are scored on those same forms.
+            Comparison forms are loaf, pond, ship, and long boat, and are never trained forms. Specificity is mean facilitation over trained forms minus
             mean facilitation over comparison forms. The gap on one seed is field specificity minus
             the better null. One seed is an illustration of the gap, not a test.
           </p>
@@ -183,15 +199,19 @@ export function MethodPage() {
           <p>
             <strong className="font-medium text-bone">Specific.</strong> Across a batch, paired by
             seed, Field’s specificity exceeds Yoked’s and exceeds Scrambled’s. Direction fixed in
-            advance. Paired sign test, two-sided, α = 0.05, and the median paired difference has to
-            favor the field. Both comparisons must pass. A bootstrap 95% interval sits beside each
-            median. This is still a fact about the table.
+            advance. Exact paired sign test, two-sided, ties dropped, α = 0.05 for one
+            pre-registered batch, and more non-tied seeds have to favor the field than oppose it.
+            Both comparisons must pass. A bootstrap 95% interval sits beside the median of the
+            non-tied differences. A mega run that tests recipe after recipe spends its 0.05: the
+            k-th attempt must clear 0.05 · 6 / (π² k²), about 0.030, then 0.0076, then 0.0034, so
+            all attempts together cannot exceed 0.05. This is still a fact about the table.
           </p>
           <p>
             <strong className="font-medium text-bone">Learned.</strong> Specific on a frozen recipe,
             then Specific again with innate forms off, an empty archive, and coupling at 0. Only
-            then a dose curve: that naive rule trains on 0, 1, 10, and 100 disjoint seeds, and 16
-            fresh test seeds are scored after each dose. Mean field specificity has to rise strictly
+            then a dose curve: that naive rule trains on 0, 1, 10, and 100 seeds, and the same 16
+            test seeds, none of them ever a training seed, are scored after each dose on the frozen
+            recipe’s trained forms. Mean field specificity has to rise strictly
             with that count. If the frozen coupling is 0, archive import does nothing, so those dose
             tests run at coupling 0.25 and say so. A mega run does this only after an armed
             illustration clears the gap bar. It does not round one seed up to Learned. Even a rising
@@ -200,7 +220,9 @@ export function MethodPage() {
           </p>
           <p>
             A batch is 8, 16, 32, or 64 seeds. 64 is the published size. A paired sign test on 64
-            seeds has about 88% power to detect a 70/30 split and about 62% for 65/35. A single run
+            seeds at α = 0.05 has about 88% power to detect a 70/30 split and about 62% for 65/35.
+            At a mega run’s first α of 0.030 those are about 82% and 52%; by the fifth attempt,
+            about 43% and 15%. Spending α is the price of a walk that does not stop. A single run
             is a demonstration, not a result. Seeds are derived from a SHA-256 of the frozen
             configuration, the archive, the thresholds, and the analysis version, so the hand does
             not pick them.
@@ -244,7 +266,7 @@ export function MethodPage() {
             <Factor n="9" title="Choices made after seeing the board" body="A confirmatory batch freezes the configuration, and its seeds come from the hash." />
             <Factor n="10" title="Stopping when it looks good" body="Armed is scored once, at generation 80. A sweep that stops early is marked short, and a batch that stops early is void." />
             <Factor n="11" title="A scorer with no blind" body="Narrowed by coded arm names. Not closed: the same program, by the same author, writes the cells and the scorer." />
-            <Factor n="12" title="Walking every knob" body="A mega run does not march the sliders from zero. It sorts clusters toward the armed band, bounces between patterns, and after a card scores it fans out to every parameter within one sweep step. When that pass runs out, it keeps combing the rest of the grid, then starts another pass from a new seed. One illustration seed is not a 64-seed batch. Every armed gap of 0.20 or wider gets its own 64-seed sign test. A miss does not end the walk, and it does not raise the bar so that weaker armed recipes are skipped. The walk stays open until a batch wins — Specific, then the naive retest and the dose curve — or until you stop it. Stopping before a seed list finishes voids that batch. None of this is morphic resonance. Old pictures are dropped." />
+            <Factor n="12" title="Walking every knob" body="A mega run does not march the sliders from zero. It sorts clusters toward the armed band, bounces between patterns, and after a card scores it fans out to every parameter within one sweep step. When that pass runs out, it keeps combing the rest of the grid, then starts another pass from a new seed. One illustration seed is not a 64-seed batch. Every armed gap of 0.20 or wider gets its own 64-seed sign test; recipes that differ only in a knob the run ignores are one recipe. A miss does not end the walk, and it does not raise the gap bar so that weaker armed recipes are skipped. It does lower the α the next sign test must clear, so a walk that keeps testing cannot buy a false win. The walk stays open until a batch wins — Specific, then the naive retest and the dose curve — or until you stop it. Stopping before a seed list finishes voids that batch. None of this is morphic resonance. Old pictures are dropped." />
           </ol>
           <p>
             One channel that does not leak: the control’s Conway step never reads the random stream.
@@ -258,8 +280,8 @@ export function MethodPage() {
           <p>There are two claims, and they do not have the same bar.</p>
           <p>
             <strong className="font-medium text-bone">Certain the stored forms did it.</strong> Field
-            strength 0, or innate off with an empty archive and coupling 0: Field equals Control for
-            the whole run. Specific passes against Yoked and Scrambled, on derived seeds, with a
+            strength 0: Field equals Control for the whole run. Innate off with an empty archive
+            and coupling 0 is not enough, because the empty table learns echoes from the board. Specific passes against Yoked and Scrambled, on derived seeds, with a
             frozen configuration. Learned passes the dose curve on disjoint seeds. The same first
             row replays to the same scores.
           </p>

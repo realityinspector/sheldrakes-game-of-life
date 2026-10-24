@@ -1,10 +1,12 @@
 import {
   ACCEPT_CAP,
   ANALYSIS_VERSION,
+  CANDIDATES_PER_GEN,
   CENSUS_EVERY,
   CENSUS_UNTIL,
   CENTER_BIT,
-  COMPARISON_ORBITS,
+  COMPARISON_SHAPES,
+  ECHO_BOOST,
   ECHO_MEMORY,
   ECHO_PERSIST,
   ECHO_RECUR,
@@ -21,15 +23,15 @@ import {
   mergeCounts,
   mixSeed,
   mulberry32,
+  objectShape,
   orbitOf,
   orientations,
   permutation,
   permuteMask,
-  pop25,
   rowsToMask,
   specificity,
   type LevelName,
-} from "@/sim/protocol";
+} from "./protocol.ts";
 
 export type { LevelName };
 export { ANALYSIS_VERSION, PATCH, PATCH_CELLS, WINDOW_GENS };
@@ -159,9 +161,23 @@ type Crystal = {
   activations: number;
   successes: number;
   origin: Origin;
+  /** Calls and correct calls this generation; folded into alpha/beta in learn(). */
   act: number;
   succ: number;
+  /** Echo sightings this generation; folded into alpha in learn(). */
+  echoes: number;
+  /** Seen this generation (called or echoed). Unseen crystals age and decay. */
   touched: boolean;
+};
+
+export type LabOptions = {
+  /**
+   * Pre-registered target shapes (shapeIds) for specificity. When omitted the targets
+   * are the forms in the table at generation 0, or, if the table starts empty, the
+   * innate catalog it would have held. A ladder passes the confirm stage's targets to
+   * its naive and dose stages so every stage scores the same endpoint.
+   */
+  targets?: number[];
 };
 
 type Choice = {
@@ -186,16 +202,38 @@ export const DEFAULT_CONFIG: FieldConfig = {
   cells: 48,
 };
 
-const INNATE: { name: string; rows: string[] }[] = [
+/** The eight installed habits, in seeding order. Periods are checked in the tests. */
+export const INNATE_FORMS: { name: string; rows: string[] }[] = [
   { name: "Block", rows: [".....", "..##.", "..##.", ".....", "....."] },
   { name: "Blinker", rows: [".....", ".....", ".###.", ".....", "....."] },
   { name: "Tub", rows: [".....", "..#..", ".#.#.", "..#..", "....."] },
-  { name: "Boat", rows: [".....", ".#...", "#.#..", ".#...", "....."] },
+  { name: "Boat", rows: [".....", ".##..", ".#.#.", "..#..", "....."] },
   { name: "Beehive", rows: [".....", "..##.", ".#..#", "..##.", "....."] },
   { name: "Glider", rows: [".#...", "..#..", "###..", ".....", "....."] },
   { name: "Toad", rows: [".....", "..###", ".###.", ".....", "....."] },
-  { name: "Beacon", rows: ["##...", "##...", "...##", "...##", "....."] },
+  { name: "Beacon", rows: ["##...", "##...", "..##.", "..##.", "....."] },
 ];
+
+/** Soup and glider flocks run on a torus; every other preset has dead edges. */
+export function presetWraps(preset: PresetId): boolean {
+  return preset === "soup" || preset === "gliders";
+}
+
+/** Shapes of the innate habits a table of this capacity would be seeded with. */
+export function catalogShapes(crystalCount: number): number[] {
+  const cap = Math.max(0, Math.round(crystalCount));
+  return INNATE_FORMS.slice(0, cap).map((form) => objectShape(rowsToMask(form.rows)));
+}
+
+/** Deduplicated, non-empty targets with every comparison shape removed. */
+function cleanTargets(shapes: number[]): number[] {
+  const out: number[] = [];
+  for (const id of shapes) {
+    if (id === 0 || COMPARISON_SHAPES.includes(id) || out.includes(id)) continue;
+    out.push(id);
+  }
+  return out;
+}
 
 const GLIDER = [".#.", "..#", "###"];
 const GLIDER_NW = ["###", "#..", ".#."];
@@ -287,6 +325,7 @@ function makeCrystal(
     origin,
     act: 0,
     succ: 0,
+    echoes: 0,
     touched: false,
   };
 }
@@ -341,6 +380,7 @@ export class MorphicLab {
     dStar: number;
     gap: number;
   }[] = [];
+  /** Target shapes (shapeIds) whose facilitation counts as specificity. */
   trained: number[] = [];
   perm: number[] = [];
 
@@ -348,6 +388,13 @@ export class MorphicLab {
   private nextF: Uint8Array;
   private nextY: Uint8Array;
   private nextS: Uint8Array;
+  /** Field's Conway successor before any overwrite; crystals are scored against this. */
+  private conwayF: Uint8Array;
+  private candX = new Int32Array(CANDIDATES_PER_GEN);
+  private candY = new Int32Array(CANDIDATES_PER_GEN);
+  private candCoin = new Float64Array(CANDIDATES_PER_GEN);
+  private pendingEchoes: { mask: number; nextMask: number }[] = [];
+  private targetOverride: number[] | null = null;
   private rngInit: () => number = Math.random;
   private rngPatch: () => number = Math.random;
   private rngAccept: () => number = Math.random;
@@ -385,11 +432,13 @@ export class MorphicLab {
     config?: Partial<FieldConfig>,
     seed?: number,
     preset?: PresetId,
+    options: LabOptions = {},
   ) {
     const n = clamp(Math.round(size), 16, 96);
     this.w = n;
     this.h = n;
     const cells = n * n;
+    this.targetOverride = options.targets ? options.targets.slice() : null;
     this.control = new Uint8Array(cells);
     this.field = new Uint8Array(cells);
     this.yoked = new Uint8Array(cells);
@@ -398,12 +447,14 @@ export class MorphicLab {
     this.nextF = new Uint8Array(cells);
     this.nextY = new Uint8Array(cells);
     this.nextS = new Uint8Array(cells);
+    this.conwayF = new Uint8Array(cells);
     this.influenced = new Uint8Array(cells);
     this.influencedY = new Uint8Array(cells);
     this.influencedS = new Uint8Array(cells);
     this.glow = new Float32Array(cells);
     this.config = { ...DEFAULT_CONFIG, ...config, cells: n };
-    this.archive = archive;
+    // Own copy: a batch hands the same archive to every seed, and no run may edit it.
+    this.archive = archive.map((entry) => ({ ...entry }));
     if (preset) this.preset = preset;
     const initial = seed ?? ((Math.floor(Math.random() * 90000) + 1000) >>> 0);
     this.reseed(this.preset, initial);
@@ -562,6 +613,8 @@ export class MorphicLab {
     this.gen = 0;
     this.history = [];
     this.traces = [];
+    this.pendingEchoes = [];
+    this.saveEvery = 0;
     this.censusC.clear();
     this.censusF.clear();
     this.censusY.clear();
@@ -583,7 +636,7 @@ export class MorphicLab {
     this.yoked.fill(0);
     this.scrambled.fill(0);
     this.echo = 1;
-    this.config.wrap = preset === "soup" || preset === "gliders";
+    this.config.wrap = presetWraps(preset);
     this.paintPreset(this.field);
     this.control.set(this.field);
     this.yoked.set(this.field);
@@ -614,11 +667,16 @@ export class MorphicLab {
     this.glow.fill(0);
     this.gen = 0;
     this.history = [];
+    this.traces = [];
+    this.pendingEchoes = [];
     this.windowFlips = 0;
     this.windowConsulted = 0;
     this.windowOccupied = 0;
     this.firstFlipGen = -1;
     this.halfDStarGen = -1;
+    this.influenceRate = 0;
+    this.maxPopC = 0;
+    this.maxPopM = 0;
     this.censusC.clear();
     this.censusF.clear();
     this.censusY.clear();
@@ -655,39 +713,52 @@ export class MorphicLab {
     this.conwayInto(this.control, this.nextC, wrap);
     this.conwayInto(this.yoked, this.nextY, wrap);
     this.conwayInto(this.scrambled, this.nextS, wrap);
+    this.conwayF.set(this.nextF);
     this.influenced.fill(0);
     this.influencedY.fill(0);
     this.influencedS.fill(0);
 
     let fieldFlips = 0;
     let consulted = 0;
-    const strength = this.config.fieldStrength;
-    const twins = this.twins();
-    if (strength > 0.001 && this.crystals.length) {
-      let taken = 0;
-      let guard = 0;
-      while (taken < SAMPLES_PER_GEN && guard < 48) {
-        guard++;
-        const x = Math.floor(this.rngPatch() * w);
-        const y = Math.floor(this.rngPatch() * h);
-        const patchF = this.pack(this.field, x, y);
-        const patchS = this.pack(this.scrambled, x, y);
-        const eligF = eligible(patchF);
-        const eligS = eligible(patchS);
-        if (!eligF && !eligS) continue;
-        const coin = this.rngAccept();
-        if (eligF) {
-          consulted++;
-          const choice = this.choose(patchF, this.crystals);
-          const conwayPatch = this.pack(this.nextF, x, y);
-          fieldFlips += this.apply(choice, coin, this.nextF, this.influenced, x, y, true, conwayPatch);
-          this.considerEcho(patchF, conwayPatch);
+    if (this.config.fieldStrength > 0.001) {
+      // One list of candidate sites and coins per generation, drawn whatever the boards
+      // hold. Field and Scrambled each consult their own first SAMPLES_PER_GEN eligible
+      // sites from it. Identical boards therefore make identical draws, but neither
+      // board's sampling depends on the other board's cells.
+      for (let k = 0; k < CANDIDATES_PER_GEN; k++) {
+        this.candX[k] = Math.floor(this.rngPatch() * w);
+        this.candY[k] = Math.floor(this.rngPatch() * h);
+        this.candCoin[k] = this.rngAccept();
+      }
+      // Both boards read the table as it stood at the start of the generation:
+      // scoring and echoes are folded in by learn(), after the pass.
+      const twins = this.twins();
+      let takenF = 0;
+      let takenS = 0;
+      for (let k = 0; k < CANDIDATES_PER_GEN && (takenF < SAMPLES_PER_GEN || takenS < SAMPLES_PER_GEN); k++) {
+        const x = this.candX[k];
+        const y = this.candY[k];
+        const coin = this.candCoin[k];
+        if (takenF < SAMPLES_PER_GEN) {
+          const patchF = this.pack(this.field, x, y);
+          if (eligible(patchF)) {
+            takenF++;
+            consulted++;
+            const conwayPatch = this.pack(this.conwayF, x, y);
+            const choice = this.choose(patchF, this.crystals);
+            fieldFlips += this.apply(choice, coin, this.nextF, this.influenced, x, y, conwayPatch);
+            // Observation does not need a table: an empty table can still learn echoes.
+            this.considerEcho(patchF, conwayPatch);
+          }
         }
-        if (eligS) {
-          const choice = this.choose(patchS, twins);
-          this.apply(choice, coin, this.nextS, this.influencedS, x, y, false, 0);
+        if (takenS < SAMPLES_PER_GEN) {
+          const patchS = this.pack(this.scrambled, x, y);
+          if (eligible(patchS)) {
+            takenS++;
+            const choice = this.choose(patchS, twins);
+            this.apply(choice, coin, this.nextS, this.influencedS, x, y, null);
+          }
         }
-        taken++;
       }
     }
 
@@ -699,9 +770,11 @@ export class MorphicLab {
         tries++;
         const x = Math.floor(this.rngYoke() * w);
         const y = Math.floor(this.rngYoke() * h);
-        if (!eligible(this.pack(this.yoked, x, y))) continue;
         const idx = y * w + x;
-        this.nextY[idx] = this.nextY[idx] ? 0 : 1;
+        // A second toggle would undo the first, so each cell flips at most once.
+        if (this.influencedY[idx]) continue;
+        if (!eligible(this.pack(this.yoked, x, y))) continue;
+        this.nextY[idx] ^= 1;
         this.influencedY[idx] = 1;
         placed++;
       }
@@ -771,6 +844,11 @@ export class MorphicLab {
     return best;
   }
 
+  /**
+   * Offer the chosen crystal's claim on the centre cell. With `conwayPatch` (Field only)
+   * the call is also scored: right when the crystal's expected next mask matches what
+   * Conway produced from this patch before any overwrite. Returns 1 for an effective flip.
+   */
   private apply(
     choice: Choice | null,
     coin: number,
@@ -778,27 +856,21 @@ export class MorphicLab {
     influenced: Uint8Array,
     x: number,
     y: number,
-    scoreIt: boolean,
-    conwayPatch: number,
+    conwayPatch: number | null,
   ): number {
     if (!choice) return 0;
     const crystal = choice.crystal;
-    if (scoreIt) {
+    if (conwayPatch !== null) {
       const expected = crystal.nextForms[choice.ori];
-      const right = dice(conwayPatch, expected) >= this.config.similarityThreshold;
-      if (right) {
-        crystal.alpha = Math.min(40, crystal.alpha + 1);
-        crystal.succ++;
-      } else {
-        crystal.beta = Math.min(40, crystal.beta + 1);
-      }
+      if (dice(conwayPatch, expected) >= this.config.similarityThreshold) crystal.succ++;
       crystal.act++;
       crystal.touched = true;
-      crystal.age = 0;
-      crystal.strength = crystal.alpha / (crystal.alpha + crystal.beta);
     }
-    const predicted = crystal.nextCenter;
     const idx = y * this.w + x;
+    // One write per cell per generation, so an effective flip is exactly a cell whose
+    // output differs from Conway and the count Yoked copies is a count of cells.
+    if (influenced[idx]) return 0;
+    const predicted = crystal.nextCenter;
     if (predicted === next[idx]) return 0;
     const p = Math.min(
       ACCEPT_CAP,
@@ -807,16 +879,23 @@ export class MorphicLab {
     if (coin >= p) return 0;
     next[idx] = predicted;
     influenced[idx] = 1;
-    if (scoreIt) this.glow[idx] = 1;
+    if (conwayPatch !== null) this.glow[idx] = 1;
     return 1;
   }
 
+  /**
+   * A consulted Field patch becomes an echo when it persists into its own Conway
+   * successor (Dice ≥ ECHO_PERSIST) or recurs from an earlier generation within
+   * ECHO_MEMORY (Dice ≥ ECHO_RECUR). Echoes are queued and folded in by learn().
+   */
   private considerEcho(mask: number, nextMask: number) {
     const persisted = dice(mask, nextMask) >= ECHO_PERSIST;
     let recurred = false;
     for (let i = this.traces.length - 1; i >= 0; i--) {
       const trace = this.traces[i];
       if (this.gen - trace.gen > ECHO_MEMORY) break;
+      // Recurrence means seen in an earlier generation, not a neighbouring sample now.
+      if (trace.gen === this.gen) continue;
       if (bestDice(mask, trace.forms).score >= ECHO_RECUR) {
         recurred = true;
         break;
@@ -824,35 +903,48 @@ export class MorphicLab {
     }
     this.traces.push({ mask, forms: orientations(mask), gen: this.gen });
     if (this.traces.length > 240) this.traces.splice(0, 80);
-    if (!persisted && !recurred) return;
-    const orbit = orbitOf(mask);
-    const known = this.crystals.find((c) => orbitOf(c.mask) === orbit || bestDice(mask, c.forms).score >= 0.92);
-    if (known) {
-      known.strength = Math.min(0.98, known.strength + 0.02);
-      known.alpha = Math.min(40, known.alpha + 0.4);
-      known.age = 0;
-      if (known.origin !== "innate") {
-        known.activations += 1;
-        known.successes += 1;
-      }
-      return;
-    }
-    this.addObserved(mask, nextMask);
+    if (persisted || recurred) this.pendingEchoes.push({ mask, nextMask });
   }
 
+  /**
+   * End-of-generation bookkeeping. Calls update the Beta posterior (alpha += right,
+   * beta += wrong); echoes add ECHO_BOOST to alpha; crystals not seen this generation
+   * age and decay toward the Beta(2, 2) prior. Strength is always alpha / (alpha + beta).
+   */
   private learn() {
+    for (const echo of this.pendingEchoes) {
+      const orbit = orbitOf(echo.mask);
+      const known = this.crystals.find(
+        (c) => orbitOf(c.mask) === orbit || bestDice(echo.mask, c.forms).score >= 0.92,
+      );
+      if (known) {
+        known.echoes += 1;
+        known.touched = true;
+      } else {
+        this.addObserved(echo.mask, echo.nextMask);
+      }
+    }
+    this.pendingEchoes = [];
     const fade = 1 - Math.min(0.5, this.config.temporalDecay);
     for (const crystal of this.crystals) {
-      if (!crystal.touched) {
+      if (crystal.act > 0) {
+        crystal.alpha = Math.min(40, crystal.alpha + crystal.succ);
+        crystal.beta = Math.min(40, crystal.beta + (crystal.act - crystal.succ));
+        crystal.activations += crystal.act;
+        crystal.successes += crystal.succ;
+      }
+      if (crystal.echoes > 0) crystal.alpha = Math.min(40, crystal.alpha + ECHO_BOOST * crystal.echoes);
+      if (crystal.touched) {
+        crystal.age = 0;
+      } else {
         crystal.age += 1;
         crystal.alpha = 2 + (crystal.alpha - 2) * fade;
         crystal.beta = 2 + (crystal.beta - 2) * fade;
-        crystal.strength = crystal.alpha / (crystal.alpha + crystal.beta);
       }
-      crystal.activations += crystal.act;
-      crystal.successes += crystal.succ;
+      crystal.strength = crystal.alpha / (crystal.alpha + crystal.beta);
       crystal.act = 0;
       crystal.succ = 0;
+      crystal.echoes = 0;
       crystal.touched = false;
     }
     this.crystals = this.crystals.filter(
@@ -878,8 +970,8 @@ export class MorphicLab {
 
   private seedInnate() {
     if (!this.config.innate) return;
-    for (const form of INNATE) {
-      if (this.crystals.length >= this.config.crystalCount) break;
+    for (const form of INNATE_FORMS) {
+      if (this.crystals.length >= Math.round(this.config.crystalCount)) break;
       const mask = rowsToMask(form.rows);
       const evolved = evolveMask(mask);
       this.crystals.push(
@@ -912,8 +1004,16 @@ export class MorphicLab {
     }
   }
 
+  /** Target shapes for this run. See LabOptions.targets. */
+  targets(): number[] {
+    return this.trained.slice();
+  }
+
   private captureTrained() {
-    this.trained = [...new Set(this.crystals.map((c) => orbitOf(c.mask)))];
+    const fromTable = cleanTargets(this.crystals.map((c) => objectShape(c.mask)));
+    const fallback = cleanTargets(catalogShapes(this.config.crystalCount));
+    const override = this.targetOverride ? cleanTargets(this.targetOverride) : [];
+    this.trained = override.length ? override : fromTable.length ? fromTable : fallback;
   }
 
   private twins(): Crystal[] {
@@ -931,6 +1031,7 @@ export class MorphicLab {
         name: `${c.name} · scrambled`,
         act: 0,
         succ: 0,
+        echoes: 0,
         touched: false,
       };
     });
@@ -949,10 +1050,11 @@ export class MorphicLab {
   }
 
   private takeCensus() {
-    mergeCounts(this.censusC, censusCounts(this.control, this.w, this.h));
-    mergeCounts(this.censusF, censusCounts(this.field, this.w, this.h));
-    mergeCounts(this.censusY, censusCounts(this.yoked, this.w, this.h));
-    mergeCounts(this.censusS, censusCounts(this.scrambled, this.w, this.h));
+    const wrap = this.config.wrap;
+    mergeCounts(this.censusC, censusCounts(this.control, this.w, this.h, wrap));
+    mergeCounts(this.censusF, censusCounts(this.field, this.w, this.h, wrap));
+    mergeCounts(this.censusY, censusCounts(this.yoked, this.w, this.h, wrap));
+    mergeCounts(this.censusS, censusCounts(this.scrambled, this.w, this.h, wrap));
     this.refreshSpecificity();
   }
 
@@ -1217,6 +1319,7 @@ export function cellFromPointer(
 let shotCanvas: HTMLCanvasElement | null = null;
 
 export function snapshotBoards(lab: MorphicLab): string {
+  if (typeof document === "undefined") return "";
   const tile = 72;
   if (!shotCanvas) {
     shotCanvas = document.createElement("canvas");

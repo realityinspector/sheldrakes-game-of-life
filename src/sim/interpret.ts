@@ -1,5 +1,5 @@
-import type { ConfirmResult, MegaState, SweepCard } from "@/sim/sweep";
-import { formatCount } from "@/sim/sweep";
+import type { ConfirmResult, MegaState, SweepCard } from "./sweep.ts";
+import { formatCount } from "./sweep.ts";
 
 export type HistoryLine = {
   name: string;
@@ -159,6 +159,11 @@ export function interpret(input: {
   };
 }
 
+function alphaText(alpha: number | undefined): string {
+  const a = alpha ?? 0.05;
+  return a >= 0.01 ? a.toFixed(3) : a.toPrecision(2);
+}
+
 function count(n: number): string {
   return Math.max(0, Math.round(n)).toLocaleString("en-US");
 }
@@ -190,7 +195,7 @@ function readMega(mega: MegaState): Verdict {
       true,
       "Not yet",
       `Morphic resonance has not been found. Proof: the 64-seed sign test is running (${mega.ladderDone}/${mega.ladderTotal || 64}). Extent: still an illustration until that batch seals.`,
-      `The best armed recipe was frozen and is being scored at generation 80 on seeds derived from the first-row hash, not the illustration seed.${frozen} Both nulls have to pass. Even a Specific batch would measure the table. ${loudNote}`,
+      `The best armed recipe was frozen and is being scored at generation 80 on seeds derived from the first-row hash, not the illustration seed.${frozen} Both nulls have to pass at α = ${alphaText(mega.alpha)}, this attempt's share of 0.05: every attempt in the run spends less, so a run that keeps testing cannot buy a false win. Even a Specific batch would measure the table. ${loudNote}`,
       "Running",
       "64 seeds, open",
       `${mega.ladderDone}/${mega.ladderTotal || 64}`,
@@ -255,7 +260,7 @@ function readMega(mega: MegaState): Verdict {
       true,
       "Not yet",
       `Morphic resonance has not been found. Proof: no. Sign test ${mega.trials || 1} failed, and the search is still going.`,
-      `That 64-seed batch did not beat both nulls, so it was not Specific. The walk did not end.${waiting} It keeps going until a batch wins, or until you stop it.${frozen} ${armedNote} ${loudNote}`,
+      `That 64-seed batch did not beat both nulls, so it was not Specific. The walk did not end.${waiting} It keeps going until a batch wins, or until you stop it. The next attempt must clear α = ${alphaText(mega.alpha)}.${frozen} ${armedNote} ${loudNote}`,
       "No",
       "last 64 failed",
       "Still open",

@@ -14,7 +14,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "A morphic Game of Life. Two boards share a seed; one of them remembers the forms it has seen.",
+          "A morphic Game of Life. Four boards share a seed; one of them remembers the forms it has seen, and two nulls check it.",
       },
       { name: "theme-color", content: "#0c1210" },
     ],

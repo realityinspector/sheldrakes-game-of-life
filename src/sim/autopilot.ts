@@ -1,6 +1,6 @@
-import { DEFAULT_CONFIG, type FieldConfig, type PresetId } from "@/sim/engine";
+import { DEFAULT_CONFIG, type FieldConfig, type PresetId } from "./engine.ts";
 import { suggestNextSweep, type SweepSuggestion } from "@/lib/suggest-sweep";
-import type { AxisKey, SeekGoal, SweepMode, SweepRunner } from "@/sim/sweep";
+import type { AxisKey, SeekGoal, SweepMode, SweepRunner } from "./sweep.ts";
 
 export type CampaignPlan = {
   name: string;

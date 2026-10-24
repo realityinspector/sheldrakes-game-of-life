@@ -1,6 +1,6 @@
-import type { LatticeDim } from "@/sim/sweep";
-import type { PresetId } from "@/sim/engine";
-import { mulberry32 } from "@/sim/protocol";
+import type { LatticeDim } from "./sweep.ts";
+import type { PresetId } from "./engine.ts";
+import { mulberry32 } from "./protocol.ts";
 
 export type MegaPhase = "scout" | "fan" | "grid";
 
@@ -134,15 +134,6 @@ export class MegaSearch {
     this.phase = "fan";
     this.fanQuiet = 0;
     this.focus = `${betterGap ? "drill" : scored ? "fan" : "edge"} · ${labelOf(this.dims, digits)}`;
-  }
-
-  /** Drop the open fan so a failed published batch does not keep grinding the same pocket. */
-  releasePocket() {
-    this.hot = [];
-    this.pending.clear();
-    this.fanQuiet = 0;
-    this.phase = "scout";
-    this.focus = "scout · leaving a failed pocket";
   }
 
   private sampleUnvisited(): number[] | null {
