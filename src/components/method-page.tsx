@@ -46,7 +46,8 @@ export function MethodPage() {
             The live boards are 48 by 48 unless a sweep recipe says otherwise. All four start from
             the same seed and the same pattern, and all obey the same rule: a dead cell is born
             with three neighbors, a live cell survives with two or three. Soup and glider flocks
-            wrap at the edges. The other patterns do not, unless Wrap is turned on.
+            wrap at the edges and the other patterns do not. Wrap can be flipped during a live run,
+            which marks it exploratory; a reseed and every sweep use the pattern’s own edges.
           </p>
           <p>
             <strong className="font-medium text-bone">Control.</strong> Conway only. It never reads
@@ -203,8 +204,11 @@ export function MethodPage() {
             pre-registered batch, and more non-tied seeds have to favor the field than oppose it.
             Both comparisons must pass. A bootstrap 95% interval sits beside the median of the
             non-tied differences. A mega run that tests recipe after recipe spends its 0.05: the
-            k-th attempt must clear 0.05 · 6 / (π² k²), about 0.030, then 0.0076, then 0.0034, so
-            all attempts together cannot exceed 0.05. This is still a fact about the table.
+            k-th attempt must clear 0.05 · 6 / (π² k²), about 0.030, then 0.0076, then 0.0034, and
+            that attempt’s naive retest and dose trend test use the same level. All attempts
+            together cannot exceed 0.05, for Specific or for Learned. The budget belongs to one
+            run: starting Mega run again, or Restart, opens a new one. This is still a fact about
+            the table.
           </p>
           <p>
             <strong className="font-medium text-bone">Learned.</strong> Specific on a frozen recipe,
@@ -212,7 +216,9 @@ export function MethodPage() {
             then a dose curve: that naive rule trains on 0, 1, 10, and 100 seeds, and the same 16
             test seeds, none of them ever a training seed, are scored after each dose on the frozen
             recipe’s trained forms. Mean field specificity has to rise strictly
-            with that count. If the frozen coupling is 0, archive import does nothing, so those dose
+            with that count, and dose 100 has to beat dose 0 seed for seed on those paired test
+            seeds (exact sign test, at the attempt’s α). A strict rise alone happens about one time
+            in 24 with no dose effect at all. If the frozen coupling is 0, archive import does nothing, so those dose
             tests run at coupling 0.25 and say so. A mega run does this only after an armed
             illustration clears the gap bar. It does not round one seed up to Learned. Even a rising
             curve is the table learning, not morphic resonance. If the curve was not run, or does
@@ -266,7 +272,7 @@ export function MethodPage() {
             <Factor n="9" title="Choices made after seeing the board" body="A confirmatory batch freezes the configuration, and its seeds come from the hash." />
             <Factor n="10" title="Stopping when it looks good" body="Armed is scored once, at generation 80. A sweep that stops early is marked short, and a batch that stops early is void." />
             <Factor n="11" title="A scorer with no blind" body="Narrowed by coded arm names. Not closed: the same program, by the same author, writes the cells and the scorer." />
-            <Factor n="12" title="Walking every knob" body="A mega run does not march the sliders from zero. It sorts clusters toward the armed band, bounces between patterns, and after a card scores it fans out to every parameter within one sweep step. When that pass runs out, it keeps combing the rest of the grid, then starts another pass from a new seed. One illustration seed is not a 64-seed batch. Every armed gap of 0.20 or wider gets its own 64-seed sign test; recipes that differ only in a knob the run ignores are one recipe. A miss does not end the walk, and it does not raise the gap bar so that weaker armed recipes are skipped. It does lower the α the next sign test must clear, so a walk that keeps testing cannot buy a false win. The walk stays open until a batch wins — Specific, then the naive retest and the dose curve — or until you stop it. Stopping before a seed list finishes voids that batch. None of this is morphic resonance. Old pictures are dropped." />
+            <Factor n="12" title="Walking every knob" body="A mega run does not march the sliders from zero. It sorts clusters toward the armed band, bounces between patterns, and after a card scores it fans out to every parameter within one sweep step. When that pass runs out, it keeps combing the rest of the grid, then starts another pass from a new seed. One illustration seed is not a 64-seed batch. Every armed gap of 0.20 or wider gets its own 64-seed sign test; recipes that differ only in a knob the run ignores are one recipe. Coupling is not walked at all: with an empty archive it does nothing until the dose stage, which uses the lab’s coupling. A miss does not end the walk, and it does not raise the gap bar so that weaker armed recipes are skipped. It does lower the α the next attempt must clear, at every stage, so a walk that keeps testing cannot buy a false Specific or a false Learned. The walk stays open until a batch wins — Specific, then the naive retest and the dose curve — or until you stop it. Stopping before a seed list finishes voids that batch. None of this is morphic resonance. Old pictures are dropped." />
           </ol>
           <p>
             One channel that does not leak: the control’s Conway step never reads the random stream.

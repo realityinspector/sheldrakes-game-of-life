@@ -159,6 +159,24 @@ export function interpret(input: {
   };
 }
 
+/** Specific results from earlier attempts, which later failures do not undo. */
+function earlierSpecific(mega: MegaState): string {
+  const wins = (mega.sealed ?? []).filter((item) => item.specific && item !== mega.sealed[mega.sealed.length - 1]);
+  if (wins.length === 0) return "";
+  const parts = wins.map((item) => {
+    const next =
+      item.learned === true
+        ? "Learned was reached"
+        : item.learned === false
+          ? "the dose curve did not show learning"
+          : item.naive === false
+            ? "its naive retest failed"
+            : "its naive retest did not finish";
+    return `sign test ${item.attempt} (α ${alphaText(item.alpha)}) was Specific and ${next}`;
+  });
+  return ` Earlier in this run, ${parts.join("; ")}. A later miss does not undo that; it is still the table.`;
+}
+
 function alphaText(alpha: number | undefined): string {
   const a = alpha ?? 0.05;
   return a >= 0.01 ? a.toFixed(3) : a.toPrecision(2);
@@ -251,6 +269,8 @@ function readMega(mega: MegaState): Verdict {
 
   const bar = Number.isFinite(mega.nextBar) ? mega.nextBar.toFixed(2) : "0.20";
 
+  const earlier = earlierSpecific(mega);
+
   if (going && stage === "search" && proof && !proof.specific) {
     const waiting =
       mega.queued > 0
@@ -260,9 +280,9 @@ function readMega(mega: MegaState): Verdict {
       true,
       "Not yet",
       `Morphic resonance has not been found. Proof: no. Sign test ${mega.trials || 1} failed, and the search is still going.`,
-      `That 64-seed batch did not beat both nulls, so it was not Specific. The walk did not end.${waiting} It keeps going until a batch wins, or until you stop it. The next attempt must clear α = ${alphaText(mega.alpha)}.${frozen} ${armedNote} ${loudNote}`,
-      "No",
-      "last 64 failed",
+      `That 64-seed batch did not beat both nulls, so it was not Specific. The walk did not end.${waiting} It keeps going until a batch wins, or until you stop it. The next attempt must clear α = ${alphaText(mega.alpha)}.${earlier}${frozen} ${armedNote} ${loudNote}`,
+      earlier ? "Earlier" : "No",
+      earlier ? "an earlier 64 was Specific" : "last 64 failed",
       "Still open",
       "miss is not the end",
       loud,
@@ -305,9 +325,9 @@ function readMega(mega: MegaState): Verdict {
       false,
       "No",
       "Morphic resonance was not found. Proof: no. The frozen recipe failed the 64-seed sign test.",
-      `Tried ${formatCount(mega.done)} illustration ${mega.done === 1n ? "card" : "cards"}, then ${proof.seeds} derived seeds. The field did not beat both the yoked null and the scrambled null. The naive retest and the dose curve were not run.${frozen} ${armedNote} ${loudNote} Extent: an illustration that did not replicate.`,
-      "No",
-      "64 seeds, failed",
+      `Tried ${formatCount(mega.done)} illustration ${mega.done === 1n ? "card" : "cards"}, then ${proof.seeds} derived seeds. The field did not beat both the yoked null and the scrambled null. The naive retest and the dose curve were not run.${earlier}${frozen} ${armedNote} ${loudNote} Extent: an illustration that did not replicate.`,
+      earlier ? "Earlier" : "No",
+      earlier ? "an earlier 64 was Specific" : "64 seeds, failed",
       "Not replicated",
       "one seed, then a miss",
       loud,

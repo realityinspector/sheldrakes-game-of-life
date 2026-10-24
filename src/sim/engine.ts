@@ -393,6 +393,9 @@ export class MorphicLab {
   private candX = new Int32Array(CANDIDATES_PER_GEN);
   private candY = new Int32Array(CANDIDATES_PER_GEN);
   private candCoin = new Float64Array(CANDIDATES_PER_GEN);
+  private siteStamp: Int32Array;
+  private siteEpoch = 0;
+  private yokePool: Int32Array;
   private pendingEchoes: { mask: number; nextMask: number }[] = [];
   private targetOverride: number[] | null = null;
   private rngInit: () => number = Math.random;
@@ -448,6 +451,8 @@ export class MorphicLab {
     this.nextY = new Uint8Array(cells);
     this.nextS = new Uint8Array(cells);
     this.conwayF = new Uint8Array(cells);
+    this.siteStamp = new Int32Array(cells);
+    this.yokePool = new Int32Array(cells);
     this.influenced = new Uint8Array(cells);
     this.influencedY = new Uint8Array(cells);
     this.influencedS = new Uint8Array(cells);
@@ -587,6 +592,8 @@ export class MorphicLab {
     if (patch.crystalCount !== undefined || patch.coupling !== undefined) {
       this.trimCrystals();
       this.importResonance();
+      // Still generation 0: the table changed before anything ran, so the targets follow it.
+      if (this.gen === 0) this.captureTrained();
     }
   }
 
@@ -656,7 +663,9 @@ export class MorphicLab {
 
   clearBoards() {
     this.runId += 1;
-    this.exploratory = false;
+    // The learned table, the random streams and the targets carry over, and the board
+    // will be hand-drawn, so this run cannot be replayed from a seed.
+    this.exploratory = true;
     this.control.fill(0);
     this.field.fill(0);
     this.yoked.fill(0);
@@ -735,10 +744,17 @@ export class MorphicLab {
       const twins = this.twins();
       let takenF = 0;
       let takenS = 0;
+      // Monotone across runs, so a stamp left by an earlier run can never match.
+      const stamp = ++this.siteEpoch;
       for (let k = 0; k < CANDIDATES_PER_GEN && (takenF < SAMPLES_PER_GEN || takenS < SAMPLES_PER_GEN); k++) {
         const x = this.candX[k];
         const y = this.candY[k];
         const coin = this.candCoin[k];
+        // Sites are drawn with replacement; a repeat is skipped so no site is consulted,
+        // scored, echoed or tossed twice in one generation.
+        const site = y * w + x;
+        if (this.siteStamp[site] === stamp) continue;
+        this.siteStamp[site] = stamp;
         if (takenF < SAMPLES_PER_GEN) {
           const patchF = this.pack(this.field, x, y);
           if (eligible(patchF)) {
@@ -763,20 +779,23 @@ export class MorphicLab {
     }
 
     if (fieldFlips > 0) {
-      let placed = 0;
-      let tries = 0;
-      const cap = Math.max(24, fieldFlips * 40);
-      while (placed < fieldFlips && tries < cap) {
-        tries++;
-        const x = Math.floor(this.rngYoke() * w);
-        const y = Math.floor(this.rngYoke() * h);
-        const idx = y * w + x;
-        // A second toggle would undo the first, so each cell flips at most once.
-        if (this.influencedY[idx]) continue;
-        if (!eligible(this.pack(this.yoked, x, y))) continue;
+      // Exactly fieldFlips distinct cells, uniform over Yoked's own eligible neighbourhoods
+      // (fewer only if Yoked has fewer eligible cells than that). Rejection sampling with a
+      // try cap ran out on sparse boards and left Yoked well short of Field.
+      let pool = 0;
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          if (eligible(this.pack(this.yoked, x, y))) this.yokePool[pool++] = y * w + x;
+        }
+      }
+      const take = Math.min(fieldFlips, pool);
+      for (let i = 0; i < take; i++) {
+        const j = i + Math.floor(this.rngYoke() * (pool - i));
+        const idx = this.yokePool[j];
+        this.yokePool[j] = this.yokePool[i];
+        this.yokePool[i] = idx;
         this.nextY[idx] ^= 1;
         this.influencedY[idx] = 1;
-        placed++;
       }
     }
 

@@ -81,11 +81,27 @@ export type DoseCurve = {
   coupling: number;
   points: DosePoint[];
   rising: boolean;
+  /** Paired sign test of dose 100 against dose 0 on the shared test seeds, once sealed. */
+  trend: { pos: number; neg: number; p: number } | null;
+  /** Level the trend test had to clear: the same α as the attempt's sign test. */
+  alpha: number;
   learned: boolean;
   reason: string;
 };
 
 export type MegaStage = "search" | "confirm" | "naive" | "dose" | "done";
+
+/** One sealed 64-seed attempt of a mega run, kept after later attempts replace `proof`. */
+export type SealedAttempt = {
+  attempt: number;
+  alpha: number;
+  label: string;
+  specific: boolean;
+  /** Naive retest outcome; null while not run. */
+  naive: boolean | null;
+  /** Dose-curve outcome; null while not run. */
+  learned: boolean | null;
+};
 
 const PUBLISHED_SEEDS = 64;
 const DOSE_TESTS = 16;
@@ -126,6 +142,10 @@ type Ladder = {
   testCoupling: number;
   couplingSubstituted: boolean;
   points: DosePoint[];
+  /** Field specificity per test seed at the current dose, in test-seed order. */
+  seedSpecs: number[];
+  /** seedSpecs for every sealed dose, paired by test seed. */
+  specsByDose: number[][];
 };
 
 type AxisDef = { key: AxisKey; label: string; min: number; max: number; integer?: boolean };
@@ -210,12 +230,20 @@ export type MegaState = {
   trials: number;
   /** α the open (or next) 64-seed sign test must clear; see alphaForAttempt. */
   alpha: number;
+  /** Every sealed attempt in this run, oldest first. Each Specific stays valid under α-spending. */
+  sealed: SealedAttempt[];
   nextBar: number;
   queued: number;
 };
 
+/**
+ * The mega walk's grid. Coupling is not an axis: the walk, the 64-seed test and the
+ * naive retest all run with an empty archive, where coupling does nothing, so walking it
+ * would only split one experiment into several "recipes" that each spend a test. It is
+ * held at the baseline and only matters to the dose stage.
+ */
 export function megaLattice(granPct: number): { dims: LatticeDim[]; total: bigint } {
-  const dims: LatticeDim[] = AXES.map((axis) => ({
+  const dims: LatticeDim[] = AXES.filter((axis) => axis.key !== "coupling").map((axis) => ({
     key: axis.key,
     values: axisValues(axis.min, axis.max, granPct, axis.integer),
   }));
@@ -527,6 +555,7 @@ export class SweepRunner {
       frozen: "",
       trials: 0,
       alpha: alphaForAttempt(1),
+      sealed: [],
       nextBar: PROMOTE_GAP,
       queued: 0,
     };
@@ -548,7 +577,8 @@ export class SweepRunner {
   }
 
   stop() {
-    if (this.status === "idle") return;
+    // A finished or already-stopped run has nothing open to void.
+    if (this.status === "idle" || this.status === "done" || this.status === "stopped") return;
     this.status = "stopped";
     this.lab = null;
     this.queue = [];
@@ -963,6 +993,7 @@ export class SweepRunner {
       ladder.diffsY.push(snap.specField - snap.specYoked);
       ladder.diffsS.push(snap.specField - snap.specScrambled);
       ladder.specSum += snap.specField;
+      if (ladder.mode === "dose") ladder.seedSpecs.push(snap.specField);
       ladder.gapSum += snap.gap;
     }
     this.lab = null;
@@ -1003,6 +1034,14 @@ export class SweepRunner {
     mega.proof = result;
     this.confirm = result;
     mega.trials += 1;
+    mega.sealed.push({
+      attempt: this.confirmAttempts,
+      alpha: ladder.alpha,
+      label: mega.frozen,
+      specific: result.specific,
+      naive: null,
+      learned: null,
+    });
     mega.alpha = alphaForAttempt(this.confirmAttempts + 1);
     mega.ladderDone = PUBLISHED_SEEDS;
     if (!result.specific) {
@@ -1025,7 +1064,9 @@ export class SweepRunner {
       targets: ladder.targets,
       from: ladder.row,
     });
-    this.ladder = freshLadder("naive", config, ladder.source, ladder.preset, row, PUBLISHED_SEEDS, ladder.targets, ALPHA);
+    // Same α as the attempt's sign test: with every stage of attempt k at α_k, a false
+    // Specific or a false Learned anywhere in the run stays under ALPHA.
+    this.ladder = freshLadder("naive", config, ladder.source, ladder.preset, row, PUBLISHED_SEEDS, ladder.targets, ladder.alpha);
     mega.stage = "naive";
     mega.ladderDone = 0;
     mega.ladderTotal = PUBLISHED_SEEDS;
@@ -1052,6 +1093,8 @@ export class SweepRunner {
       : "Naive retest failed. Innate forms were off, coupling was 0, and the archive was empty. The illustration’s gap was not shown without those habits. Learned was not reached. This is not morphic resonance.";
     mega.naive = result;
     if (mega.proof) mega.proof.learnedReason = result.learnedReason;
+    const sealed = mega.sealed[mega.sealed.length - 1];
+    if (sealed) sealed.naive = result.specific;
     if (!result.specific) {
       this.resumeSearch(
         `Sign test ${mega.trials} was Specific, and the naive retest was not. Learned was not reached. The walk resumed. This is not morphic resonance.`,
@@ -1078,7 +1121,7 @@ export class SweepRunner {
     });
     const first = DOSE_LIST[0];
     this.ladder = {
-      ...freshLadder("dose", config, ladder.source, ladder.preset, row, first === 0 ? DOSE_TESTS : first, ladder.targets, ALPHA),
+      ...freshLadder("dose", config, ladder.source, ladder.preset, row, first === 0 ? DOSE_TESTS : first, ladder.targets, ladder.alpha),
       doseCursor: 0,
       doses: DOSE_LIST,
       phase: first === 0 ? "test" : "train",
@@ -1098,8 +1141,10 @@ export class SweepRunner {
       coupling: testCoupling,
       points: [],
       rising: false,
+      trend: null,
+      alpha: ladder.alpha,
       learned: false,
-      reason: `Dose curve is running. Every dose is scored on the same ${DOSE_TESTS} test seeds, and no training seed is ever a test seed. ${why} Learned requires mean field specificity to rise strictly from dose 0 to 1 to 10 to 100. This is not morphic resonance.`,
+      reason: `Dose curve is running. Every dose is scored on the same ${DOSE_TESTS} test seeds, and no training seed is ever a test seed. ${why} Learned requires mean field specificity to rise strictly from dose 0 to 1 to 10 to 100, and dose 100 to beat dose 0 on the paired test seeds (exact sign test at α = ${formatAlpha(ladder.alpha)}). This is not morphic resonance.`,
     };
     this.note = mega.dose.reason;
   }
@@ -1130,11 +1175,15 @@ export class SweepRunner {
       spec: ladder.specSum / ladder.total,
       gap: ladder.gapSum / ladder.total,
     });
+    ladder.specsByDose.push(ladder.seedSpecs);
+    ladder.seedSpecs = [];
     const partial = doseReason(ladder, false);
     mega.dose = {
       coupling: ladder.testCoupling,
       points: ladder.points.map((point) => ({ ...point })),
       rising: false,
+      trend: null,
+      alpha: ladder.alpha,
       learned: false,
       reason: partial,
     };
@@ -1162,16 +1211,23 @@ export class SweepRunner {
     const ladder = this.ladder;
     const mega = this.mega;
     if (!ladder || !mega) return;
-    const learned = !!(mega.proof?.specific && mega.naive?.specific && curveRises(ladder.points));
-    const reason = doseReason(ladder, learned);
+    const rising = curveRises(ladder.points);
+    const trend = doseTrend(ladder);
+    const trendPasses = trend.p < ladder.alpha && trend.pos > trend.neg;
+    const learned = !!(mega.proof?.specific && mega.naive?.specific && rising && trendPasses);
+    const reason = doseReason(ladder, learned, trend);
     mega.dose = {
       coupling: ladder.testCoupling,
       points: ladder.points.map((point) => ({ ...point })),
-      rising: curveRises(ladder.points),
+      rising,
+      trend: { pos: trend.pos, neg: trend.neg, p: trend.p },
+      alpha: ladder.alpha,
       learned,
       reason,
     };
     if (mega.proof) mega.proof.learnedReason = reason;
+    const sealed = mega.sealed[mega.sealed.length - 1];
+    if (sealed) sealed.learned = learned;
     if (learned) {
       this.endLadder(reason);
       return;
@@ -1252,6 +1308,8 @@ export class SweepRunner {
         coupling: ladder.testCoupling,
         points: ladder.points.map((point) => ({ ...point })),
         rising: false,
+        trend: null,
+        alpha: ladder.alpha,
         learned: false,
         reason:
           "Stopped before the dose curve finished. The open dose is void. Learned was not reached. This is not morphic resonance.",
@@ -1330,6 +1388,8 @@ function freshLadder(
     testCoupling: config.coupling,
     couplingSubstituted: false,
     points: [],
+    seedSpecs: [],
+    specsByDose: [],
   };
 }
 
@@ -1409,24 +1469,44 @@ function doseFocus(ladder: Ladder): string {
   return `Dose ${dose} · ${kind} ${ladder.index}/${ladder.total}`;
 }
 
+/**
+ * Dose 100 against dose 0, paired by test seed. A strict rise of four means happens about
+ * 1 time in 24 with no dose effect at all, whatever α is, so Learned also needs this test.
+ */
+function doseTrend(ladder: Ladder): ReturnType<typeof signTest> {
+  const low = ladder.specsByDose[0] ?? [];
+  const high = ladder.specsByDose[ladder.specsByDose.length - 1] ?? [];
+  const n = Math.min(low.length, high.length);
+  const diffs: number[] = [];
+  for (let i = 0; i < n; i++) diffs.push(high[i] - low[i]);
+  return signTest(diffs);
+}
+
 function curveRises(points: DosePoint[]): boolean {
   if (points.length !== 4) return false;
   return points[0].spec < points[1].spec && points[1].spec < points[2].spec && points[2].spec < points[3].spec;
 }
 
-function doseReason(ladder: Ladder, learned: boolean): string {
+function doseReason(ladder: Ladder, learned: boolean, trend?: ReturnType<typeof signTest>): string {
   const specs = ladder.points.map((point) => `${point.dose}→${point.spec.toFixed(3)}`).join(", ");
   const couplingNote = ladder.couplingSubstituted
     ? `Frozen coupling was 0, which makes archive import a no-op, so these dose tests used coupling ${ladder.testCoupling.toFixed(2)}.`
     : `Dose tests used coupling ${ladder.testCoupling.toFixed(2)}.`;
   const head = specs ? `Mean field specificity by dose: ${specs}. ` : "";
+  const trendNote = trend
+    ? ` Dose 100 against dose 0 on the paired test seeds: ${trend.pos} up, ${trend.neg} down, p ${trend.p < 0.001 ? "< 0.001" : trend.p.toFixed(3)} (needed α = ${formatAlpha(ladder.alpha)}).`
+    : "";
   if (learned) {
-    return `${head}${couplingNote} Both 64-seed tests were Specific, and mean field specificity rose strictly with dose. Learned, for this table, was reached. That is the table learning. It is not morphic resonance. Turn the field off and the boards lock.`;
+    return `${head}${couplingNote}${trendNote} Both 64-seed tests were Specific, mean field specificity rose strictly with dose, and dose 100 beat dose 0 seed for seed. Learned, for this table, was reached. That is the table learning. It is not morphic resonance. Turn the field off and the boards lock.`;
   }
   if (ladder.points.length < 4) {
     return `${head}${couplingNote} The dose curve is not finished. Learned was not reached. This is not morphic resonance.`;
   }
-  return `${head}${couplingNote} Mean field specificity did not rise strictly across doses 0, 1, 10, and 100. Learned was not reached. This is not morphic resonance.`;
+  const rising = curveRises(ladder.points);
+  const why = rising
+    ? "Mean field specificity rose strictly, but dose 100 did not beat dose 0 on the paired seeds at the attempt's α."
+    : "Mean field specificity did not rise strictly across doses 0, 1, 10, and 100.";
+  return `${head}${couplingNote}${trendNote} ${why} Learned was not reached. This is not morphic resonance.`;
 }
 
 /**

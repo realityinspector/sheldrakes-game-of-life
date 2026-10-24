@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { DEFAULT_CONFIG, MorphicLab, catalogShapes, type FieldConfig, type PresetId } from "./engine.ts";
-import { COMPARISON_SHAPES, censusCounts } from "./protocol.ts";
+import { COMPARISON_SHAPES, WINDOW_GENS, censusCounts, eligible } from "./protocol.ts";
 
 function lab(config: Partial<FieldConfig> = {}, seed = 4242, preset: PresetId = "soup", cells = 32) {
   return new MorphicLab(cells, [], { ...DEFAULT_CONFIG, ...config, cells }, seed, preset);
@@ -81,10 +81,16 @@ describe("boards", () => {
     assert.notDeepEqual(poked.scrambled, plain.scrambled);
   });
 
-  it("effective flips are exactly the cells that differ from Conway, and Yoked copies the count", () => {
-    const l = lab({ fieldStrength: 1, similarityThreshold: 0.5 }, 11);
-    let flips = 0;
-    for (let t = 0; t < 80; t++) {
+  for (const [preset, cells] of [
+    ["soup", 32],
+    ["rpen", 64],
+    ["gliders", 64],
+    ["pulsar", 64],
+  ] as [PresetId, number][]) {
+    it(`effective flips are exactly the cells that differ from Conway, and Yoked copies the count (${preset} ${cells}²)`, () => {
+      const l = lab({ fieldStrength: 1, similarityThreshold: 0.5 }, 11, preset, cells);
+      let flips = 0;
+      for (let t = 0; t < 80; t++) {
       const conwayF = conway(l.field, l.w, l.config.wrap);
       const conwayY = conway(l.yoked, l.w, l.config.wrap);
       l.step();
@@ -96,6 +102,44 @@ describe("boards", () => {
       flips += count(l.influenced);
     }
     assert.ok(flips > 0, "the field should write at this setting");
+    });
+  }
+
+  it("consults each site at most once a generation", () => {
+    // 16² soup repeats a candidate site in about a fifth of generations.
+    const l = lab({ fieldStrength: 1, similarityThreshold: 0.5 }, 21, "soup", 16);
+    const r = l as any;
+    const w = l.w;
+    const packAt = (g: Uint8Array, x: number, y: number) => {
+      let mask = 0;
+      let bit = 0;
+      for (let dy = -2; dy <= 2; dy++) {
+        for (let dx = -2; dx <= 2; dx++) {
+          if (g[((y + dy + w) % w) * w + ((x + dx + w) % w)]) mask |= 1 << bit;
+          bit++;
+        }
+      }
+      return mask;
+    };
+    let repeats = 0;
+    for (let t = 0; t < WINDOW_GENS; t++) {
+      const before = l.field.slice();
+      const consultedBefore = r.windowConsulted;
+      l.step();
+      const seen = new Set<number>();
+      let expected = 0;
+      for (let k = 0; k < r.candX.length && expected < 8; k++) {
+        const site = r.candY[k] * w + r.candX[k];
+        if (seen.has(site)) {
+          repeats++;
+          continue;
+        }
+        seen.add(site);
+        if (eligible(packAt(before, r.candX[k], r.candY[k]))) expected++;
+      }
+      assert.equal(r.windowConsulted - consultedBefore, expected, `generation ${t + 1}`);
+    }
+    assert.ok(repeats > 0, "this board should repeat some candidate sites");
   });
 });
 
@@ -153,6 +197,7 @@ describe("targets", () => {
     for (let t = 0; t < 30; t++) l.step();
     const keys = new Set(censusCounts(l.control, l.w, l.h, l.config.wrap).keys());
     // The garden stamps blocks, a blinker, tubs and a beehive, all of them innate targets.
+    // (It also stamps a ship, a comparison form, so comparison counts start above zero.)
     assert.ok(l.targets().filter((id) => keys.has(id)).length >= 3);
   });
 });

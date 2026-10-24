@@ -621,6 +621,12 @@ function DoseBlock({ dose }: { dose: DoseCurve }) {
           {dose.points.map((point) => `dose ${point.dose}: spec ${point.spec.toFixed(3)}, gap ${point.gap.toFixed(3)}`).join(" · ")}
         </p>
       ) : null}
+      {dose.trend ? (
+        <p className="mt-1 text-sm text-mist tabular-nums">
+          Dose 100 vs dose 0, paired by test seed: {dose.trend.pos} up, {dose.trend.neg} down, p{" "}
+          {dose.trend.p < 0.001 ? "< 0.001" : dose.trend.p.toFixed(3)} against α = {formatAlpha(dose.alpha)}.
+        </p>
+      ) : null}
     </aside>
   );
 }
