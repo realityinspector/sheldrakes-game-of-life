@@ -266,18 +266,12 @@ export function review(
 
   if (snap.gen >= WINDOW && !next.filedThisRun.includes("level")) {
     const level = snap.level;
-    file(
-      "level",
-      level,
-      levelClaim(level),
-      levelDetail(snap),
-      {
-        meanInfluence: round(influence),
-        dStar: round(snap.dStar),
-        gap: round(snap.gap),
-        generations: snap.gen,
-      },
-    );
+    file("level", level, levelClaim(level), levelDetail(snap), {
+      meanInfluence: round(influence),
+      dStar: round(snap.dStar),
+      gap: round(snap.gap),
+      generations: snap.gen,
+    });
   }
 
   if (snap.gen >= WINDOW && !next.filedThisRun.includes("dstar")) {
@@ -440,13 +434,23 @@ export function scoreResonance(book: Book, snap: RunSnapshot | null, _filed: str
     };
   }
 
-  const verdict: ResonanceVerdict = snap.provisional && snap.level !== "off" ? "window" : snap.level;
+  const verdict: ResonanceVerdict =
+    snap.provisional && snap.level !== "off" ? "window" : snap.level;
   const title =
-    verdict === "window" ? "Window open" : verdict === "armed" ? "Armed" : verdict === "loud" ? "Loud" : verdict === "off" ? "Off" : "Unarmed";
+    verdict === "window"
+      ? "Window open"
+      : verdict === "armed"
+        ? "Armed"
+        : verdict === "loud"
+          ? "Loud"
+          : verdict === "off"
+            ? "Off"
+            : "Unarmed";
   const rate = snap.meanInfluence;
   let line: string;
   if (verdict === "off") {
-    line = "Field strength is under 0.20 and nothing was rewritten. The test was never switched on.";
+    line =
+      "Field strength is under 0.20 and nothing was rewritten. The test was never switched on.";
   } else if (verdict === "window") {
     line = `Scored at generation 80, not before. So far ${pct(rate)} of consulted neighborhoods were rewritten. This seed is a demonstration.`;
   } else if (verdict === "armed") {
@@ -456,13 +460,19 @@ export function scoreResonance(book: Book, snap: RunSnapshot | null, _filed: str
   } else {
     line = `The table rewrote ${pct(rate)} of the neighborhoods it read. Under 1% the term is not armed. The rate is among the eight patches read each generation, not the whole board.`;
   }
-  if (snap.exploratory) line += " This run was touched after generation 0, so it cannot enter a confirmatory ledger.";
+  if (snap.exploratory)
+    line += " This run was touched after generation 0, so it cannot enter a confirmatory ledger.";
 
   return {
     verdict,
     title,
     line,
-    meter: verdict === "window" ? Math.min(1, snap.gen / WINDOW) : verdict === "off" ? 0 : Math.min(1, rate / 0.12),
+    meter:
+      verdict === "window"
+        ? Math.min(1, snap.gen / WINDOW)
+        : verdict === "off"
+          ? 0
+          : Math.min(1, rate / 0.12),
     thisRun: 0,
     ledger: armedRuns,
     chips: [
@@ -473,7 +483,13 @@ export function scoreResonance(book: Book, snap: RunSnapshot | null, _filed: str
         hint: verdict === "armed" ? "1–12%" : verdict === "loud" ? "above 12%" : "of consulted",
         tone: verdict === "armed" ? "ready" : verdict === "loud" ? "paid" : "short",
       },
-      { id: "dstar", label: "D*", value: snap.dStar.toFixed(2), hint: "descriptive only", tone: "note" },
+      {
+        id: "dstar",
+        label: "D*",
+        value: snap.dStar.toFixed(2),
+        hint: "descriptive only",
+        tone: "note",
+      },
       { id: "gap", label: "Gap", value: snap.gap.toFixed(2), hint: "not a batch", tone: "note" },
     ],
   };
@@ -486,7 +502,8 @@ export function exportDocument(book: Book) {
     summary: ledgerDigest(book),
     armedRuns: book.findings.find((item) => item.kind === "armed")?.times ?? 0,
     rules: {
-      armed: "Mean share of consulted occupied neighborhoods rewritten, generations 1–80, is between 1% and 12%.",
+      armed:
+        "Mean share of consulted occupied neighborhoods rewritten, generations 1–80, is between 1% and 12%.",
       loud: "That share is above 12%.",
       off: "Field strength under 0.20 and no effective flips in generations 1–80.",
       dStar: "Descriptive. Not a pass condition.",
@@ -504,7 +521,8 @@ export function ledgerDigest(book: Book): string {
   if (book.findings.length === 0 && book.trials.length === 0) {
     return "Nothing filed yet. A single seed can reach Armed. It cannot reach Specific.";
   }
-  const times = (kind: string) => book.findings.filter((item) => item.kind === kind).reduce((sum, item) => sum + item.times, 0);
+  const times = (kind: string) =>
+    book.findings.filter((item) => item.kind === kind).reduce((sum, item) => sum + item.times, 0);
   const habits = book.findings.filter((item) => item.kind === "habit");
   const kept =
     habits.length === 0

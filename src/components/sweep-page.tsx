@@ -1,7 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Layers, Pause, Play, RotateCcw, Sparkles, Square } from "lucide-react";
-import { Bar, BarChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { LabBrand } from "@/components/lab-nav";
 import { Autopilot } from "@/sim/autopilot";
 import { DEFAULT_CONFIG, type FieldConfig, type PresetId } from "@/sim/engine";
@@ -78,7 +87,14 @@ export function SweepPage() {
           paintAt.current = now;
           setView((n) => n + 1);
         }
-      } else if (auto && current && auto.on && !auto.busy && current.status === "done" && current.mode !== "mega") {
+      } else if (
+        auto &&
+        current &&
+        auto.on &&
+        !auto.busy &&
+        current.status === "done" &&
+        current.mode !== "mega"
+      ) {
         void auto.advance(current).then(() => {
           if (!dead) setView((n) => n + 1);
         });
@@ -175,7 +191,9 @@ export function SweepPage() {
   }
 
   function toggleAxis(key: AxisKey) {
-    setAxes((current) => (current.includes(key) ? current.filter((item) => item !== key) : [...current, key]));
+    setAxes((current) =>
+      current.includes(key) ? current.filter((item) => item !== key) : [...current, key],
+    );
   }
 
   function openCard(card: SweepCard) {
@@ -197,10 +215,10 @@ export function SweepPage() {
         <p className="text-xs tracking-widest text-mist uppercase">Sweep</p>
         <h1 className="mt-1 font-display text-4xl leading-tight font-medium italic">Recipe walk</h1>
         <p className="mt-2 max-w-3xl text-sm leading-relaxed text-pretty text-mist">
-          Each card is one configuration. The reading under the title says whether any of it is morphic
-          resonance. Autopilot changes the kind of sweep. Mega run stays open until a batch wins:
-          a 64-seed sign test, then the naive retest and the dose curve. A miss does not end it, and
-          neither does finishing a pass. It stays on this page until you stop it.
+          Each card is one configuration. The reading under the title says whether any of it is
+          morphic resonance. Autopilot changes the kind of sweep. Mega run stays open until a batch
+          wins: a 64-seed sign test, then the naive retest and the dose curve. A miss does not end
+          it, and neither does finishing a pass. It stays on this page until you stop it.
         </p>
 
         <VerdictBanner
@@ -216,15 +234,27 @@ export function SweepPage() {
         />
 
         <div className="mt-4 flex flex-wrap gap-2">
-          <Choice pressed={mode === "seek" && runner.mode !== "mega"} onClick={() => setMode("seek")} label="Goal seek" disabled={locked} />
-          <Choice pressed={mode === "grid" && runner.mode !== "mega"} onClick={() => setMode("grid")} label="Grid" disabled={locked} />
+          <Choice
+            pressed={mode === "seek" && runner.mode !== "mega"}
+            onClick={() => setMode("seek")}
+            label="Goal seek"
+            disabled={locked}
+          />
+          <Choice
+            pressed={mode === "grid" && runner.mode !== "mega"}
+            onClick={() => setMode("grid")}
+            label="Grid"
+            disabled={locked}
+          />
           <Choice
             pressed={mode === "confirm" && runner.mode !== "mega"}
             onClick={() => setMode("confirm")}
             label="Confirmatory"
             disabled={locked}
           />
-          {runner.mode === "mega" ? <Choice pressed label="Mega run" disabled onClick={() => undefined} /> : null}
+          {runner.mode === "mega" ? (
+            <Choice pressed label="Mega run" disabled onClick={() => undefined} />
+          ) : null}
         </div>
 
         <div className="mt-4 grid gap-3 rounded-lab border border-line bg-panel p-3 md:grid-cols-2">
@@ -281,7 +311,9 @@ export function SweepPage() {
               />
             ) : (
               <div>
-                <p className="text-xs text-mist">Seeds, derived from the hash. 64 is the published size.</p>
+                <p className="text-xs text-mist">
+                  Seeds, derived from the hash. 64 is the published size.
+                </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {[8, 16, 32, 64].map((count) => (
                     <Choice
@@ -398,7 +430,9 @@ export function SweepPage() {
             <RotateCcw className="size-4" /> Restart
           </button>
           <p className="text-sm text-mist tabular-nums" data-sweep-progress="">
-            {mega ? megaProgress(mega) : `${cards.length}${runner.planned ? ` / ${runner.planned}` : ""} cards`}
+            {mega
+              ? megaProgress(mega)
+              : `${cards.length}${runner.planned ? ` / ${runner.planned}` : ""} cards`}
             {status === "running" && !mega && runner.currentLabel
               ? ` · ${pilot.on ? pilot.campaign : runner.currentLabel} · gen ${runner.gen}`
               : status === "running" && mega
@@ -411,10 +445,14 @@ export function SweepPage() {
         <p className="mt-2 text-sm text-pretty text-bone">{runner.note}</p>
         {!mega && status === "idle" ? (
           <p className="mt-1 text-xs text-mist tabular-nums">
-            Mega run at {granularity}% sorts {formatCount(megaCount)} configurations toward the armed band. A wide armed gap freezes that recipe for a 64-seed sign test, then a naive retest and a dose curve. None of that is morphic resonance.
+            Mega run at {granularity}% sorts {formatCount(megaCount)} configurations toward the
+            armed band. A wide armed gap freezes that recipe for a 64-seed sign test, then a naive
+            retest and a dose curve. None of that is morphic resonance.
           </p>
         ) : null}
-        {mega && mega.focus ? <p className="mt-1 line-clamp-3 text-xs text-mist">{mega.focus}</p> : null}
+        {mega && mega.focus ? (
+          <p className="mt-1 line-clamp-3 text-xs text-mist">{mega.focus}</p>
+        ) : null}
         <span className="sr-only">{view}</span>
 
         {mega?.proof ? (
@@ -422,7 +460,9 @@ export function SweepPage() {
         ) : runner.confirm ? (
           <ConfirmBlock result={runner.confirm} />
         ) : null}
-        {mega?.naive ? <ConfirmBlock result={mega.naive} kicker="Naive retest · innate off · coupling 0" /> : null}
+        {mega?.naive ? (
+          <ConfirmBlock result={mega.naive} kicker="Naive retest · innate off · coupling 0" />
+        ) : null}
         {mega?.dose ? <DoseBlock dose={mega.dose} /> : null}
 
         {showCharts ? <Charts cards={cards} /> : null}
@@ -433,7 +473,8 @@ export function SweepPage() {
             <CardGrid title="Widest gaps kept" cards={mega.highlights} onOpen={openCard} />
             <CardGrid title="Latest" cards={latest} onOpen={openCard} />
             <p className="text-xs text-mist">
-              Older pictures are dropped. The tally above counts every configuration, not just the cards still on screen.
+              Older pictures are dropped. The tally above counts every configuration, not just the
+              cards still on screen.
             </p>
           </div>
         ) : (
@@ -448,7 +489,8 @@ export function SweepPage() {
 
 function megaProgress(mega: MegaState): string {
   if (mega.stage === "confirm") return `64-seed sign test · ${mega.ladderDone}/${mega.ladderTotal}`;
-  if (mega.stage === "naive") return `Naive 64 · innate off · ${mega.ladderDone}/${mega.ladderTotal}`;
+  if (mega.stage === "naive")
+    return `Naive 64 · innate off · ${mega.ladderDone}/${mega.ladderTotal}`;
   if (mega.stage === "dose") return `Dose curve · ${mega.ladderDone}/${mega.ladderTotal}`;
   if (mega.stage === "done") {
     // "done" is also where a stop during the ladder lands; only a learned dose curve won.
@@ -456,8 +498,14 @@ function megaProgress(mega: MegaState): string {
       ? `Won the ladder · ${formatCount(mega.done)} illustration tries`
       : `Stopped · ${formatCount(mega.done)} illustration tries`;
   }
-  const hunt = mega.queued > 0 ? ` · ${mega.queued} waiting for a 64-seed test` : mega.trials > 0 ? " · still open" : "";
-  const motion = mega.phase === "fan" ? "fanning out" : mega.phase === "grid" ? "combing the grid" : "bouncing";
+  const hunt =
+    mega.queued > 0
+      ? ` · ${mega.queued} waiting for a 64-seed test`
+      : mega.trials > 0
+        ? " · still open"
+        : "";
+  const motion =
+    mega.phase === "fan" ? "fanning out" : mega.phase === "grid" ? "combing the grid" : "bouncing";
   return `${formatCount(mega.done)} tried · ${mega.hits} scored · ${motion}${hunt}`;
 }
 
@@ -476,7 +524,10 @@ function CardGrid({
       {title ? <h2 className="font-display text-2xl italic">{title}</h2> : null}
       <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (
-          <article key={card.id} className="overflow-hidden rounded-lab border border-line bg-panel">
+          <article
+            key={card.id}
+            className="overflow-hidden rounded-lab border border-line bg-panel"
+          >
             {card.image ? (
               <img src={card.image} alt="" className="h-24 w-full bg-ink object-contain" />
             ) : (
@@ -484,12 +535,15 @@ function CardGrid({
             )}
             <div className="p-3">
               <div className="flex items-baseline justify-between gap-2">
-                <h3 className="font-display text-2xl leading-none italic capitalize">{card.level}</h3>
+                <h3 className="font-display text-2xl leading-none italic capitalize">
+                  {card.level}
+                </h3>
                 <p className="text-xs text-mist tabular-nums">#{card.id}</p>
               </div>
               <p className="mt-1 line-clamp-3 text-sm text-bone">{card.label}</p>
               <p className="mt-1 text-xs text-mist tabular-nums">
-                flips {pct(card.flipRate)} · D* {card.dStar.toFixed(2)} · gap {card.gap.toFixed(2)} · {card.cells}² · seed {card.seed}
+                flips {pct(card.flipRate)} · D* {card.dStar.toFixed(2)} · gap {card.gap.toFixed(2)}{" "}
+                · {card.cells}² · seed {card.seed}
               </p>
               <button
                 type="button"
@@ -539,12 +593,19 @@ function VerdictBanner({
   });
   const tone = verdict.resonance === "no" ? "text-mist" : "text-bone";
   return (
-    <section className="mt-4 rounded-lab border border-line bg-panel px-4 py-4" aria-label="Did this find morphic resonance?">
-      <p className="text-xs tracking-widest text-mist uppercase">Did this find morphic resonance?</p>
+    <section
+      className="mt-4 rounded-lab border border-line bg-panel px-4 py-4"
+      aria-label="Did this find morphic resonance?"
+    >
+      <p className="text-xs tracking-widest text-mist uppercase">
+        Did this find morphic resonance?
+      </p>
       <p className={`mt-1 font-display text-5xl leading-none italic ${tone}`}>{verdict.title}</p>
       <p className="mt-3 text-base text-pretty text-bone">{verdict.line}</p>
       <p className="mt-2 text-sm leading-relaxed text-pretty text-mist">{verdict.detail}</p>
-      {grokStatus && !mega ? <p className="mt-2 text-sm text-pretty text-amber">{grokStatus}</p> : null}
+      {grokStatus && !mega ? (
+        <p className="mt-2 text-sm text-pretty text-amber">{grokStatus}</p>
+      ) : null}
       <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {verdict.chips.map((chip) => (
           <li key={chip.label} className="rounded-lg border border-line bg-ink px-2 py-2">
@@ -557,7 +618,10 @@ function VerdictBanner({
       {history.length > 0 ? (
         <ol className="mt-3 grid gap-1 text-sm text-mist">
           {history.map((item, index) => (
-            <li key={`${item.name}-${index}`} className="flex flex-wrap justify-between gap-2 border-t border-line py-1">
+            <li
+              key={`${item.name}-${index}`}
+              className="flex flex-wrap justify-between gap-2 border-t border-line py-1"
+            >
               <span className="text-bone">{item.name}</span>
               <span className="tabular-nums">{item.reading}</span>
             </li>
@@ -589,20 +653,24 @@ function ConfirmBlock({
             : "The field did not beat both nulls."}
       </p>
       <p className="mt-2 text-sm leading-relaxed text-pretty text-mist">
-        {result.seeds} seeds. Yoked {result.yoked.pos} favoring the field, {result.yoked.neg} against ({result.yoked.n} non-ties), p{" "}
-        {result.yoked.p < 0.001 ? "< 0.001" : result.yoked.p.toFixed(3)}, median {result.yoked.median.toFixed(3)} (CI{" "}
-        {result.yoked.lo.toFixed(3)} to {result.yoked.hi.toFixed(3)}). Scrambled {result.scrambled.pos} favoring the
-        field, {result.scrambled.neg} against ({result.scrambled.n} non-ties), p {result.scrambled.p < 0.001 ? "< 0.001" : result.scrambled.p.toFixed(3)},
-        median {result.scrambled.median.toFixed(3)} (CI {result.scrambled.lo.toFixed(3)} to {result.scrambled.hi.toFixed(3)}
-        ). Ties are dropped, and medians are of the non-tied differences. Both must pass an exact two-sided sign test at α ={" "}
-        {formatAlpha(result.alpha)}
-        {result.alpha < 0.05 ? " (this run's share of 0.05, spent across its attempts)" : ""}, with more seeds favoring the field than
-        against it.
+        {result.seeds} seeds. Yoked {result.yoked.pos} favoring the field, {result.yoked.neg}{" "}
+        against ({result.yoked.n} non-ties), p{" "}
+        {result.yoked.p < 0.001 ? "< 0.001" : result.yoked.p.toFixed(3)}, median{" "}
+        {result.yoked.median.toFixed(3)} (CI {result.yoked.lo.toFixed(3)} to{" "}
+        {result.yoked.hi.toFixed(3)}). Scrambled {result.scrambled.pos} favoring the field,{" "}
+        {result.scrambled.neg} against ({result.scrambled.n} non-ties), p{" "}
+        {result.scrambled.p < 0.001 ? "< 0.001" : result.scrambled.p.toFixed(3)}, median{" "}
+        {result.scrambled.median.toFixed(3)} (CI {result.scrambled.lo.toFixed(3)} to{" "}
+        {result.scrambled.hi.toFixed(3)}
+        ). Ties are dropped, and medians are of the non-tied differences. Both must pass an exact
+        two-sided sign test at α = {formatAlpha(result.alpha)}
+        {result.alpha < 0.05 ? " (this run's share of 0.05, spent across its attempts)" : ""}, with
+        more seeds favoring the field than against it.
       </p>
       <p className="mt-2 text-sm text-pretty text-bone">{result.learnedReason}</p>
       <p className="mt-2 text-xs break-all text-mist">
-        First row {result.row.slice(0, 16)}… · codes ash = {result.key.ash}, birch = {result.key.birch}, cedar ={" "}
-        {result.key.cedar}. The key is appended after the scores.
+        First row {result.row.slice(0, 16)}… · codes ash = {result.key.ash}, birch ={" "}
+        {result.key.birch}, cedar = {result.key.cedar}. The key is appended after the scores.
       </p>
     </aside>
   );
@@ -618,13 +686,19 @@ function DoseBlock({ dose }: { dose: DoseCurve }) {
       {dose.points.length > 0 ? (
         <p className="mt-2 text-sm text-mist tabular-nums">
           Coupling {dose.coupling.toFixed(2)}.{" "}
-          {dose.points.map((point) => `dose ${point.dose}: spec ${point.spec.toFixed(3)}, gap ${point.gap.toFixed(3)}`).join(" · ")}
+          {dose.points
+            .map(
+              (point) =>
+                `dose ${point.dose}: spec ${point.spec.toFixed(3)}, gap ${point.gap.toFixed(3)}`,
+            )
+            .join(" · ")}
         </p>
       ) : null}
       {dose.trend ? (
         <p className="mt-1 text-sm text-mist tabular-nums">
           Dose 100 vs dose 0, paired by test seed: {dose.trend.pos} up, {dose.trend.neg} down, p{" "}
-          {dose.trend.p < 0.001 ? "< 0.001" : dose.trend.p.toFixed(3)} against α = {formatAlpha(dose.alpha)}.
+          {dose.trend.p < 0.001 ? "< 0.001" : dose.trend.p.toFixed(3)} against α ={" "}
+          {formatAlpha(dose.alpha)}.
         </p>
       ) : null}
     </aside>
@@ -648,15 +722,33 @@ function Charts({ cards }: { cards: SweepCard[] }) {
     <div className="mt-4 grid gap-3 md:grid-cols-2">
       <LevelChart caption="Levels" levels={levels} />
       <figure className="rounded-lab border border-line bg-panel p-3">
-        <figcaption className="font-display text-lg italic">Flips and gap along the walk</figcaption>
+        <figcaption className="font-display text-lg italic">
+          Flips and gap along the walk
+        </figcaption>
         <div className="h-40">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={series}>
               <XAxis dataKey="i" stroke="#8d978f" fontSize={12} tickLine={false} axisLine={false} />
               <YAxis stroke="#8d978f" fontSize={12} width={32} tickLine={false} axisLine={false} />
               <Tooltip contentStyle={chartTip} />
-              <Line type="monotone" dataKey="flips" name="flips %" stroke="#3dba86" dot={false} strokeWidth={1.75} isAnimationActive={false} />
-              <Line type="monotone" dataKey="gap" name="gap" stroke="#e39a3c" dot={false} strokeWidth={1.75} isAnimationActive={false} />
+              <Line
+                type="monotone"
+                dataKey="flips"
+                name="flips %"
+                stroke="#3dba86"
+                dot={false}
+                strokeWidth={1.75}
+                isAnimationActive={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="gap"
+                name="gap"
+                stroke="#e39a3c"
+                dot={false}
+                strokeWidth={1.75}
+                isAnimationActive={false}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -665,13 +757,7 @@ function Charts({ cards }: { cards: SweepCard[] }) {
   );
 }
 
-function MegaCharts({
-  tally,
-  trace,
-}: {
-  tally: MegaState["tally"];
-  trace: MegaState["trace"];
-}) {
+function MegaCharts({ tally, trace }: { tally: MegaState["tally"]; trace: MegaState["trace"] }) {
   const levels = [
     { name: "Off", count: tally.off },
     { name: "Unarmed", count: tally.unarmed },
@@ -694,8 +780,24 @@ function MegaCharts({
               <XAxis dataKey="i" stroke="#8d978f" fontSize={12} tickLine={false} axisLine={false} />
               <YAxis stroke="#8d978f" fontSize={12} width={32} tickLine={false} axisLine={false} />
               <Tooltip contentStyle={chartTip} />
-              <Line type="monotone" dataKey="flips" name="flips %" stroke="#3dba86" dot={false} strokeWidth={1.75} isAnimationActive={false} />
-              <Line type="monotone" dataKey="gap" name="gap" stroke="#e39a3c" dot={false} strokeWidth={1.75} isAnimationActive={false} />
+              <Line
+                type="monotone"
+                dataKey="flips"
+                name="flips %"
+                stroke="#3dba86"
+                dot={false}
+                strokeWidth={1.75}
+                isAnimationActive={false}
+              />
+              <Line
+                type="monotone"
+                dataKey="gap"
+                name="gap"
+                stroke="#e39a3c"
+                dot={false}
+                strokeWidth={1.75}
+                isAnimationActive={false}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -719,7 +821,13 @@ function LevelChart({
       <div className="h-40">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={levels}>
-            <XAxis dataKey="name" stroke="#8d978f" fontSize={12} tickLine={false} axisLine={false} />
+            <XAxis
+              dataKey="name"
+              stroke="#8d978f"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+            />
             <YAxis
               allowDecimals={false}
               stroke="#8d978f"

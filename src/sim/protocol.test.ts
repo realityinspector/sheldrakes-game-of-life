@@ -82,7 +82,15 @@ function shapePeriod(rows: string[], limit = 8): number {
 
 describe("sha256", () => {
   it("matches node:crypto on ASCII, multi-byte and astral input", () => {
-    for (const s of ["", "abc", "x".repeat(1000), "été", "αβγ", "🜁 morphic", JSON.stringify({ a: 1 })]) {
+    for (const s of [
+      "",
+      "abc",
+      "x".repeat(1000),
+      "été",
+      "αβγ",
+      "🜁 morphic",
+      JSON.stringify({ a: 1 }),
+    ]) {
       assert.equal(sha256(s), createHash("sha256").update(s, "utf8").digest("hex"), s);
     }
   });
@@ -175,7 +183,12 @@ describe("census", () => {
   it("keys an object by shape wherever and however it sits", () => {
     const boat = ["##.", "#.#", ".#."];
     const keys = new Set<number>();
-    for (const rows of [boat, [".##", "#.#", ".#."], [".#.", "#.#", "##."], [".#.", "#.#", ".##"]]) {
+    for (const rows of [
+      boat,
+      [".##", "#.#", ".#."],
+      [".#.", "#.#", "##."],
+      [".#.", "#.#", ".##"],
+    ]) {
       for (const [ox, oy] of [
         [2, 2],
         [11, 5],
@@ -199,7 +212,10 @@ describe("census", () => {
   it("counts an object straddling the torus seam once, whole", () => {
     const beehive = [".##.", "#..#", ".##."];
     const g = stampRows(beehive, 16, 14, 15);
-    assert.deepEqual([...censusCounts(g, 16, 16, true).entries()], [[shapeId(rowsToMask(beehive)), 1]]);
+    assert.deepEqual(
+      [...censusCounts(g, 16, 16, true).entries()],
+      [[shapeId(rowsToMask(beehive)), 1]],
+    );
     assert.notDeepEqual([...censusCounts(g, 16, 16, false).keys()], [shapeId(rowsToMask(beehive))]);
   });
 

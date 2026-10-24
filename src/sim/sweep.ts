@@ -179,7 +179,7 @@ export function axisValues(min: number, max: number, granPct: number, integer = 
 }
 
 export function sizeValues(granPct: number): number[] {
-  const step = Math.max(2, Math.round((((64 - 16) * granPct) / 100) / 2) * 2);
+  const step = Math.max(2, Math.round(((64 - 16) * granPct) / 100 / 2) * 2);
   const values: number[] = [];
   for (let n = 16; n <= 64; n += step) values.push(n);
   if (values[values.length - 1] !== 64) values.push(64);
@@ -336,8 +336,10 @@ function differs(config: FieldConfig, base: FieldConfig): string {
   const b = normalize(base);
   if (c.fieldStrength !== b.fieldStrength) bits.push(`strength ${c.fieldStrength.toFixed(2)}`);
   if (c.temporalDecay !== b.temporalDecay) bits.push(`decay ${c.temporalDecay.toFixed(3)}`);
-  if (c.similarityThreshold !== b.similarityThreshold) bits.push(`sim ${c.similarityThreshold.toFixed(2)}`);
-  if (c.influenceExponent !== b.influenceExponent) bits.push(`sharpen ${c.influenceExponent.toFixed(1)}`);
+  if (c.similarityThreshold !== b.similarityThreshold)
+    bits.push(`sim ${c.similarityThreshold.toFixed(2)}`);
+  if (c.influenceExponent !== b.influenceExponent)
+    bits.push(`sharpen ${c.influenceExponent.toFixed(1)}`);
   if (c.coupling !== b.coupling) bits.push(`coupling ${c.coupling.toFixed(2)}`);
   if (c.density !== b.density) bits.push(`density ${c.density.toFixed(2)}`);
   if (c.crystalCount !== b.crystalCount) bits.push(`${c.crystalCount} crystals`);
@@ -490,7 +492,8 @@ export class SweepRunner {
     } else if (this.mode === "grid") {
       const built = buildGrid(base, this.axes, this.granularity, this.sweepSize, this.sweepInnate);
       this.factorial = built.product;
-      for (const item of built.recipes) this.enqueue(item.config, this.illustrationSeed, item.label);
+      for (const item of built.recipes)
+        this.enqueue(item.config, this.illustrationSeed, item.label);
       this.planned = this.queue.length;
       this.note =
         built.product > built.recipes.length
@@ -652,7 +655,13 @@ export class SweepRunner {
       const key = configKey(this.bestConfig, this.illustrationSeed);
       if (key === this.expandedFrom) return false;
       this.expandedFrom = key;
-      const neighbors = neighborConfigs(this.bestConfig, this.axes, this.granularity, this.sweepSize, this.sweepInnate);
+      const neighbors = neighborConfigs(
+        this.bestConfig,
+        this.axes,
+        this.granularity,
+        this.sweepSize,
+        this.sweepInnate,
+      );
       let added = 0;
       for (const config of neighbors) {
         if (this.cards.length + this.queue.length >= this.limit) break;
@@ -821,7 +830,12 @@ export class SweepRunner {
       this.bestConfig = canonicalFrozen(recipe.config, this.preset);
     }
     if (armedCard && snap.gen >= WINDOW_GENS && snap.gap >= PROMOTE_GAP) {
-      this.rememberCandidate(canonicalFrozen(recipe.config, this.preset), this.preset, snap.gap, recipe.label);
+      this.rememberCandidate(
+        canonicalFrozen(recipe.config, this.preset),
+        this.preset,
+        snap.gap,
+        recipe.label,
+      );
     }
     mega.done += 1n;
     mega.trace.push({
@@ -915,8 +929,12 @@ export class SweepRunner {
   private openNextPass() {
     const finished = this.pass;
     this.pass += 1;
-    this.illustrationSeed = (Math.imul(this.illustrationSeed || 1, 1664525) + 1013904223) >>> 0 || 1;
-    const search = new MegaSearch(this.megaDims, (this.illustrationSeed ^ Math.imul(this.pass, 0x9e3779b9)) >>> 0);
+    this.illustrationSeed =
+      (Math.imul(this.illustrationSeed || 1, 1664525) + 1013904223) >>> 0 || 1;
+    const search = new MegaSearch(
+      this.megaDims,
+      (this.illustrationSeed ^ Math.imul(this.pass, 0x9e3779b9)) >>> 0,
+    );
     this.megaSearch = search;
     if (this.mega) {
       this.mega.on = true;
@@ -950,7 +968,16 @@ export class SweepRunner {
       alpha,
       targets,
     });
-    this.ladder = freshLadder("confirm", candidate.config, candidate.config, preset, row, PUBLISHED_SEEDS, targets, alpha);
+    this.ladder = freshLadder(
+      "confirm",
+      candidate.config,
+      candidate.config,
+      preset,
+      row,
+      PUBLISHED_SEEDS,
+      targets,
+      alpha,
+    );
     mega.stage = "confirm";
     mega.alpha = alpha;
     mega.frozen = this.bestLabel;
@@ -972,9 +999,16 @@ export class SweepRunner {
     const label = mega.focus;
     this.recipe = { config: world.config, seed, label };
     this.currentLabel = label;
-    this.lab = new MorphicLab(world.config.cells, world.archive, world.config, seed, ladder.preset, {
-      targets: ladder.targets,
-    });
+    this.lab = new MorphicLab(
+      world.config.cells,
+      world.archive,
+      world.config,
+      seed,
+      ladder.preset,
+      {
+        targets: ladder.targets,
+      },
+    );
     this.lab.playing = false;
     this.gen = 0;
     return true;
@@ -1066,7 +1100,16 @@ export class SweepRunner {
     });
     // Same α as the attempt's sign test: with every stage of attempt k at α_k, a false
     // Specific or a false Learned anywhere in the run stays under ALPHA.
-    this.ladder = freshLadder("naive", config, ladder.source, ladder.preset, row, PUBLISHED_SEEDS, ladder.targets, ladder.alpha);
+    this.ladder = freshLadder(
+      "naive",
+      config,
+      ladder.source,
+      ladder.preset,
+      row,
+      PUBLISHED_SEEDS,
+      ladder.targets,
+      ladder.alpha,
+    );
     mega.stage = "naive";
     mega.ladderDone = 0;
     mega.ladderTotal = PUBLISHED_SEEDS;
@@ -1121,7 +1164,16 @@ export class SweepRunner {
     });
     const first = DOSE_LIST[0];
     this.ladder = {
-      ...freshLadder("dose", config, ladder.source, ladder.preset, row, first === 0 ? DOSE_TESTS : first, ladder.targets, ladder.alpha),
+      ...freshLadder(
+        "dose",
+        config,
+        ladder.source,
+        ladder.preset,
+        row,
+        first === 0 ? DOSE_TESTS : first,
+        ladder.targets,
+        ladder.alpha,
+      ),
       doseCursor: 0,
       doses: DOSE_LIST,
       phase: first === 0 ? "test" : "train",
@@ -1349,7 +1401,15 @@ export class SweepRunner {
       base.innate || !archiveEmpty || base.coupling > 0
         ? "Learned was not attempted. It needs innate forms off, an empty archive, coupling at 0, and a dose curve on seeds that are not these test seeds."
         : "The switches for Learned are set, but the dose curve — forms placed 0, 1, 10, and 100 times on disjoint training seeds — was not run. Learned is not reached.";
-    this.confirm = makeConfirmResult(this.row, this.diffsY, this.diffsS, this.seedCount, voided, learnedReason, ALPHA);
+    this.confirm = makeConfirmResult(
+      this.row,
+      this.diffsY,
+      this.diffsS,
+      this.seedCount,
+      voided,
+      learnedReason,
+      ALPHA,
+    );
   }
 }
 
@@ -1399,7 +1459,9 @@ function freshLadder(
  * seed can ever be a test seed, and scores every dose on the same test seeds (a paired
  * comparison across doses rather than four unrelated samples).
  */
-export function ladderSeed(ladder: Pick<Ladder, "mode" | "phase" | "row" | "doses" | "doseCursor" | "index">): number {
+export function ladderSeed(
+  ladder: Pick<Ladder, "mode" | "phase" | "row" | "doses" | "doseCursor" | "index">,
+): number {
   if (ladder.mode === "dose" && ladder.phase === "train") {
     const dose = ladder.doses[ladder.doseCursor] ?? 0;
     return seedFromRow(ladder.row, `train:${dose}:${ladder.index}`);
@@ -1459,7 +1521,8 @@ function rowHash(stage: string, config: FieldConfig, preset: PresetId, extra: un
 }
 
 function stageFocus(ladder: Ladder): string {
-  if (ladder.mode === "naive") return `Naive 64 · innate off · coupling 0 · ${ladder.index}/${ladder.total}`;
+  if (ladder.mode === "naive")
+    return `Naive 64 · innate off · coupling 0 · ${ladder.index}/${ladder.total}`;
   return `64-seed sign test · ${ladder.index}/${ladder.total} · ${PRESET_LABEL[ladder.preset]}`;
 }
 
@@ -1484,7 +1547,11 @@ function doseTrend(ladder: Ladder): ReturnType<typeof signTest> {
 
 function curveRises(points: DosePoint[]): boolean {
   if (points.length !== 4) return false;
-  return points[0].spec < points[1].spec && points[1].spec < points[2].spec && points[2].spec < points[3].spec;
+  return (
+    points[0].spec < points[1].spec &&
+    points[1].spec < points[2].spec &&
+    points[2].spec < points[3].spec
+  );
 }
 
 function doseReason(ladder: Ladder, learned: boolean, trend?: ReturnType<typeof signTest>): string {
@@ -1527,7 +1594,8 @@ export function makeConfirmResult(
   const scrambledTest = signTest(diffsS);
   const yokedCi = bootstrapMedianCI(diffsY, 400, 3);
   const scrambledCi = bootstrapMedianCI(diffsS, 400, 4);
-  const favours = (test: ReturnType<typeof signTest>) => test.p < alpha && test.pos > test.neg && test.median > 0;
+  const favours = (test: ReturnType<typeof signTest>) =>
+    test.p < alpha && test.pos > test.neg && test.median > 0;
   const specific =
     !voided &&
     diffsY.length === expected &&

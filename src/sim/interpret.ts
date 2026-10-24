@@ -29,21 +29,31 @@ export function interpret(input: {
 
   const armed = input.cards.filter((card) => card.level.startsWith("armed")).length;
   const loud = input.cards.filter((card) => card.level.startsWith("loud")).length;
-  const unarmed = input.cards.filter((card) => card.level.startsWith("unarmed") || card.level.startsWith("off")).length;
-  const bestGap = input.cards.reduce((best, card) => Math.max(best, card.gap), Number.NEGATIVE_INFINITY);
+  const unarmed = input.cards.filter(
+    (card) => card.level.startsWith("unarmed") || card.level.startsWith("off"),
+  ).length;
+  const bestGap = input.cards.reduce(
+    (best, card) => Math.max(best, card.gap),
+    Number.NEGATIVE_INFINITY,
+  );
   const gapText = input.cards.length && Number.isFinite(bestGap) ? bestGap.toFixed(2) : "—";
-  const passedShort = input.history.some((item) => item.specific === true && !item.reading.includes("64"));
-  const passedPublished = input.history.some((item) => item.reading.includes("64") && item.specific === true);
+  const passedShort = input.history.some(
+    (item) => item.specific === true && !item.reading.includes("64"),
+  );
+  const passedPublished = input.history.some(
+    (item) => item.reading.includes("64") && item.specific === true,
+  );
   const confirm = input.confirm;
-  const published =
-    !!confirm && !confirm.voided && confirm.specific && confirm.seeds >= 64;
-  const shortPass =
-    !!confirm && !confirm.voided && confirm.specific && confirm.seeds < 64;
+  const published = !!confirm && !confirm.voided && confirm.specific && confirm.seeds >= 64;
+  const shortPass = !!confirm && !confirm.voided && confirm.specific && confirm.seeds < 64;
   const failedConfirm = !!confirm && !confirm.voided && !confirm.specific;
   const anySpecific = published || passedPublished;
 
   const unanswered = input.cards.length === 0 && input.history.length === 0;
-  const resonanceValue = unanswered || (input.running && !anySpecific && !published && !failedConfirm) ? "Not yet" : "No";
+  const resonanceValue =
+    unanswered || (input.running && !anySpecific && !published && !failedConfirm)
+      ? "Not yet"
+      : "No";
   const chips = [
     {
       label: "Resonance",
@@ -52,7 +62,14 @@ export function interpret(input: {
     },
     {
       label: "Specific",
-      value: anySpecific || published ? "Yes" : shortPass || passedShort ? "Short" : failedConfirm ? "No" : "Not run",
+      value:
+        anySpecific || published
+          ? "Yes"
+          : shortPass || passedShort
+            ? "Short"
+            : failedConfirm
+              ? "No"
+              : "Not run",
       hint: anySpecific || published ? "64 seeds" : "needs both nulls",
     },
     {
@@ -151,9 +168,10 @@ export function interpret(input: {
   return {
     resonance: "not-yet",
     title: "Not yet",
-    line: armed > 0
-      ? `Armed on ${armed} ${armed === 1 ? "card" : "cards"}. That is not morphic resonance.`
-      : "These cards do not show morphic resonance.",
+    line:
+      armed > 0
+        ? `Armed on ${armed} ${armed === 1 ? "card" : "cards"}. That is not morphic resonance.`
+        : "These cards do not show morphic resonance.",
     detail: `The table is writing at a measured rate. Best specificity gap on this walk is ${gapText}. A gap on one seed is an illustration. Morphic resonance is only even approachable after a frozen batch, and a Specific result would still be the table. ${input.reason}`,
     chips,
   };
@@ -161,7 +179,9 @@ export function interpret(input: {
 
 /** Specific results from earlier attempts, which later failures do not undo. */
 function earlierSpecific(mega: MegaState): string {
-  const wins = (mega.sealed ?? []).filter((item) => item.specific && item !== mega.sealed[mega.sealed.length - 1]);
+  const wins = (mega.sealed ?? []).filter(
+    (item) => item.specific && item !== mega.sealed[mega.sealed.length - 1],
+  );
   if (wins.length === 0) return "";
   const parts = wins.map((item) => {
     const next =
@@ -455,7 +475,17 @@ function readMega(mega: MegaState): Verdict {
     detail = `Tried ${formatCount(mega.done)} on one shared seed. ${armedNote} ${loudNote} The best gap is ${gapText}${where}: field facilitation minus the worse null, on that single recipe. One seed cannot be Specific. The run freezes the best armed card — not a loud one — once that gap reaches 0.20, and then runs the 64-seed sign test. A smaller gap keeps searching. That test still measures the table. It has not sealed.`;
   }
 
-  return megaVerdict(going, going ? "Not yet" : "No", line, detail, proofValue, proofHint, extent, extentHint, loud);
+  return megaVerdict(
+    going,
+    going ? "Not yet" : "No",
+    line,
+    detail,
+    proofValue,
+    proofHint,
+    extent,
+    extentHint,
+    loud,
+  );
 }
 
 function megaVerdict(

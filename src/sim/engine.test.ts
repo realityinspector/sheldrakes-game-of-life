@@ -1,9 +1,20 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { DEFAULT_CONFIG, MorphicLab, catalogShapes, type FieldConfig, type PresetId } from "./engine.ts";
+import {
+  DEFAULT_CONFIG,
+  MorphicLab,
+  catalogShapes,
+  type FieldConfig,
+  type PresetId,
+} from "./engine.ts";
 import { COMPARISON_SHAPES, WINDOW_GENS, censusCounts, eligible } from "./protocol.ts";
 
-function lab(config: Partial<FieldConfig> = {}, seed = 4242, preset: PresetId = "soup", cells = 32) {
+function lab(
+  config: Partial<FieldConfig> = {},
+  seed = 4242,
+  preset: PresetId = "soup",
+  cells = 32,
+) {
   return new MorphicLab(cells, [], { ...DEFAULT_CONFIG, ...config, cells }, seed, preset);
 }
 
@@ -91,17 +102,17 @@ describe("boards", () => {
       const l = lab({ fieldStrength: 1, similarityThreshold: 0.5 }, 11, preset, cells);
       let flips = 0;
       for (let t = 0; t < 80; t++) {
-      const conwayF = conway(l.field, l.w, l.config.wrap);
-      const conwayY = conway(l.yoked, l.w, l.config.wrap);
-      l.step();
-      for (let i = 0; i < l.field.length; i++) {
-        assert.equal(l.field[i] !== conwayF[i], l.influenced[i] === 1);
-        assert.equal(l.yoked[i] !== conwayY[i], l.influencedY[i] === 1);
+        const conwayF = conway(l.field, l.w, l.config.wrap);
+        const conwayY = conway(l.yoked, l.w, l.config.wrap);
+        l.step();
+        for (let i = 0; i < l.field.length; i++) {
+          assert.equal(l.field[i] !== conwayF[i], l.influenced[i] === 1);
+          assert.equal(l.yoked[i] !== conwayY[i], l.influencedY[i] === 1);
+        }
+        assert.equal(count(l.influencedY), count(l.influenced));
+        flips += count(l.influenced);
       }
-      assert.equal(count(l.influencedY), count(l.influenced));
-      flips += count(l.influenced);
-    }
-    assert.ok(flips > 0, "the field should write at this setting");
+      assert.ok(flips > 0, "the field should write at this setting");
     });
   }
 
@@ -145,7 +156,10 @@ describe("boards", () => {
 
 describe("table", () => {
   it("an empty table learns echoes and can write", () => {
-    const l = lab({ innate: false, coupling: 0, fieldStrength: 0.9, similarityThreshold: 0.5 }, 777);
+    const l = lab(
+      { innate: false, coupling: 0, fieldStrength: 0.9, similarityThreshold: 0.5 },
+      777,
+    );
     assert.equal(l.crystals.length, 0);
     for (let t = 0; t < 80; t++) l.step();
     assert.ok(l.crystals.length > 0);
@@ -166,9 +180,17 @@ describe("table", () => {
   });
 
   it("a run never edits the archive it was handed", () => {
-    const archive = [{ name: "Echo", mask: 0b111 << 11, nextMask: 0b100001 << 7, strength: 0.7, nextCenter: 1 }];
+    const archive = [
+      { name: "Echo", mask: 0b111 << 11, nextMask: 0b100001 << 7, strength: 0.7, nextCenter: 1 },
+    ];
     const frozen = JSON.stringify(archive);
-    const l = new MorphicLab(32, archive, { ...DEFAULT_CONFIG, coupling: 0.8, cells: 32 }, 5, "soup");
+    const l = new MorphicLab(
+      32,
+      archive,
+      { ...DEFAULT_CONFIG, coupling: 0.8, cells: 32 },
+      5,
+      "soup",
+    );
     for (let t = 0; t < 60; t++) l.step();
     l.remember({ name: "x", mask: 99, nextMask: 99, strength: 1, nextCenter: 0 });
     assert.equal(JSON.stringify(archive), frozen);
@@ -188,7 +210,9 @@ describe("targets", () => {
   });
 
   it("honour a pre-registered override", () => {
-    const l = new MorphicLab(32, [], { ...DEFAULT_CONFIG, cells: 32 }, 1, "soup", { targets: [7, 99, 7] });
+    const l = new MorphicLab(32, [], { ...DEFAULT_CONFIG, cells: 32 }, 1, "soup", {
+      targets: [7, 99, 7],
+    });
     assert.deepEqual(l.targets(), [7, 99]);
   });
 

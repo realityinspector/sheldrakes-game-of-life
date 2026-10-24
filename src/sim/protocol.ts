@@ -12,7 +12,15 @@ export const PATCH = 5;
 export const PATCH_CELLS = 25;
 export const CENTER_BIT = 12;
 export const CENTER3 =
-  (1 << 6) | (1 << 7) | (1 << 8) | (1 << 11) | (1 << 12) | (1 << 13) | (1 << 16) | (1 << 17) | (1 << 18);
+  (1 << 6) |
+  (1 << 7) |
+  (1 << 8) |
+  (1 << 11) |
+  (1 << 12) |
+  (1 << 13) |
+  (1 << 16) |
+  (1 << 17) |
+  (1 << 18);
 
 export const WINDOW_GENS = 80;
 /** Eligible patches each memory board consults per generation. */
@@ -87,7 +95,7 @@ export function orientations(mask: number): number[] {
  */
 export function orbitOf(mask: number): number {
   let best = mask >>> 0;
-  for (const form of orientations(mask)) if ((form >>> 0) < best) best = form >>> 0;
+  for (const form of orientations(mask)) if (form >>> 0 < best) best = form >>> 0;
   return best;
 }
 
@@ -211,7 +219,9 @@ export const COMPARE_ROWS: { name: string; rows: string[] }[] = [
   { name: "Long boat", rows: ["##...", "#.#..", ".#.#.", "..#..", "....."] },
 ];
 
-export const COMPARISON_SHAPES: number[] = COMPARE_ROWS.map((form) => shapeId(rowsToMask(form.rows)));
+export const COMPARISON_SHAPES: number[] = COMPARE_ROWS.map((form) =>
+  shapeId(rowsToMask(form.rows)),
+);
 
 export function classifyLevel(
   fieldStrength: number,
@@ -255,7 +265,12 @@ export function mergeCounts(into: Map<number, number>, add: Map<number, number>)
  * On a torus, components are followed across the seam so an object straddling the
  * edge is counted once, whole. A fused soup contributes nothing.
  */
-export function censusCounts(grid: Uint8Array, w: number, h: number, wrap = false): Map<number, number> {
+export function censusCounts(
+  grid: Uint8Array,
+  w: number,
+  h: number,
+  wrap = false,
+): Map<number, number> {
   const seen = new Uint8Array(grid.length);
   const counts = new Map<number, number>();
   const stack: number[] = [];
@@ -355,7 +370,13 @@ export function alphaForAttempt(k: number): number {
  * Exact two-sided sign test. Ties are dropped. `median` is the median of the non-tied
  * differences, which is > 0 exactly when pos > neg.
  */
-export function signTest(diffs: number[]): { n: number; pos: number; neg: number; p: number; median: number } {
+export function signTest(diffs: number[]): {
+  n: number;
+  pos: number;
+  neg: number;
+  p: number;
+  median: number;
+} {
   const nz = diffs.filter((value) => value !== 0);
   const pos = nz.filter((value) => value > 0).length;
   const n = nz.length;
@@ -366,7 +387,11 @@ export function signTest(diffs: number[]): { n: number; pos: number; neg: number
   return { n, pos, neg: n - pos, p: Math.min(1, 2 * acc), median: median(nz) };
 }
 
-export function bootstrapMedianCI(diffs: number[], iters = 400, seed = 1): { lo: number; hi: number } {
+export function bootstrapMedianCI(
+  diffs: number[],
+  iters = 400,
+  seed = 1,
+): { lo: number; hi: number } {
   const nz = diffs.filter((value) => value !== 0);
   if (nz.length === 0) return { lo: 0, hi: 0 };
   const rng = mulberry32(seed);

@@ -94,15 +94,24 @@ describe("sealing", () => {
     assert.equal(makeConfirmResult(row, strong, strong, 64, false, "").specific, true);
     assert.equal(makeConfirmResult(row, strong, split(32, 32), 64, false, "").specific, false);
     assert.equal(makeConfirmResult(row, split(0, 64), strong, 64, false, "").specific, false);
-    assert.equal(makeConfirmResult(row, strong.slice(1), strong.slice(1), 64, false, "").specific, false);
+    assert.equal(
+      makeConfirmResult(row, strong.slice(1), strong.slice(1), 64, false, "").specific,
+      false,
+    );
     assert.equal(makeConfirmResult(row, strong, strong, 64, true, "").specific, false);
   });
 
   it("applies the spent α, not a flat 0.05", () => {
     // 42 of 64: two-sided p ≈ 0.016 — passes the first attempt's α ≈ 0.030, not the fifth's ≈ 0.0012.
     const diffs = split(42, 22);
-    assert.equal(makeConfirmResult(row, diffs, diffs, 64, false, "", alphaForAttempt(1)).specific, true);
-    assert.equal(makeConfirmResult(row, diffs, diffs, 64, false, "", alphaForAttempt(5)).specific, false);
+    assert.equal(
+      makeConfirmResult(row, diffs, diffs, 64, false, "", alphaForAttempt(1)).specific,
+      true,
+    );
+    assert.equal(
+      makeConfirmResult(row, diffs, diffs, 64, false, "", alphaForAttempt(5)).specific,
+      false,
+    );
   });
 });
 
@@ -114,7 +123,9 @@ describe("dose seeds", () => {
     const tests: number[][] = [];
     doses.forEach((dose, cursor) => {
       for (let index = 0; index < dose; index++) {
-        train.add(ladderSeed({ mode: "dose", phase: "train", row, doses, doseCursor: cursor, index }));
+        train.add(
+          ladderSeed({ mode: "dose", phase: "train", row, doses, doseCursor: cursor, index }),
+        );
       }
       tests.push(
         Array.from({ length: 16 }, (_, index) =>
@@ -188,7 +199,11 @@ describe("mega ladder", () => {
       if (r.lab && r.lab !== lastLab) {
         lastLab = r.lab;
         assert.deepEqual(r.lab.targets(), targets);
-        runs.push({ phase: r.ladder.phase, dose: r.ladder.doses[r.ladder.doseCursor], seed: r.lab.seed });
+        runs.push({
+          phase: r.ladder.phase,
+          dose: r.ladder.doses[r.ladder.doseCursor],
+          seed: r.lab.seed,
+        });
       }
     }
     assert.notEqual(r.mega.stage, "dose");
@@ -196,7 +211,8 @@ describe("mega ladder", () => {
     assert.equal(r.mega.dose.alpha, alphaForAttempt(3));
     assert.ok(r.mega.dose.trend);
     assert.equal(r.mega.dose.trend.pos + r.mega.dose.trend.neg <= 16, true);
-    if (r.mega.dose.learned) assert.ok(r.mega.dose.rising && r.mega.dose.trend.p < alphaForAttempt(3));
+    if (r.mega.dose.learned)
+      assert.ok(r.mega.dose.rising && r.mega.dose.trend.p < alphaForAttempt(3));
     const train = runs.filter((run) => run.phase === "train");
     const test = runs.filter((run) => run.phase === "test");
     assert.equal(train.length, 111);

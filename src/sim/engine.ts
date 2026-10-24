@@ -61,14 +61,7 @@ export type FieldConfig = {
   cells: number;
 };
 
-export type PresetId =
-  | "soup"
-  | "rpen"
-  | "acorn"
-  | "gliders"
-  | "pulsar"
-  | "garden"
-  | "gun";
+export type PresetId = "soup" | "rpen" | "acorn" | "gliders" | "pulsar" | "garden" | "gun";
 
 export type HabitCandidate = {
   name: string;
@@ -461,7 +454,7 @@ export class MorphicLab {
     // Own copy: a batch hands the same archive to every seed, and no run may edit it.
     this.archive = archive.map((entry) => ({ ...entry }));
     if (preset) this.preset = preset;
-    const initial = seed ?? ((Math.floor(Math.random() * 90000) + 1000) >>> 0);
+    const initial = seed ?? (Math.floor(Math.random() * 90000) + 1000) >>> 0;
     this.reseed(this.preset, initial);
   }
 
@@ -519,9 +512,7 @@ export class MorphicLab {
         nextCenter: c.nextCenter,
       });
     }
-    return [...merged.values()]
-      .sort((a, b) => b.strength - a.strength)
-      .slice(0, 24);
+    return [...merged.values()].sort((a, b) => b.strength - a.strength).slice(0, 24);
   }
 
   remember(entry: ArchiveEntry) {
@@ -746,7 +737,11 @@ export class MorphicLab {
       let takenS = 0;
       // Monotone across runs, so a stamp left by an earlier run can never match.
       const stamp = ++this.siteEpoch;
-      for (let k = 0; k < CANDIDATES_PER_GEN && (takenF < SAMPLES_PER_GEN || takenS < SAMPLES_PER_GEN); k++) {
+      for (
+        let k = 0;
+        k < CANDIDATES_PER_GEN && (takenF < SAMPLES_PER_GEN || takenS < SAMPLES_PER_GEN);
+        k++
+      ) {
         const x = this.candX[k];
         const y = this.candY[k];
         const coin = this.candCoin[k];
@@ -826,7 +821,12 @@ export class MorphicLab {
   }
 
   private levelNow() {
-    return classifyLevel(this.config.fieldStrength, this.flipRate(), this.windowFlips > 0, this.gen);
+    return classifyLevel(
+      this.config.fieldStrength,
+      this.flipRate(),
+      this.windowFlips > 0,
+      this.gen,
+    );
   }
 
   private swap() {
@@ -952,7 +952,8 @@ export class MorphicLab {
         crystal.activations += crystal.act;
         crystal.successes += crystal.succ;
       }
-      if (crystal.echoes > 0) crystal.alpha = Math.min(40, crystal.alpha + ECHO_BOOST * crystal.echoes);
+      if (crystal.echoes > 0)
+        crystal.alpha = Math.min(40, crystal.alpha + ECHO_BOOST * crystal.echoes);
       if (crystal.touched) {
         crystal.age = 0;
       } else {
@@ -984,7 +985,18 @@ export class MorphicLab {
       this.crystals = this.crystals.filter((c) => c !== weakest);
     }
     const center = (nextMask >> CENTER_BIT) & 1;
-    this.crystals.push(makeCrystal(this.nextId++, `Echo ${this.echo++}`, mask, nextMask, center, 0.42, "observed", 0));
+    this.crystals.push(
+      makeCrystal(
+        this.nextId++,
+        `Echo ${this.echo++}`,
+        mask,
+        nextMask,
+        center,
+        0.42,
+        "observed",
+        0,
+      ),
+    );
   }
 
   private seedInnate() {
@@ -994,7 +1006,16 @@ export class MorphicLab {
       const mask = rowsToMask(form.rows);
       const evolved = evolveMask(mask);
       this.crystals.push(
-        makeCrystal(this.nextId++, form.name, mask, evolved.next, evolved.center, 0.58, "innate", 0),
+        makeCrystal(
+          this.nextId++,
+          form.name,
+          mask,
+          evolved.next,
+          evolved.center,
+          0.58,
+          "innate",
+          0,
+        ),
       );
     }
   }
@@ -1005,7 +1026,11 @@ export class MorphicLab {
     if (coupling <= 0.001) return;
     for (const entry of this.archive) {
       if (this.crystals.length >= this.config.crystalCount) break;
-      if (this.crystals.some((c) => c.mask === entry.mask || bestDice(entry.mask, c.forms).score > 0.92)) {
+      if (
+        this.crystals.some(
+          (c) => c.mask === entry.mask || bestDice(entry.mask, c.forms).score > 0.92,
+        )
+      ) {
         continue;
       }
       this.crystals.push(
@@ -1252,9 +1277,21 @@ export function drawBoard(
   ctx.fillRect(ox, oy, side, side);
 
   const grid =
-    which === "control" ? lab.control : which === "yoked" ? lab.yoked : which === "scrambled" ? lab.scrambled : lab.field;
+    which === "control"
+      ? lab.control
+      : which === "yoked"
+        ? lab.yoked
+        : which === "scrambled"
+          ? lab.scrambled
+          : lab.field;
   const marks =
-    which === "field" ? lab.influenced : which === "yoked" ? lab.influencedY : which === "scrambled" ? lab.influencedS : null;
+    which === "field"
+      ? lab.influenced
+      : which === "yoked"
+        ? lab.influencedY
+        : which === "scrambled"
+          ? lab.influencedS
+          : null;
   const inset = cell >= 9 ? cell * 0.1 : cell >= 6 ? 0.6 : 0.25;
   const size = cell - inset * 2;
   const radius = Math.min(3.5, size * 0.22);
