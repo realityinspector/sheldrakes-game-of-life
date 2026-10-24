@@ -76,7 +76,11 @@ export function Laboratory() {
     bookRef.current = storedBook;
     setBook(storedBook);
     const size = Math.max(16, Math.min(96, Math.round(saved.settings.cells ?? 48)));
-    const lab = new MorphicLab(size, saved.archive, { ...DEFAULT_CONFIG, ...saved.settings, cells: size });
+    const lab = new MorphicLab(size, saved.archive, {
+      ...DEFAULT_CONFIG,
+      ...saved.settings,
+      cells: size,
+    });
     labRef.current = lab;
     publish(lab);
 
@@ -407,7 +411,11 @@ export function Laboratory() {
                 }
                 label="Innate"
               />
-              <Toggle pressed={config.wrap} onClick={() => patchConfig({ wrap: !config.wrap })} label="Wrap" />
+              <Toggle
+                pressed={config.wrap}
+                onClick={() => patchConfig({ wrap: !config.wrap })}
+                label="Wrap"
+              />
             </div>
           </div>
 
@@ -660,7 +668,10 @@ function CrystalChip({ crystal }: { crystal: CrystalView }) {
         <p className="truncate text-sm text-bone">{crystal.name}</p>
         <p className="text-xs tracking-wide text-mist uppercase">{origin}</p>
         <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-line">
-          <div className="h-full bg-amber" style={{ width: `${Math.round(crystal.strength * 100)}%` }} />
+          <div
+            className="h-full bg-amber"
+            style={{ width: `${Math.round(crystal.strength * 100)}%` }}
+          />
         </div>
       </div>
     </article>

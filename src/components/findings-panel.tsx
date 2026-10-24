@@ -26,11 +26,19 @@ export function ResonanceBanner({ book, snap }: { book: Book; snap: RunSnapshot 
     score.verdict === "armed" ? "bg-life" : score.verdict === "loud" ? "bg-amber" : "bg-mist";
 
   return (
-    <section className="rounded-lab border border-line bg-panel px-3 py-3" aria-label="What this run shows">
+    <section
+      className="rounded-lab border border-line bg-panel px-3 py-3"
+      aria-label="What this run shows"
+    >
       <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
         <div className="min-w-0">
-          <h2 className="font-display text-lg leading-tight italic">What this run is allowed to say</h2>
-          <p className={`mt-1 font-display text-4xl leading-none italic ${titleColor}`} aria-live="polite">
+          <h2 className="font-display text-lg leading-tight italic">
+            What this run is allowed to say
+          </h2>
+          <p
+            className={`mt-1 font-display text-4xl leading-none italic ${titleColor}`}
+            aria-live="polite"
+          >
             {score.title}
           </p>
         </div>
@@ -41,8 +49,9 @@ export function ResonanceBanner({ book, snap }: { book: Book; snap: RunSnapshot 
         </div>
       </div>
       <p className="mt-2 text-xs text-pretty text-mist">
-        Armed means the table rewrote 1–12% of the neighborhoods it read. That is the old Yes, and it is not
-        morphic resonance. Specific and Learned are scored only on a frozen batch, in Sweep.
+        Armed means the table rewrote 1–12% of the neighborhoods it read. That is the old Yes, and
+        it is not morphic resonance. Specific and Learned are scored only on a frozen batch, in
+        Sweep.
       </p>
       <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
         <div
@@ -82,8 +91,8 @@ export function FindingsPanel({
         <div className="max-w-3xl">
           <h2 className="font-display text-lg italic">Evidence</h2>
           <p className="mt-1 text-sm text-pretty text-mist">
-            Armed is a fact about the table. Crowd, settle, D*, and kept forms are written down so a long
-            run still leaves a trail. Specific is not decided on this page.
+            Armed is a fact about the table. Crowd, settle, D*, and kept forms are written down so a
+            long run still leaves a trail. Specific is not decided on this page.
           </p>
         </div>
         <p className="text-sm text-bone tabular-nums">
@@ -132,8 +141,8 @@ export function FindingsPanel({
         <h3 className="text-sm text-bone">Ledger</h3>
         {book.findings.length === 0 ? (
           <p className="mt-1 text-sm text-mist">
-            Nothing filed yet. At generation 80 the run records Armed, Loud, Unarmed, or Off. A miss is
-            not a detection either way. Specific waits for a frozen batch.
+            Nothing filed yet. At generation 80 the run records Armed, Loud, Unarmed, or Off. A miss
+            is not a detection either way. Specific waits for a frozen batch.
           </p>
         ) : (
           <ul className="lab-scroll mt-1 max-h-64 overflow-y-auto">
@@ -314,7 +323,8 @@ function Glyph({ mask }: { mask: number }) {
 
 function scoredLabel(kind: FindingKind, times: number): string {
   void times;
-  if (kind === "armed" || kind === "loud" || kind === "unarmed" || kind === "off") return "Level, not resonance";
+  if (kind === "armed" || kind === "loud" || kind === "unarmed" || kind === "off")
+    return "Level, not resonance";
   return "Not a score";
 }
 

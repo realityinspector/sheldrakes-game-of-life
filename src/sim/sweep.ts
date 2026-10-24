@@ -1,22 +1,25 @@
 import {
   DEFAULT_CONFIG,
   MorphicLab,
+  presetWraps,
   snapshotBoards,
   type ArchiveEntry,
   type FieldConfig,
   type PresetId,
-} from "@/sim/engine";
-import type { MegaPhase } from "@/sim/mega-search";
-import { MegaSearch } from "@/sim/mega-search";
+} from "./engine.ts";
+import type { MegaPhase } from "./mega-search.ts";
+import { MegaSearch } from "./mega-search.ts";
 import {
+  ALPHA,
   ANALYSIS_VERSION,
   WINDOW_GENS,
+  alphaForAttempt,
   bootstrapMedianCI,
   mulberry32,
   seedFromRow,
   sha256,
   signTest,
-} from "@/sim/protocol";
+} from "./protocol.ts";
 
 export type AxisKey =
   | "fieldStrength"
@@ -62,6 +65,8 @@ export type ArmTest = {
 export type ConfirmResult = {
   row: string;
   seeds: number;
+  /** Two-sided level each comparison had to clear. Smaller than 0.05 on later mega attempts. */
+  alpha: number;
   yoked: ArmTest;
   scrambled: ArmTest;
   specific: boolean;
@@ -76,11 +81,27 @@ export type DoseCurve = {
   coupling: number;
   points: DosePoint[];
   rising: boolean;
+  /** Paired sign test of dose 100 against dose 0 on the shared test seeds, once sealed. */
+  trend: { pos: number; neg: number; p: number } | null;
+  /** Level the trend test had to clear: the same α as the attempt's sign test. */
+  alpha: number;
   learned: boolean;
   reason: string;
 };
 
 export type MegaStage = "search" | "confirm" | "naive" | "dose" | "done";
+
+/** One sealed 64-seed attempt of a mega run, kept after later attempts replace `proof`. */
+export type SealedAttempt = {
+  attempt: number;
+  alpha: number;
+  label: string;
+  specific: boolean;
+  /** Naive retest outcome; null while not run. */
+  naive: boolean | null;
+  /** Dose-curve outcome; null while not run. */
+  learned: boolean | null;
+};
 
 const PUBLISHED_SEEDS = 64;
 const DOSE_TESTS = 16;
@@ -100,8 +121,14 @@ type LadderMode = "confirm" | "naive" | "dose";
 type Ladder = {
   mode: LadderMode;
   config: FieldConfig;
+  /** The frozen recipe the ladder started from, carried unchanged into naive and dose. */
+  source: FieldConfig;
   preset: PresetId;
   row: string;
+  /** Pre-registered target shapes, fixed at the confirm stage and reused by every stage. */
+  targets: number[];
+  /** Level this stage's sign tests must clear. */
+  alpha: number;
   index: number;
   total: number;
   diffsY: number[];
@@ -115,6 +142,10 @@ type Ladder = {
   testCoupling: number;
   couplingSubstituted: boolean;
   points: DosePoint[];
+  /** Field specificity per test seed at the current dose, in test-seed order. */
+  seedSpecs: number[];
+  /** seedSpecs for every sealed dose, paired by test seed. */
+  specsByDose: number[][];
 };
 
 type AxisDef = { key: AxisKey; label: string; min: number; max: number; integer?: boolean };
@@ -148,7 +179,7 @@ export function axisValues(min: number, max: number, granPct: number, integer = 
 }
 
 export function sizeValues(granPct: number): number[] {
-  const step = Math.max(2, Math.round((((64 - 16) * granPct) / 100) / 2) * 2);
+  const step = Math.max(2, Math.round(((64 - 16) * granPct) / 100 / 2) * 2);
   const values: number[] = [];
   for (let n = 16; n <= 64; n += step) values.push(n);
   if (values[values.length - 1] !== 64) values.push(64);
@@ -197,12 +228,22 @@ export type MegaState = {
   dose: DoseCurve | null;
   frozen: string;
   trials: number;
+  /** α the open (or next) 64-seed sign test must clear; see alphaForAttempt. */
+  alpha: number;
+  /** Every sealed attempt in this run, oldest first. Each Specific stays valid under α-spending. */
+  sealed: SealedAttempt[];
   nextBar: number;
   queued: number;
 };
 
+/**
+ * The mega walk's grid. Coupling is not an axis: the walk, the 64-seed test and the
+ * naive retest all run with an empty archive, where coupling does nothing, so walking it
+ * would only split one experiment into several "recipes" that each spend a test. It is
+ * held at the baseline and only matters to the dose stage.
+ */
 export function megaLattice(granPct: number): { dims: LatticeDim[]; total: bigint } {
-  const dims: LatticeDim[] = AXES.map((axis) => ({
+  const dims: LatticeDim[] = AXES.filter((axis) => axis.key !== "coupling").map((axis) => ({
     key: axis.key,
     values: axisValues(axis.min, axis.max, granPct, axis.integer),
   }));
@@ -250,8 +291,26 @@ function normalize(config: FieldConfig): FieldConfig {
   };
 }
 
+/**
+ * The recipe a batch actually runs. Wrap follows the preset (the engine enforces it),
+ * and density only paints soup, so for every other preset it is pinned. Two recipes
+ * that differ only in an inert knob are the same experiment and get the same key.
+ */
+function canonicalFrozen(config: FieldConfig, preset: PresetId): FieldConfig {
+  return normalize({
+    ...config,
+    wrap: presetWraps(preset),
+    density: preset === "soup" ? config.density : DEFAULT_CONFIG.density,
+  });
+}
+
 function frozenKey(config: FieldConfig, preset: PresetId): string {
-  return `${configKey(config, 0)}:${preset}`;
+  return `${configKey(canonicalFrozen(config, preset), 0)}:${preset}`;
+}
+
+/** Targets a frozen recipe is scored on. They depend on the table at generation 0, not the seed. */
+function targetsFor(config: FieldConfig, preset: PresetId, archive: ArchiveEntry[]): number[] {
+  return new MorphicLab(config.cells, archive, config, 1, preset).targets();
 }
 
 function configKey(config: FieldConfig, seed: number): string {
@@ -277,8 +336,10 @@ function differs(config: FieldConfig, base: FieldConfig): string {
   const b = normalize(base);
   if (c.fieldStrength !== b.fieldStrength) bits.push(`strength ${c.fieldStrength.toFixed(2)}`);
   if (c.temporalDecay !== b.temporalDecay) bits.push(`decay ${c.temporalDecay.toFixed(3)}`);
-  if (c.similarityThreshold !== b.similarityThreshold) bits.push(`sim ${c.similarityThreshold.toFixed(2)}`);
-  if (c.influenceExponent !== b.influenceExponent) bits.push(`sharpen ${c.influenceExponent.toFixed(1)}`);
+  if (c.similarityThreshold !== b.similarityThreshold)
+    bits.push(`sim ${c.similarityThreshold.toFixed(2)}`);
+  if (c.influenceExponent !== b.influenceExponent)
+    bits.push(`sharpen ${c.influenceExponent.toFixed(1)}`);
   if (c.coupling !== b.coupling) bits.push(`coupling ${c.coupling.toFixed(2)}`);
   if (c.density !== b.density) bits.push(`density ${c.density.toFixed(2)}`);
   if (c.crystalCount !== b.crystalCount) bits.push(`${c.crystalCount} crystals`);
@@ -339,8 +400,8 @@ export class SweepRunner {
   private bestGen = 0;
   private bestLabel = "";
   private ladder: Ladder | null = null;
+  /** Confirmatory attempts opened in this mega run; the k-th spends alphaForAttempt(k). */
   private confirmAttempts = 0;
-  private promoteFloor = PROMOTE_GAP;
   private testedKeys = new Set<string>();
   private candidates: Candidate[] = [];
   private pass = 1;
@@ -396,7 +457,6 @@ export class SweepRunner {
     this.bestLabel = "";
     this.ladder = null;
     this.confirmAttempts = 0;
-    this.promoteFloor = PROMOTE_GAP;
     this.testedKeys.clear();
     this.candidates = [];
     this.pass = 1;
@@ -405,8 +465,10 @@ export class SweepRunner {
     this.diffsS = [];
     this.gen = 0;
     this.status = "running";
-    const base = this.baseline;
+    let base = this.baseline;
     if (this.mode === "confirm") {
+      // Hash the recipe the seeds will actually run (wrap and inert density pinned).
+      base = canonicalFrozen(base, this.preset);
       const archive = this.ignoreArchive ? [] : this.archive;
       const payload = JSON.stringify({
         version: ANALYSIS_VERSION,
@@ -430,7 +492,8 @@ export class SweepRunner {
     } else if (this.mode === "grid") {
       const built = buildGrid(base, this.axes, this.granularity, this.sweepSize, this.sweepInnate);
       this.factorial = built.product;
-      for (const item of built.recipes) this.enqueue(item.config, this.illustrationSeed, item.label);
+      for (const item of built.recipes)
+        this.enqueue(item.config, this.illustrationSeed, item.label);
       this.planned = this.queue.length;
       this.note =
         built.product > built.recipes.length
@@ -461,7 +524,6 @@ export class SweepRunner {
     this.bestLabel = "";
     this.ladder = null;
     this.confirmAttempts = 0;
-    this.promoteFloor = PROMOTE_GAP;
     this.testedKeys.clear();
     this.candidates = [];
     this.pass = 1;
@@ -495,6 +557,8 @@ export class SweepRunner {
       dose: null,
       frozen: "",
       trials: 0,
+      alpha: alphaForAttempt(1),
+      sealed: [],
       nextBar: PROMOTE_GAP,
       queued: 0,
     };
@@ -516,7 +580,8 @@ export class SweepRunner {
   }
 
   stop() {
-    if (this.status === "idle") return;
+    // A finished or already-stopped run has nothing open to void.
+    if (this.status === "idle" || this.status === "done" || this.status === "stopped") return;
     this.status = "stopped";
     this.lab = null;
     this.queue = [];
@@ -590,7 +655,13 @@ export class SweepRunner {
       const key = configKey(this.bestConfig, this.illustrationSeed);
       if (key === this.expandedFrom) return false;
       this.expandedFrom = key;
-      const neighbors = neighborConfigs(this.bestConfig, this.axes, this.granularity, this.sweepSize, this.sweepInnate);
+      const neighbors = neighborConfigs(
+        this.bestConfig,
+        this.axes,
+        this.granularity,
+        this.sweepSize,
+        this.sweepInnate,
+      );
       let added = 0;
       for (const config of neighbors) {
         if (this.cards.length + this.queue.length >= this.limit) break;
@@ -756,17 +827,15 @@ export class SweepRunner {
       this.bestGen = snap.gen;
       this.bestPreset = this.preset;
       this.bestLabel = recipe.label;
-      this.bestConfig = normalize({
-        ...recipe.config,
-        wrap: this.preset === "soup" || this.preset === "gliders",
-      });
+      this.bestConfig = canonicalFrozen(recipe.config, this.preset);
     }
     if (armedCard && snap.gen >= WINDOW_GENS && snap.gap >= PROMOTE_GAP) {
-      const frozen = normalize({
-        ...recipe.config,
-        wrap: this.preset === "soup" || this.preset === "gliders",
-      });
-      this.rememberCandidate(frozen, this.preset, snap.gap, recipe.label);
+      this.rememberCandidate(
+        canonicalFrozen(recipe.config, this.preset),
+        this.preset,
+        snap.gap,
+        recipe.label,
+      );
     }
     mega.done += 1n;
     mega.trace.push({
@@ -860,8 +929,12 @@ export class SweepRunner {
   private openNextPass() {
     const finished = this.pass;
     this.pass += 1;
-    this.illustrationSeed = (Math.imul(this.illustrationSeed || 1, 1664525) + 1013904223) >>> 0 || 1;
-    const search = new MegaSearch(this.megaDims, (this.illustrationSeed ^ Math.imul(this.pass, 0x9e3779b9)) >>> 0);
+    this.illustrationSeed =
+      (Math.imul(this.illustrationSeed || 1, 1664525) + 1013904223) >>> 0 || 1;
+    const search = new MegaSearch(
+      this.megaDims,
+      (this.illustrationSeed ^ Math.imul(this.pass, 0x9e3779b9)) >>> 0,
+    );
     this.megaSearch = search;
     if (this.mega) {
       this.mega.on = true;
@@ -886,16 +959,34 @@ export class SweepRunner {
     this.bestLabel = candidate.label;
     this.bestGoal = candidate.gap;
     const preset = candidate.preset;
-    const row = rowHash("confirm", candidate.config, preset, { seeds: PUBLISHED_SEEDS, archive: [] });
-    this.ladder = freshLadder("confirm", candidate.config, preset, row, PUBLISHED_SEEDS);
+    const alpha = alphaForAttempt(this.confirmAttempts);
+    const targets = targetsFor(candidate.config, preset, []);
+    const row = rowHash("confirm", candidate.config, preset, {
+      seeds: PUBLISHED_SEEDS,
+      archive: [],
+      attempt: this.confirmAttempts,
+      alpha,
+      targets,
+    });
+    this.ladder = freshLadder(
+      "confirm",
+      candidate.config,
+      candidate.config,
+      preset,
+      row,
+      PUBLISHED_SEEDS,
+      targets,
+      alpha,
+    );
     mega.stage = "confirm";
+    mega.alpha = alpha;
     mega.frozen = this.bestLabel;
     mega.ladderDone = 0;
     mega.ladderTotal = PUBLISHED_SEEDS;
     mega.focus = `64-seed sign test · 0/${PUBLISHED_SEEDS} · ${PRESET_LABEL[preset]}`;
     mega.naive = null;
     mega.dose = null;
-    this.note = `Sign test ${this.confirmAttempts}. Illustration frozen (armed gap ${this.bestGoal.toFixed(2)}). ${this.bestLabel}. Published 64-seed batch at generation ${WINDOW_GENS}, empty archive, seeds from the first-row hash — not seed ${this.illustrationSeed}. A miss returns to the search. This is not morphic resonance.`;
+    this.note = `Sign test ${this.confirmAttempts}, at α = ${formatAlpha(alpha)} (each further attempt in this run spends less, so all of them together stay under ${ALPHA}). Illustration frozen (armed gap ${this.bestGoal.toFixed(2)}). ${this.bestLabel}. Published 64-seed batch at generation ${WINDOW_GENS}, empty archive, seeds from the first-row hash — not seed ${this.illustrationSeed}. A miss returns to the search. This is not morphic resonance.`;
   }
 
   private spawnLadderLab(): boolean {
@@ -908,7 +999,16 @@ export class SweepRunner {
     const label = mega.focus;
     this.recipe = { config: world.config, seed, label };
     this.currentLabel = label;
-    this.lab = new MorphicLab(world.config.cells, world.archive, world.config, seed, ladder.preset);
+    this.lab = new MorphicLab(
+      world.config.cells,
+      world.archive,
+      world.config,
+      seed,
+      ladder.preset,
+      {
+        targets: ladder.targets,
+      },
+    );
     this.lab.playing = false;
     this.gen = 0;
     return true;
@@ -927,6 +1027,7 @@ export class SweepRunner {
       ladder.diffsY.push(snap.specField - snap.specYoked);
       ladder.diffsS.push(snap.specField - snap.specScrambled);
       ladder.specSum += snap.specField;
+      if (ladder.mode === "dose") ladder.seedSpecs.push(snap.specField);
       ladder.gapSum += snap.gap;
     }
     this.lab = null;
@@ -959,6 +1060,7 @@ export class SweepRunner {
       PUBLISHED_SEEDS,
       false,
       "The 64-seed sign test is sealed. Naive and the dose curve have not changed this sentence yet.",
+      ladder.alpha,
     );
     result.learnedReason = result.specific
       ? "Specific on the frozen recipe. A naive retest is next: innate off, coupling 0, empty archive, 64 new seeds. This is not morphic resonance."
@@ -966,6 +1068,15 @@ export class SweepRunner {
     mega.proof = result;
     this.confirm = result;
     mega.trials += 1;
+    mega.sealed.push({
+      attempt: this.confirmAttempts,
+      alpha: ladder.alpha,
+      label: mega.frozen,
+      specific: result.specific,
+      naive: null,
+      learned: null,
+    });
+    mega.alpha = alphaForAttempt(this.confirmAttempts + 1);
     mega.ladderDone = PUBLISHED_SEEDS;
     if (!result.specific) {
       this.resumeSearch(
@@ -981,14 +1092,30 @@ export class SweepRunner {
     const mega = this.mega;
     if (!ladder || !mega) return;
     const config = normalize({ ...ladder.config, innate: false, coupling: 0 });
-    const row = rowHash("naive", config, ladder.preset, { seeds: PUBLISHED_SEEDS, archive: [] });
-    this.ladder = freshLadder("naive", config, ladder.preset, row, PUBLISHED_SEEDS);
+    const row = rowHash("naive", config, ladder.preset, {
+      seeds: PUBLISHED_SEEDS,
+      archive: [],
+      targets: ladder.targets,
+      from: ladder.row,
+    });
+    // Same α as the attempt's sign test: with every stage of attempt k at α_k, a false
+    // Specific or a false Learned anywhere in the run stays under ALPHA.
+    this.ladder = freshLadder(
+      "naive",
+      config,
+      ladder.source,
+      ladder.preset,
+      row,
+      PUBLISHED_SEEDS,
+      ladder.targets,
+      ladder.alpha,
+    );
     mega.stage = "naive";
     mega.ladderDone = 0;
     mega.ladderTotal = PUBLISHED_SEEDS;
     mega.focus = `Naive 64 · innate off · coupling 0 · 0/${PUBLISHED_SEEDS}`;
     this.note =
-      "The 64-seed test beat both nulls. That is still the table. Naive retest now: same recipe, innate forms off, coupling 0, empty archive, a new first row. If this fails, the gap depended on habits that were already in the program.";
+      "The 64-seed test beat both nulls. That is still the table. Naive retest now: same recipe, innate forms off, coupling 0, empty archive, a new first row, scored on the same target forms. The table starts empty and can only learn echoes from the board. If this fails, the gap depended on habits that were already in the program.";
   }
 
   private sealNaiveLadder() {
@@ -1002,12 +1129,15 @@ export class SweepRunner {
       PUBLISHED_SEEDS,
       false,
       "Naive retest: innate off, coupling 0, empty archive.",
+      ladder.alpha,
     );
     result.learnedReason = result.specific
       ? "Naive retest passed with innate forms off, coupling 0, and an empty archive. The dose curve is next. This is not morphic resonance."
       : "Naive retest failed. Innate forms were off, coupling was 0, and the archive was empty. The illustration’s gap was not shown without those habits. Learned was not reached. This is not morphic resonance.";
     mega.naive = result;
     if (mega.proof) mega.proof.learnedReason = result.learnedReason;
+    const sealed = mega.sealed[mega.sealed.length - 1];
+    if (sealed) sealed.naive = result.specific;
     if (!result.specific) {
       this.resumeSearch(
         `Sign test ${mega.trials} was Specific, and the naive retest was not. Learned was not reached. The walk resumed. This is not morphic resonance.`,
@@ -1021,14 +1151,29 @@ export class SweepRunner {
     const ladder = this.ladder;
     const mega = this.mega;
     if (!ladder || !mega) return;
-    const frozenCoupling = this.bestConfig?.coupling ?? ladder.config.coupling;
+    const frozenCoupling = ladder.source.coupling;
     const substituted = frozenCoupling <= 0.001;
     const testCoupling = substituted ? 0.25 : frozenCoupling;
     const config = normalize({ ...ladder.config, innate: false, coupling: 0 });
-    const row = rowHash("dose", config, ladder.preset, { doses: DOSE_LIST, testCoupling });
+    const row = rowHash("dose", config, ladder.preset, {
+      doses: DOSE_LIST,
+      tests: DOSE_TESTS,
+      testCoupling,
+      targets: ladder.targets,
+      from: ladder.row,
+    });
     const first = DOSE_LIST[0];
     this.ladder = {
-      ...freshLadder("dose", config, ladder.preset, row, first === 0 ? DOSE_TESTS : first),
+      ...freshLadder(
+        "dose",
+        config,
+        ladder.source,
+        ladder.preset,
+        row,
+        first === 0 ? DOSE_TESTS : first,
+        ladder.targets,
+        ladder.alpha,
+      ),
       doseCursor: 0,
       doses: DOSE_LIST,
       phase: first === 0 ? "test" : "train",
@@ -1048,8 +1193,10 @@ export class SweepRunner {
       coupling: testCoupling,
       points: [],
       rising: false,
+      trend: null,
+      alpha: ladder.alpha,
       learned: false,
-      reason: `Dose curve is running. Training seeds are disjoint from the test seeds. ${why} Learned requires mean field specificity to rise strictly from dose 0 to 1 to 10 to 100. This is not morphic resonance.`,
+      reason: `Dose curve is running. Every dose is scored on the same ${DOSE_TESTS} test seeds, and no training seed is ever a test seed. ${why} Learned requires mean field specificity to rise strictly from dose 0 to 1 to 10 to 100, and dose 100 to beat dose 0 on the paired test seeds (exact sign test at α = ${formatAlpha(ladder.alpha)}). This is not morphic resonance.`,
     };
     this.note = mega.dose.reason;
   }
@@ -1080,11 +1227,15 @@ export class SweepRunner {
       spec: ladder.specSum / ladder.total,
       gap: ladder.gapSum / ladder.total,
     });
+    ladder.specsByDose.push(ladder.seedSpecs);
+    ladder.seedSpecs = [];
     const partial = doseReason(ladder, false);
     mega.dose = {
       coupling: ladder.testCoupling,
       points: ladder.points.map((point) => ({ ...point })),
       rising: false,
+      trend: null,
+      alpha: ladder.alpha,
       learned: false,
       reason: partial,
     };
@@ -1112,16 +1263,23 @@ export class SweepRunner {
     const ladder = this.ladder;
     const mega = this.mega;
     if (!ladder || !mega) return;
-    const learned = !!(mega.proof?.specific && mega.naive?.specific && curveRises(ladder.points));
-    const reason = doseReason(ladder, learned);
+    const rising = curveRises(ladder.points);
+    const trend = doseTrend(ladder);
+    const trendPasses = trend.p < ladder.alpha && trend.pos > trend.neg;
+    const learned = !!(mega.proof?.specific && mega.naive?.specific && rising && trendPasses);
+    const reason = doseReason(ladder, learned, trend);
     mega.dose = {
       coupling: ladder.testCoupling,
       points: ladder.points.map((point) => ({ ...point })),
-      rising: curveRises(ladder.points),
+      rising,
+      trend: { pos: trend.pos, neg: trend.neg, p: trend.p },
+      alpha: ladder.alpha,
       learned,
       reason,
     };
     if (mega.proof) mega.proof.learnedReason = reason;
+    const sealed = mega.sealed[mega.sealed.length - 1];
+    if (sealed) sealed.learned = learned;
     if (learned) {
       this.endLadder(reason);
       return;
@@ -1134,7 +1292,6 @@ export class SweepRunner {
     this.ladder = null;
     this.lab = null;
     this.recipe = null;
-    this.promoteFloor = PROMOTE_GAP;
     if (mega) {
       mega.on = true;
       mega.stage = "search";
@@ -1186,6 +1343,7 @@ export class SweepRunner {
         ladder.mode === "confirm"
           ? "Stopped before the 64 seeds finished. The batch is void. Naive and the dose curve were not run."
           : "Stopped before the naive 64 finished. That retest is void. Learned was not reached.",
+        ladder.alpha,
       );
       if (ladder.mode === "confirm") {
         mega.proof = result;
@@ -1202,6 +1360,8 @@ export class SweepRunner {
         coupling: ladder.testCoupling,
         points: ladder.points.map((point) => ({ ...point })),
         rising: false,
+        trend: null,
+        alpha: ladder.alpha,
         learned: false,
         reason:
           "Stopped before the dose curve finished. The open dose is void. Learned was not reached. This is not morphic resonance.",
@@ -1241,22 +1401,40 @@ export class SweepRunner {
       base.innate || !archiveEmpty || base.coupling > 0
         ? "Learned was not attempted. It needs innate forms off, an empty archive, coupling at 0, and a dose curve on seeds that are not these test seeds."
         : "The switches for Learned are set, but the dose curve — forms placed 0, 1, 10, and 100 times on disjoint training seeds — was not run. Learned is not reached.";
-    this.confirm = makeConfirmResult(this.row, this.diffsY, this.diffsS, this.seedCount, voided, learnedReason);
+    this.confirm = makeConfirmResult(
+      this.row,
+      this.diffsY,
+      this.diffsS,
+      this.seedCount,
+      voided,
+      learnedReason,
+      ALPHA,
+    );
   }
+}
+
+function formatAlpha(alpha: number): string {
+  return alpha >= 0.01 ? alpha.toFixed(3) : alpha.toPrecision(2);
 }
 
 function freshLadder(
   mode: LadderMode,
   config: FieldConfig,
+  source: FieldConfig,
   preset: PresetId,
   row: string,
   total: number,
+  targets: number[],
+  alpha: number,
 ): Ladder {
   return {
     mode,
     config,
+    source,
     preset,
     row,
+    targets: targets.slice(),
+    alpha,
     index: 0,
     total,
     diffsY: [],
@@ -1270,18 +1448,25 @@ function freshLadder(
     testCoupling: config.coupling,
     couplingSubstituted: false,
     points: [],
+    seedSpecs: [],
+    specsByDose: [],
   };
 }
 
-function ladderSeed(ladder: Ladder): number {
+/**
+ * Seeds for a ladder stage. Confirm and naive use seeds 1…N of their own first row.
+ * The dose stage keeps training and testing in separate named streams, so no training
+ * seed can ever be a test seed, and scores every dose on the same test seeds (a paired
+ * comparison across doses rather than four unrelated samples).
+ */
+export function ladderSeed(
+  ladder: Pick<Ladder, "mode" | "phase" | "row" | "doses" | "doseCursor" | "index">,
+): number {
   if (ladder.mode === "dose" && ladder.phase === "train") {
     const dose = ladder.doses[ladder.doseCursor] ?? 0;
-    return seedFromRow(ladder.row, 10000 + dose * 1000 + ladder.index);
+    return seedFromRow(ladder.row, `train:${dose}:${ladder.index}`);
   }
-  if (ladder.mode === "dose") {
-    const dose = ladder.doses[ladder.doseCursor] ?? 0;
-    return seedFromRow(ladder.row, 20000 + dose * 100 + ladder.index + 1);
-  }
+  if (ladder.mode === "dose") return seedFromRow(ladder.row, `test:${ladder.index + 1}`);
   return seedFromRow(ladder.row, ladder.index + 1);
 }
 
@@ -1336,7 +1521,8 @@ function rowHash(stage: string, config: FieldConfig, preset: PresetId, extra: un
 }
 
 function stageFocus(ladder: Ladder): string {
-  if (ladder.mode === "naive") return `Naive 64 · innate off · coupling 0 · ${ladder.index}/${ladder.total}`;
+  if (ladder.mode === "naive")
+    return `Naive 64 · innate off · coupling 0 · ${ladder.index}/${ladder.total}`;
   return `64-seed sign test · ${ladder.index}/${ladder.total} · ${PRESET_LABEL[ladder.preset]}`;
 }
 
@@ -1346,49 +1532,77 @@ function doseFocus(ladder: Ladder): string {
   return `Dose ${dose} · ${kind} ${ladder.index}/${ladder.total}`;
 }
 
-function curveRises(points: DosePoint[]): boolean {
-  if (points.length !== 4) return false;
-  return points[0].spec < points[1].spec && points[1].spec < points[2].spec && points[2].spec < points[3].spec;
+/**
+ * Dose 100 against dose 0, paired by test seed. A strict rise of four means happens about
+ * 1 time in 24 with no dose effect at all, whatever α is, so Learned also needs this test.
+ */
+function doseTrend(ladder: Ladder): ReturnType<typeof signTest> {
+  const low = ladder.specsByDose[0] ?? [];
+  const high = ladder.specsByDose[ladder.specsByDose.length - 1] ?? [];
+  const n = Math.min(low.length, high.length);
+  const diffs: number[] = [];
+  for (let i = 0; i < n; i++) diffs.push(high[i] - low[i]);
+  return signTest(diffs);
 }
 
-function doseReason(ladder: Ladder, learned: boolean): string {
+function curveRises(points: DosePoint[]): boolean {
+  if (points.length !== 4) return false;
+  return (
+    points[0].spec < points[1].spec &&
+    points[1].spec < points[2].spec &&
+    points[2].spec < points[3].spec
+  );
+}
+
+function doseReason(ladder: Ladder, learned: boolean, trend?: ReturnType<typeof signTest>): string {
   const specs = ladder.points.map((point) => `${point.dose}→${point.spec.toFixed(3)}`).join(", ");
   const couplingNote = ladder.couplingSubstituted
     ? `Frozen coupling was 0, which makes archive import a no-op, so these dose tests used coupling ${ladder.testCoupling.toFixed(2)}.`
     : `Dose tests used coupling ${ladder.testCoupling.toFixed(2)}.`;
   const head = specs ? `Mean field specificity by dose: ${specs}. ` : "";
+  const trendNote = trend
+    ? ` Dose 100 against dose 0 on the paired test seeds: ${trend.pos} up, ${trend.neg} down, p ${trend.p < 0.001 ? "< 0.001" : trend.p.toFixed(3)} (needed α = ${formatAlpha(ladder.alpha)}).`
+    : "";
   if (learned) {
-    return `${head}${couplingNote} Both 64-seed tests were Specific, and mean field specificity rose strictly with dose. Learned, for this table, was reached. That is the table learning. It is not morphic resonance. Turn the field off and the boards lock.`;
+    return `${head}${couplingNote}${trendNote} Both 64-seed tests were Specific, mean field specificity rose strictly with dose, and dose 100 beat dose 0 seed for seed. Learned, for this table, was reached. That is the table learning. It is not morphic resonance. Turn the field off and the boards lock.`;
   }
   if (ladder.points.length < 4) {
     return `${head}${couplingNote} The dose curve is not finished. Learned was not reached. This is not morphic resonance.`;
   }
-  return `${head}${couplingNote} Mean field specificity did not rise strictly across doses 0, 1, 10, and 100. Learned was not reached. This is not morphic resonance.`;
+  const rising = curveRises(ladder.points);
+  const why = rising
+    ? "Mean field specificity rose strictly, but dose 100 did not beat dose 0 on the paired seeds at the attempt's α."
+    : "Mean field specificity did not rise strictly across doses 0, 1, 10, and 100.";
+  return `${head}${couplingNote}${trendNote} ${why} Learned was not reached. This is not morphic resonance.`;
 }
 
-function makeConfirmResult(
+/**
+ * Seal a paired batch. Specific needs every planned seed, and for each null an exact
+ * two-sided sign test below `alpha` with more non-tied seeds favouring the field.
+ * Requiring both nulls (an intersection–union test) keeps the overall level at `alpha`.
+ */
+export function makeConfirmResult(
   row: string,
   diffsY: number[],
   diffsS: number[],
   expected: number,
   voided: boolean,
   learnedReason: string,
+  alpha: number = ALPHA,
 ): ConfirmResult {
   const yokedTest = signTest(diffsY);
   const scrambledTest = signTest(diffsS);
   const yokedCi = bootstrapMedianCI(diffsY, 400, 3);
   const scrambledCi = bootstrapMedianCI(diffsS, 400, 4);
+  const favours = (test: ReturnType<typeof signTest>) =>
+    test.p < alpha && test.pos > test.neg && test.median > 0;
   const specific =
     !voided &&
     diffsY.length === expected &&
     diffsS.length === expected &&
     expected > 0 &&
-    yokedTest.p < 0.05 &&
-    yokedTest.median > 0 &&
-    yokedTest.pos > yokedTest.neg &&
-    scrambledTest.p < 0.05 &&
-    scrambledTest.median > 0 &&
-    scrambledTest.pos > scrambledTest.neg;
+    favours(yokedTest) &&
+    favours(scrambledTest);
   const arms = ["field", "yoked", "scrambled"];
   const rng = mulberry32(Number.parseInt(row.slice(0, 8), 16) || 1);
   for (let i = arms.length - 1; i > 0; i--) {
@@ -1400,6 +1614,7 @@ function makeConfirmResult(
   return {
     row,
     seeds: diffsY.length,
+    alpha,
     yoked: { ...yokedTest, lo: yokedCi.lo, hi: yokedCi.hi },
     scrambled: { ...scrambledTest, lo: scrambledCi.lo, hi: scrambledCi.hi },
     specific,

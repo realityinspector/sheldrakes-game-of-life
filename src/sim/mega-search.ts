@@ -1,6 +1,6 @@
-import type { LatticeDim } from "@/sim/sweep";
-import type { PresetId } from "@/sim/engine";
-import { mulberry32 } from "@/sim/protocol";
+import type { LatticeDim } from "./sweep.ts";
+import type { PresetId } from "./engine.ts";
+import { mulberry32 } from "./protocol.ts";
 
 export type MegaPhase = "scout" | "fan" | "grid";
 
@@ -70,7 +70,7 @@ export class MegaSearch {
     this.clusters = built.clusters;
     this.buckets = built.buckets;
     this.maxDepth = this.clusters.reduce((max, cluster) => Math.max(max, cluster.innerLimit), 0);
-    this.rng = mulberry32((salt >>> 0) || 1);
+    this.rng = mulberry32(salt >>> 0 || 1);
     const lead = this.clusters[this.buckets[0]?.[0] ?? 0];
     if (lead) this.focus = `scout · ${labelOf(dims, lead.base)}`;
   }
@@ -134,15 +134,6 @@ export class MegaSearch {
     this.phase = "fan";
     this.fanQuiet = 0;
     this.focus = `${betterGap ? "drill" : scored ? "fan" : "edge"} · ${labelOf(this.dims, digits)}`;
-  }
-
-  /** Drop the open fan so a failed published batch does not keep grinding the same pocket. */
-  releasePocket() {
-    this.hot = [];
-    this.pending.clear();
-    this.fanQuiet = 0;
-    this.phase = "scout";
-    this.focus = "scout · leaving a failed pocket";
   }
 
   private sampleUnvisited(): number[] | null {
@@ -240,7 +231,8 @@ export class MegaSearch {
         for (let dm = -1; dm <= 1; dm++) {
           if (ds === 0 && dm === 0) continue;
           const base = center.slice();
-          if (!shift(base, strengthDim, ds, this.lengths) || !shift(base, simDim, dm, this.lengths)) continue;
+          if (!shift(base, strengthDim, ds, this.lengths) || !shift(base, simDim, dm, this.lengths))
+            continue;
           add(base.slice());
           for (const dim of this.dims.keys()) {
             if (dim === strengthDim || dim === simDim || dim === presetDim) continue;
@@ -324,8 +316,14 @@ function prefer(key: string, value: number | boolean | PresetId | undefined): nu
   return 0;
 }
 
-function buildClusters(dims: LatticeDim[]): { clusters: Cluster[]; buckets: number[][]; sampled: boolean } {
-  const fixed = FIXED_KEYS.map((key) => dims.findIndex((dim) => dim.key === key)).filter((index) => index >= 0);
+function buildClusters(dims: LatticeDim[]): {
+  clusters: Cluster[];
+  buckets: number[][];
+  sampled: boolean;
+} {
+  const fixed = FIXED_KEYS.map((key) => dims.findIndex((dim) => dim.key === key)).filter(
+    (index) => index >= 0,
+  );
   const freeIdx = dims.map((_, index) => index).filter((index) => !fixed.includes(index));
   let product = 1;
   for (const index of fixed) product *= dims[index].values.length;
@@ -387,7 +385,14 @@ function sampleFixed(dims: LatticeDim[], fixed: number[]): number[][] {
   const picks = fixed.map((dim) => {
     const key = dims[dim].key;
     const order = sortOrder(dims[dim]);
-    const keep = key === "preset" || key === "innate" ? order.length : key === "fieldStrength" ? 4 : key === "cells" ? 2 : 3;
+    const keep =
+      key === "preset" || key === "innate"
+        ? order.length
+        : key === "fieldStrength"
+          ? 4
+          : key === "cells"
+            ? 2
+            : 3;
     return { dim, values: order.slice(0, keep) };
   });
   let rows: number[][] = [dims.map(() => 0)];

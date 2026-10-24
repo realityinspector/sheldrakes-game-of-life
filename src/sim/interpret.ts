@@ -1,5 +1,5 @@
-import type { ConfirmResult, MegaState, SweepCard } from "@/sim/sweep";
-import { formatCount } from "@/sim/sweep";
+import type { ConfirmResult, MegaState, SweepCard } from "./sweep.ts";
+import { formatCount } from "./sweep.ts";
 
 export type HistoryLine = {
   name: string;
@@ -29,21 +29,31 @@ export function interpret(input: {
 
   const armed = input.cards.filter((card) => card.level.startsWith("armed")).length;
   const loud = input.cards.filter((card) => card.level.startsWith("loud")).length;
-  const unarmed = input.cards.filter((card) => card.level.startsWith("unarmed") || card.level.startsWith("off")).length;
-  const bestGap = input.cards.reduce((best, card) => Math.max(best, card.gap), Number.NEGATIVE_INFINITY);
+  const unarmed = input.cards.filter(
+    (card) => card.level.startsWith("unarmed") || card.level.startsWith("off"),
+  ).length;
+  const bestGap = input.cards.reduce(
+    (best, card) => Math.max(best, card.gap),
+    Number.NEGATIVE_INFINITY,
+  );
   const gapText = input.cards.length && Number.isFinite(bestGap) ? bestGap.toFixed(2) : "—";
-  const passedShort = input.history.some((item) => item.specific === true && !item.reading.includes("64"));
-  const passedPublished = input.history.some((item) => item.reading.includes("64") && item.specific === true);
+  const passedShort = input.history.some(
+    (item) => item.specific === true && !item.reading.includes("64"),
+  );
+  const passedPublished = input.history.some(
+    (item) => item.reading.includes("64") && item.specific === true,
+  );
   const confirm = input.confirm;
-  const published =
-    !!confirm && !confirm.voided && confirm.specific && confirm.seeds >= 64;
-  const shortPass =
-    !!confirm && !confirm.voided && confirm.specific && confirm.seeds < 64;
+  const published = !!confirm && !confirm.voided && confirm.specific && confirm.seeds >= 64;
+  const shortPass = !!confirm && !confirm.voided && confirm.specific && confirm.seeds < 64;
   const failedConfirm = !!confirm && !confirm.voided && !confirm.specific;
   const anySpecific = published || passedPublished;
 
   const unanswered = input.cards.length === 0 && input.history.length === 0;
-  const resonanceValue = unanswered || (input.running && !anySpecific && !published && !failedConfirm) ? "Not yet" : "No";
+  const resonanceValue =
+    unanswered || (input.running && !anySpecific && !published && !failedConfirm)
+      ? "Not yet"
+      : "No";
   const chips = [
     {
       label: "Resonance",
@@ -52,7 +62,14 @@ export function interpret(input: {
     },
     {
       label: "Specific",
-      value: anySpecific || published ? "Yes" : shortPass || passedShort ? "Short" : failedConfirm ? "No" : "Not run",
+      value:
+        anySpecific || published
+          ? "Yes"
+          : shortPass || passedShort
+            ? "Short"
+            : failedConfirm
+              ? "No"
+              : "Not run",
       hint: anySpecific || published ? "64 seeds" : "needs both nulls",
     },
     {
@@ -151,12 +168,38 @@ export function interpret(input: {
   return {
     resonance: "not-yet",
     title: "Not yet",
-    line: armed > 0
-      ? `Armed on ${armed} ${armed === 1 ? "card" : "cards"}. That is not morphic resonance.`
-      : "These cards do not show morphic resonance.",
+    line:
+      armed > 0
+        ? `Armed on ${armed} ${armed === 1 ? "card" : "cards"}. That is not morphic resonance.`
+        : "These cards do not show morphic resonance.",
     detail: `The table is writing at a measured rate. Best specificity gap on this walk is ${gapText}. A gap on one seed is an illustration. Morphic resonance is only even approachable after a frozen batch, and a Specific result would still be the table. ${input.reason}`,
     chips,
   };
+}
+
+/** Specific results from earlier attempts, which later failures do not undo. */
+function earlierSpecific(mega: MegaState): string {
+  const wins = (mega.sealed ?? []).filter(
+    (item) => item.specific && item !== mega.sealed[mega.sealed.length - 1],
+  );
+  if (wins.length === 0) return "";
+  const parts = wins.map((item) => {
+    const next =
+      item.learned === true
+        ? "Learned was reached"
+        : item.learned === false
+          ? "the dose curve did not show learning"
+          : item.naive === false
+            ? "its naive retest failed"
+            : "its naive retest did not finish";
+    return `sign test ${item.attempt} (α ${alphaText(item.alpha)}) was Specific and ${next}`;
+  });
+  return ` Earlier in this run, ${parts.join("; ")}. A later miss does not undo that; it is still the table.`;
+}
+
+function alphaText(alpha: number | undefined): string {
+  const a = alpha ?? 0.05;
+  return a >= 0.01 ? a.toFixed(3) : a.toPrecision(2);
 }
 
 function count(n: number): string {
@@ -190,7 +233,7 @@ function readMega(mega: MegaState): Verdict {
       true,
       "Not yet",
       `Morphic resonance has not been found. Proof: the 64-seed sign test is running (${mega.ladderDone}/${mega.ladderTotal || 64}). Extent: still an illustration until that batch seals.`,
-      `The best armed recipe was frozen and is being scored at generation 80 on seeds derived from the first-row hash, not the illustration seed.${frozen} Both nulls have to pass. Even a Specific batch would measure the table. ${loudNote}`,
+      `The best armed recipe was frozen and is being scored at generation 80 on seeds derived from the first-row hash, not the illustration seed.${frozen} Both nulls have to pass at α = ${alphaText(mega.alpha)}, this attempt's share of 0.05: every attempt in the run spends less, so a run that keeps testing cannot buy a false win. Even a Specific batch would measure the table. ${loudNote}`,
       "Running",
       "64 seeds, open",
       `${mega.ladderDone}/${mega.ladderTotal || 64}`,
@@ -246,6 +289,8 @@ function readMega(mega: MegaState): Verdict {
 
   const bar = Number.isFinite(mega.nextBar) ? mega.nextBar.toFixed(2) : "0.20";
 
+  const earlier = earlierSpecific(mega);
+
   if (going && stage === "search" && proof && !proof.specific) {
     const waiting =
       mega.queued > 0
@@ -255,9 +300,9 @@ function readMega(mega: MegaState): Verdict {
       true,
       "Not yet",
       `Morphic resonance has not been found. Proof: no. Sign test ${mega.trials || 1} failed, and the search is still going.`,
-      `That 64-seed batch did not beat both nulls, so it was not Specific. The walk did not end.${waiting} It keeps going until a batch wins, or until you stop it.${frozen} ${armedNote} ${loudNote}`,
-      "No",
-      "last 64 failed",
+      `That 64-seed batch did not beat both nulls, so it was not Specific. The walk did not end.${waiting} It keeps going until a batch wins, or until you stop it. The next attempt must clear α = ${alphaText(mega.alpha)}.${earlier}${frozen} ${armedNote} ${loudNote}`,
+      earlier ? "Earlier" : "No",
+      earlier ? "an earlier 64 was Specific" : "last 64 failed",
       "Still open",
       "miss is not the end",
       loud,
@@ -300,9 +345,9 @@ function readMega(mega: MegaState): Verdict {
       false,
       "No",
       "Morphic resonance was not found. Proof: no. The frozen recipe failed the 64-seed sign test.",
-      `Tried ${formatCount(mega.done)} illustration ${mega.done === 1n ? "card" : "cards"}, then ${proof.seeds} derived seeds. The field did not beat both the yoked null and the scrambled null. The naive retest and the dose curve were not run.${frozen} ${armedNote} ${loudNote} Extent: an illustration that did not replicate.`,
-      "No",
-      "64 seeds, failed",
+      `Tried ${formatCount(mega.done)} illustration ${mega.done === 1n ? "card" : "cards"}, then ${proof.seeds} derived seeds. The field did not beat both the yoked null and the scrambled null. The naive retest and the dose curve were not run.${earlier}${frozen} ${armedNote} ${loudNote} Extent: an illustration that did not replicate.`,
+      earlier ? "Earlier" : "No",
+      earlier ? "an earlier 64 was Specific" : "64 seeds, failed",
       "Not replicated",
       "one seed, then a miss",
       loud,
@@ -430,7 +475,17 @@ function readMega(mega: MegaState): Verdict {
     detail = `Tried ${formatCount(mega.done)} on one shared seed. ${armedNote} ${loudNote} The best gap is ${gapText}${where}: field facilitation minus the worse null, on that single recipe. One seed cannot be Specific. The run freezes the best armed card — not a loud one — once that gap reaches 0.20, and then runs the 64-seed sign test. A smaller gap keeps searching. That test still measures the table. It has not sealed.`;
   }
 
-  return megaVerdict(going, going ? "Not yet" : "No", line, detail, proofValue, proofHint, extent, extentHint, loud);
+  return megaVerdict(
+    going,
+    going ? "Not yet" : "No",
+    line,
+    detail,
+    proofValue,
+    proofHint,
+    extent,
+    extentHint,
+    loud,
+  );
 }
 
 function megaVerdict(

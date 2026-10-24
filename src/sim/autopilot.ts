@@ -1,6 +1,6 @@
-import { DEFAULT_CONFIG, type FieldConfig, type PresetId } from "@/sim/engine";
+import { DEFAULT_CONFIG, type FieldConfig, type PresetId } from "./engine.ts";
 import { suggestNextSweep, type SweepSuggestion } from "@/lib/suggest-sweep";
-import type { AxisKey, SeekGoal, SweepMode, SweepRunner } from "@/sim/sweep";
+import type { AxisKey, SeekGoal, SweepMode, SweepRunner } from "./sweep.ts";
 
 export type CampaignPlan = {
   name: string;
@@ -157,7 +157,9 @@ export class Autopilot {
       };
     }
     if (record.specific && record.seeds >= 16) {
-      return { plan: this.confirmPlan(record.config, record.preset, 64, "Published 64-seed freeze") };
+      return {
+        plan: this.confirmPlan(record.config, record.preset, 64, "Published 64-seed freeze"),
+      };
     }
     this.index += 1;
     if ((this.index === 4 || this.index === 7) && this.grokCalls < 2) return { grok: true };
@@ -191,7 +193,12 @@ export class Autopilot {
     return `Campaigns so far:\n${lines.join("\n")}\nBest field strength ${this.best.fieldStrength}, similarity ${this.best.similarityThreshold}, cells ${this.best.cells}, innate ${this.best.innate}.`;
   }
 
-  private confirmPlan(config: FieldConfig, preset: PresetId, seeds: number, name: string): CampaignPlan {
+  private confirmPlan(
+    config: FieldConfig,
+    preset: PresetId,
+    seeds: number,
+    name: string,
+  ): CampaignPlan {
     return {
       name,
       mode: "confirm",
@@ -252,7 +259,12 @@ export class Autopilot {
       return this.confirmPlan(best, "garden", 16, "Freeze the garden");
     }
     if (index === 3) {
-      return this.confirmPlan(garden({ ...best, innate: false, coupling: 0 }), "garden", 16, "Garden with innate forms off");
+      return this.confirmPlan(
+        garden({ ...best, innate: false, coupling: 0 }),
+        "garden",
+        16,
+        "Garden with innate forms off",
+      );
     }
     if (index === 4) {
       return this.confirmPlan(
@@ -283,7 +295,12 @@ export class Autopilot {
       return this.confirmPlan(this.best, "gliders", 16, "Freeze the gliders");
     }
     if (index === 7) {
-      return this.confirmPlan(garden({ ...best, cells: 28, coupling: 0 }), "pulsar", 16, "Pulsar, in case the census was the wrong one");
+      return this.confirmPlan(
+        garden({ ...best, cells: 28, coupling: 0 }),
+        "pulsar",
+        16,
+        "Pulsar, in case the census was the wrong one",
+      );
     }
     return {
       name: "Small R-pentomino",

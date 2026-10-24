@@ -1,15 +1,35 @@
 /** Published rules for the morphic laboratory. Analysis version is hashed into every confirmatory row. */
 
-export const ANALYSIS_VERSION = "2026-10-23.dice8";
+/**
+ * Bumped whenever scoring changes, so a row hashed under an older rule can never be
+ * mistaken for one scored under this one. dice9 fixed the census/target identity
+ * (translation-normalized shapes), learning from an empty table, per-board sampling,
+ * dose seed namespaces, and α-spending across mega attempts. dice10 made Yoked's flip
+ * count exact, skipped repeated candidate sites, and spent α on every ladder stage.
+ */
+export const ANALYSIS_VERSION = "2026-10-24.dice10";
 
 export const PATCH = 5;
 export const PATCH_CELLS = 25;
 export const CENTER_BIT = 12;
 export const CENTER3 =
-  (1 << 6) | (1 << 7) | (1 << 8) | (1 << 11) | (1 << 12) | (1 << 13) | (1 << 16) | (1 << 17) | (1 << 18);
+  (1 << 6) |
+  (1 << 7) |
+  (1 << 8) |
+  (1 << 11) |
+  (1 << 12) |
+  (1 << 13) |
+  (1 << 16) |
+  (1 << 17) |
+  (1 << 18);
 
 export const WINDOW_GENS = 80;
+/** Eligible patches each memory board consults per generation. */
 export const SAMPLES_PER_GEN = 8;
+/** Candidate sites (and coins) drawn per generation, shared by Field and Scrambled. */
+export const CANDIDATES_PER_GEN = 48;
+/** Pseudo-count added to a crystal's alpha each time its form echoes on the board. */
+export const ECHO_BOOST = 0.4;
 export const ARMED_LO = 0.01;
 export const ARMED_HI = 0.12;
 export const FIELD_OFF = 0.2;
@@ -69,10 +89,96 @@ export function orientations(mask: number): number[] {
   return ORIENT_OPS.map((op) => transformMask(mask, op));
 }
 
+/**
+ * Orbit of a centre-anchored 5×5 patch under the eight symmetries that fix the centre.
+ * Placement matters here on purpose: a crystal is a neighbourhood around one cell.
+ * Do not use this to name free-floating objects; use `shapeId`.
+ */
 export function orbitOf(mask: number): number {
   let best = mask >>> 0;
-  for (const form of orientations(mask)) if ((form >>> 0) < best) best = form >>> 0;
+  for (const form of orientations(mask)) if (form >>> 0 < best) best = form >>> 0;
   return best;
+}
+
+/** Shift a 5×5 mask so its live cells touch the top and left edges. Empty stays 0. */
+export function normalizeMask(mask: number): number {
+  if (mask === 0) return 0;
+  let minX = PATCH;
+  let minY = PATCH;
+  for (let i = 0; i < PATCH_CELLS; i++) {
+    if ((mask & (1 << i)) === 0) continue;
+    const x = i % PATCH;
+    const y = (i / PATCH) | 0;
+    if (x < minX) minX = x;
+    if (y < minY) minY = y;
+  }
+  let out = 0;
+  for (let i = 0; i < PATCH_CELLS; i++) {
+    if ((mask & (1 << i)) === 0) continue;
+    const x = (i % PATCH) - minX;
+    const y = ((i / PATCH) | 0) - minY;
+    out |= 1 << (y * PATCH + x);
+  }
+  return out;
+}
+
+/**
+ * Name of a free shape: invariant to translation inside the 5×5 frame and to all
+ * eight rotations and reflections. Census keys and trained/comparison targets both
+ * use this, so they are in the same identity space.
+ */
+export function shapeId(mask: number): number {
+  let best = normalizeMask(mask) >>> 0;
+  for (const op of ORIENT_OPS) {
+    const form = normalizeMask(transformMask(mask, op)) >>> 0;
+    if (form < best) best = form;
+  }
+  return best;
+}
+
+/**
+ * The object a centre-anchored patch is "about": the largest 8-connected component
+ * with a cell in the centre 3×3 (falling back to the largest component), as a shapeId.
+ * A patch that clips two neighbours would otherwise name a shape no census can see.
+ */
+export function objectShape(mask: number): number {
+  if (mask === 0) return 0;
+  let seen = 0;
+  let best = 0;
+  let bestSize = 0;
+  let bestCentral = false;
+  for (let start = 0; start < PATCH_CELLS; start++) {
+    if ((mask & (1 << start)) === 0 || (seen & (1 << start)) !== 0) continue;
+    let comp = 0;
+    let size = 0;
+    const stack = [start];
+    seen |= 1 << start;
+    while (stack.length) {
+      const cur = stack.pop() as number;
+      comp |= 1 << cur;
+      size++;
+      const x = cur % PATCH;
+      const y = (cur / PATCH) | 0;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          const nx = x + dx;
+          const ny = y + dy;
+          if (nx < 0 || ny < 0 || nx >= PATCH || ny >= PATCH) continue;
+          const bit = 1 << (ny * PATCH + nx);
+          if ((mask & bit) === 0 || (seen & bit) !== 0) continue;
+          seen |= bit;
+          stack.push(ny * PATCH + nx);
+        }
+      }
+    }
+    const central = (comp & CENTER3) !== 0;
+    if ((central && !bestCentral) || (central === bestCentral && size > bestSize)) {
+      best = comp;
+      bestSize = size;
+      bestCentral = central;
+    }
+  }
+  return shapeId(best);
 }
 
 export function bestDice(patch: number, forms: number[]): { score: number; index: number } {
@@ -106,14 +212,17 @@ export function rowsToMask(rows: string[]): number {
   return mask;
 }
 
-const COMPARE_ROWS: { name: string; rows: string[] }[] = [
+/** Still lifes the table never starts with. Each is verified period-1 in the tests. */
+export const COMPARE_ROWS: { name: string; rows: string[] }[] = [
   { name: "Loaf", rows: [".....", ".##..", "#..#.", ".#.#.", "..#.."] },
   { name: "Pond", rows: [".....", ".##..", "#..#.", "#..#.", ".##.."] },
   { name: "Ship", rows: [".....", "##...", "#.#..", ".##..", "....."] },
-  { name: "Long boat", rows: [".....", ".#...", "#.#..", ".##..", ".#..."] },
+  { name: "Long boat", rows: ["##...", "#.#..", ".#.#.", "..#..", "....."] },
 ];
 
-export const COMPARISON_ORBITS: number[] = COMPARE_ROWS.map((form) => orbitOf(rowsToMask(form.rows)));
+export const COMPARISON_SHAPES: number[] = COMPARE_ROWS.map((form) =>
+  shapeId(rowsToMask(form.rows)),
+);
 
 export function classifyLevel(
   fieldStrength: number,
@@ -132,11 +241,12 @@ export function facilitation(nBoard: number, nControl: number): number {
   return Math.log((nBoard + 0.5) / (nControl + 0.5));
 }
 
+/** Mean facilitation over trained shapes minus mean over comparison shapes. Keys are shapeIds. */
 export function specificity(
   board: Map<number, number>,
   control: Map<number, number>,
   trained: number[],
-  comparison: number[] = COMPARISON_ORBITS,
+  comparison: number[] = COMPARISON_SHAPES,
 ): number {
   const mean = (ids: number[]) => {
     if (ids.length === 0) return 0;
@@ -151,53 +261,72 @@ export function mergeCounts(into: Map<number, number>, add: Map<number, number>)
   for (const [key, value] of add) into.set(key, (into.get(key) ?? 0) + value);
 }
 
-/** Isolated objects that fit in a 5×5, keyed by symmetry orbit. A fused soup contributes nothing. */
-export function censusCounts(grid: Uint8Array, w: number, h: number): Map<number, number> {
+/**
+ * Isolated objects (8-connected components) that fit in a 5×5, keyed by `shapeId`.
+ * On a torus, components are followed across the seam so an object straddling the
+ * edge is counted once, whole. A fused soup contributes nothing.
+ */
+export function censusCounts(
+  grid: Uint8Array,
+  w: number,
+  h: number,
+  wrap = false,
+): Map<number, number> {
   const seen = new Uint8Array(grid.length);
   const counts = new Map<number, number>();
   const stack: number[] = [];
+  // Unwrapped coordinates relative to the component's first cell. Any component that
+  // winds around the torus spans at least w - 1 here, so it is rejected as too big.
+  const ux = new Int32Array(grid.length);
+  const uy = new Int32Array(grid.length);
+  const cells: number[] = [];
   for (let i = 0; i < grid.length; i++) {
     if (!grid[i] || seen[i]) continue;
     stack.length = 0;
+    cells.length = 0;
     stack.push(i);
     seen[i] = 1;
-    let minX = w;
-    let minY = h;
+    ux[i] = 0;
+    uy[i] = 0;
+    let minX = 0;
+    let minY = 0;
     let maxX = 0;
     let maxY = 0;
-    const cells: number[] = [];
     while (stack.length) {
       const cur = stack.pop() as number;
       const x = cur % w;
       const y = (cur / w) | 0;
+      const cx = ux[cur];
+      const cy = uy[cur];
       cells.push(cur);
-      if (x < minX) minX = x;
-      if (y < minY) minY = y;
-      if (x > maxX) maxX = x;
-      if (y > maxY) maxY = y;
+      if (cx < minX) minX = cx;
+      if (cy < minY) minY = cy;
+      if (cx > maxX) maxX = cx;
+      if (cy > maxY) maxY = cy;
       for (let dy = -1; dy <= 1; dy++) {
         for (let dx = -1; dx <= 1; dx++) {
           if (dx === 0 && dy === 0) continue;
-          const nx = x + dx;
-          const ny = y + dy;
-          if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+          let nx = x + dx;
+          let ny = y + dy;
+          if (wrap) {
+            nx = (nx + w) % w;
+            ny = (ny + h) % h;
+          } else if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
           const ni = ny * w + nx;
           if (!grid[ni] || seen[ni]) continue;
           seen[ni] = 1;
+          ux[ni] = cx + dx;
+          uy[ni] = cy + dy;
           stack.push(ni);
         }
       }
     }
     const bw = maxX - minX + 1;
     const bh = maxY - minY + 1;
-    if (bw > 5 || bh > 5 || cells.length > 16) continue;
+    if (bw > PATCH || bh > PATCH || cells.length > 16) continue;
     let mask = 0;
-    for (const cur of cells) {
-      const x = (cur % w) - minX;
-      const y = ((cur / w) | 0) - minY;
-      mask |= 1 << (y * 5 + x);
-    }
-    const id = orbitOf(mask);
+    for (const cur of cells) mask |= 1 << ((uy[cur] - minY) * PATCH + (ux[cur] - minX));
+    const id = shapeId(mask);
     counts.set(id, (counts.get(id) ?? 0) + 1);
   }
   return counts;
@@ -223,8 +352,32 @@ function logChoose(n: number, k: number): number {
   return s;
 }
 
-/** Two-sided sign test. Ties are dropped. α for Specific is 0.05, fixed in advance. */
-export function signTest(diffs: number[]): { n: number; pos: number; neg: number; p: number; median: number } {
+/** Family-wise α for Specific. A single pre-registered batch is tested at this level. */
+export const ALPHA = 0.05;
+
+/**
+ * α spent on the k-th confirmatory attempt of one open-ended walk (k ≥ 1):
+ * ALPHA · 6 / (π² k²). The series sums to ALPHA, so however many frozen recipes a
+ * mega run tests before one passes, the chance that any pass is a false positive
+ * stays at or under ALPHA. Testing each attempt at a flat 0.05 "until a batch wins"
+ * would make a false win certain given enough time.
+ */
+export function alphaForAttempt(k: number): number {
+  const n = Math.max(1, Math.floor(k));
+  return (ALPHA * 6) / (Math.PI * Math.PI * n * n);
+}
+
+/**
+ * Exact two-sided sign test. Ties are dropped. `median` is the median of the non-tied
+ * differences, which is > 0 exactly when pos > neg.
+ */
+export function signTest(diffs: number[]): {
+  n: number;
+  pos: number;
+  neg: number;
+  p: number;
+  median: number;
+} {
   const nz = diffs.filter((value) => value !== 0);
   const pos = nz.filter((value) => value > 0).length;
   const n = nz.length;
@@ -235,7 +388,11 @@ export function signTest(diffs: number[]): { n: number; pos: number; neg: number
   return { n, pos, neg: n - pos, p: Math.min(1, 2 * acc), median: median(nz) };
 }
 
-export function bootstrapMedianCI(diffs: number[], iters = 400, seed = 1): { lo: number; hi: number } {
+export function bootstrapMedianCI(
+  diffs: number[],
+  iters = 400,
+  seed = 1,
+): { lo: number; hi: number } {
   const nz = diffs.filter((value) => value !== 0);
   if (nz.length === 0) return { lo: 0, hi: 0 };
   const rng = mulberry32(seed);
@@ -296,14 +453,9 @@ export function permuteMask(mask: number, order: number[]): number {
   return out;
 }
 
+/** Synchronous SHA-256 of the UTF-8 encoding of `message`, as lowercase hex. */
 export function sha256(message: string): string {
-  const bytes: number[] = [];
-  for (let i = 0; i < message.length; i++) {
-    const code = message.charCodeAt(i);
-    if (code < 0x80) bytes.push(code);
-    else if (code < 0x800) bytes.push(0xc0 | (code >> 6), 0x80 | (code & 0x3f));
-    else bytes.push(0xe0 | (code >> 12), 0x80 | ((code >> 6) & 0x3f), 0x80 | (code & 0x3f));
-  }
+  const bytes: number[] = Array.from(new TextEncoder().encode(message));
   const bitLen = bytes.length * 8;
   bytes.push(0x80);
   while (bytes.length % 64 !== 56) bytes.push(0);
@@ -378,7 +530,11 @@ export function sha256(message: string): string {
   return hex;
 }
 
-export function seedFromRow(rowHex: string, index: number): number {
+/**
+ * Seed number `index` of the batch whose first row is `rowHex`. A string index names a
+ * separate stream (for example "train:10:3"), so different roles never share a seed.
+ */
+export function seedFromRow(rowHex: string, index: number | string): number {
   const hex = sha256(`${rowHex}:${index}`);
   const value = Number.parseInt(hex.slice(0, 8), 16) >>> 0;
   return value || 1;
