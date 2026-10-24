@@ -15,6 +15,7 @@ import {
   mulberry32,
   normalizeMask,
   objectShape,
+  permutation,
   orientations,
   rowsToMask,
   seedFromRow,
@@ -316,13 +317,24 @@ describe("Page's trend test", () => {
   it("is calibrated under the null and ignores fully tied rows", () => {
     const rng = mulberry32(17);
     let hits = 0;
-    for (let rep = 0; rep < 2000; rep++) {
-      const rows = Array.from({ length: 64 }, () => [rng(), rng(), rng(), rng()]);
+    for (let rep = 0; rep < 1000; rep++) {
+      const rows = Array.from({ length: 16 }, () => [rng(), rng(), rng()]);
       if (pageTest(rows).p < 0.05) hits++;
     }
-    // Binomial(2000, 0.05): mean 100, sd 9.7.
-    assert.ok(hits > 70 && hits < 130, `false positives ${hits}/2000`);
-    assert.deepEqual(pageTest([[2, 2, 2, 2]]), { n: 1, L: 25, z: 0, p: 1 });
+    // Exact and discrete, so at most 5%: Binomial(1000, ≤0.05), mean ≤ 50, sd ≈ 6.9.
+    assert.ok(hits > 25 && hits < 66, `false positives ${hits}/1000`);
+    assert.deepEqual(pageTest([[2, 2, 2, 2]]), { n: 0, L: 25, z: 0, p: 1 });
+  });
+
+  it("p is exact: one row of three distinct values", () => {
+    // Orders of (1,2,3): L = 14 once, 13 twice, 11 twice, 10 once.
+    assert.ok(Math.abs(pageTest([[1, 2, 3]]).p - 1 / 6) < 1e-12);
+    assert.ok(Math.abs(pageTest([[1, 3, 2]]).p - 3 / 6) < 1e-12);
+    const exact = pageTest([
+      [1, 2, 3],
+      [1, 2, 3],
+    ]).p;
+    assert.ok(Math.abs(exact - 1 / 36) < 1e-12);
   });
 
   it("detects a monotone shift and not a decreasing one", () => {
@@ -341,5 +353,16 @@ describe("Page's trend test", () => {
       [-1, 1.842700792949715],
     ];
     for (const [x, v] of cases) assert.ok(Math.abs(erfc(x) - v) / v < 2e-7, `erfc(${x})`);
+  });
+});
+
+describe("Scrambled permutation", () => {
+  it("never moves the centre cell, always moves something, and is a bijection", () => {
+    for (let seed = 1; seed <= 500; seed++) {
+      const order = permutation(seed);
+      assert.equal(order[12], 12);
+      assert.equal(new Set(order).size, 25);
+      assert.ok(order.some((v, i) => v !== i));
+    }
   });
 });

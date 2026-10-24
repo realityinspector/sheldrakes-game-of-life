@@ -9,9 +9,12 @@
  * dice11 rate-matched Scrambled, scaled consultations with board area, added the mega
  * screen, moved Learned to Page's trend test on 64 paired dose seeds, and armed the
  * default recipe. Exploration for dice11 ran under "dice11-dev", so none of its seeds
- * can reappear here.
+ * can reappear here. dice12 kept the permutation's centre cell fixed (the moving centre
+ * made Scrambled delete-only or add-only on some seeds), ranked Scrambled's sites by
+ * Field's formula, made the dose stage's unit the training replicate, and computes Page's
+ * test exactly.
  */
-export const ANALYSIS_VERSION = "2026-10-24.dice11";
+export const ANALYSIS_VERSION = "2026-10-24.dice12";
 
 export const PATCH = 5;
 export const PATCH_CELLS = 25;
@@ -438,19 +441,31 @@ function midranks(values: number[]): number[] {
   return ranks;
 }
 
+function permutationsOf(values: number[]): number[][] {
+  if (values.length <= 1) return [values.slice()];
+  const out: number[][] = [];
+  values.forEach((v, i) => {
+    for (const rest of permutationsOf([...values.slice(0, i), ...values.slice(i + 1)])) out.push([v, ...rest]);
+  });
+  return out;
+}
+
 /**
  * Page's L test for an increasing trend across ordered conditions, paired by row.
- * rows[i][j] is the outcome of unit i under condition j (j in increasing order).
+ * rows[i][j] is the outcome of unit i under condition j (j in increasing order, k ≤ 6).
  * Ranks are taken within each row (midranks for ties). Under the null the ranks in a row
- * are exchangeable, so L has the permutation mean and variance used here (tie-corrected,
- * summed over rows); p is one-sided from the normal approximation, accurate for the 64
- * rows the dose stage uses.
+ * are exchangeable, so the exact null distribution of L is the convolution, over rows, of
+ * each row's L under all k! orderings of its own ranks. p is that exact upper tail. z is
+ * the normal score with the tie-corrected permutation variance, for display. n counts rows
+ * that are not fully tied.
  */
 export function pageTest(rows: number[][]): { n: number; L: number; z: number; p: number } {
-  let L = 0;
+  let L2 = 0;
   let mean = 0;
   let variance = 0;
   let n = 0;
+  // Distribution of 2L (always an integer: midranks are multiples of ½).
+  let dist = new Map<number, number>([[0, 1]]);
   for (const row of rows) {
     const k = row.length;
     if (k < 2) continue;
@@ -459,20 +474,32 @@ export function pageTest(rows: number[][]): { n: number; L: number; z: number; p
     const abar = (k + 1) / 2;
     let sa = 0;
     let sr = 0;
-    let li = 0;
+    let li2 = 0;
     for (let j = 0; j < k; j++) {
-      li += (j + 1) * r[j];
+      li2 += Math.round(2 * (j + 1) * r[j]);
       sa += (j + 1 - abar) ** 2;
       sr += (r[j] - rbar) ** 2;
     }
-    L += li;
+    L2 += li2;
     mean += k * abar * rbar;
     variance += (sa * sr) / (k - 1);
-    n++;
+    if (sr > 0) n++;
+    const rowDist = new Map<number, number>();
+    const perms = permutationsOf(r);
+    for (const perm of perms) {
+      let v = 0;
+      for (let j = 0; j < k; j++) v += Math.round(2 * (j + 1) * perm[j]);
+      rowDist.set(v, (rowDist.get(v) ?? 0) + 1 / perms.length);
+    }
+    const next = new Map<number, number>();
+    for (const [a, pa] of dist) for (const [b, pb] of rowDist) next.set(a + b, (next.get(a + b) ?? 0) + pa * pb);
+    dist = next;
   }
+  const L = L2 / 2;
   if (variance <= 0) return { n, L, z: 0, p: 1 };
-  const z = (L - mean) / Math.sqrt(variance);
-  return { n, L, z, p: 0.5 * erfc(z / Math.SQRT2) };
+  let p = 0;
+  for (const [v, pv] of dist) if (v >= L2) p += pv;
+  return { n, L, z: (L - mean) / Math.sqrt(variance), p: Math.min(1, p) };
 }
 
 export function bootstrapMedianCI(
@@ -513,22 +540,29 @@ export function mixSeed(seed: number, salt: number): number {
   return (x ^ (x >>> 16)) >>> 0;
 }
 
+/**
+ * The Scrambled null's permutation of the 25 patch cells. The centre stays put: a crystal's
+ * prediction is its next centre, so moving the centre made every scrambled crystal predict
+ * the same source cell, and on some seeds the null only ever deleted (or only ever added)
+ * cells. With the centre fixed, each scrambled crystal predicts what its real crystal
+ * predicts; only the shape it matches on is permuted.
+ */
 export function permutation(seed: number): number[] {
   const rng = mulberry32(mixSeed(seed, 0x5c5a1117));
-  const order = Array.from({ length: PATCH_CELLS }, (_, index) => index);
-  for (let i = order.length - 1; i > 0; i--) {
+  const others = Array.from({ length: PATCH_CELLS }, (_, index) => index).filter((i) => i !== CENTER_BIT);
+  for (let i = others.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    const swap = order[i];
-    order[i] = order[j];
-    order[j] = swap;
+    const swap = others[i];
+    others[i] = others[j];
+    others[j] = swap;
   }
-  let moved = false;
-  for (let i = 0; i < order.length; i++) if (order[i] !== i) moved = true;
-  if (!moved) {
-    const swap = order[0];
-    order[0] = order[1];
-    order[1] = swap;
+  if (others.every((value, i) => value === (i < CENTER_BIT ? i : i + 1))) {
+    const swap = others[0];
+    others[0] = others[1];
+    others[1] = swap;
   }
+  const order: number[] = [];
+  for (let i = 0, k = 0; i < PATCH_CELLS; i++) order.push(i === CENTER_BIT ? CENTER_BIT : others[k++]);
   return order;
 }
 

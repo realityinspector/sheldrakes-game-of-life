@@ -35,3 +35,29 @@ seed. A miss at any stage ends it. The result is reported whatever it is.
 
 This is the second confirmatory family in this program, after the dice11 mega run.
 Neither can show morphic resonance: both measure the table.
+
+## Amendment (before the follow-up ran)
+
+An independent review of `f39661d`, received while the mega run was still going, found two
+defects that affect the follow-up's test (not its selection):
+
+1. **Scrambled moved the centre cell.** The permutation did not hold the centre fixed, so every
+   scrambled crystal predicted the same source cell. On some seeds the null only deleted cells,
+   collapsing its own board, which favoured Field. The Field-vs-Scrambled arm of the mega run is
+   therefore not informative; the Yoked arm is unaffected.
+2. **The dose test pseudo-replicated.** One archive per dose was shared by all 64 test seeds, so
+   archive-to-archive variation counted as trend (17% false positives at a nominal 3%), and
+   Page's L passed curves where only dose 0 was low.
+
+`dice12` fixes both: the permutation keeps the centre, Scrambled ranks sites by Field's formula,
+and the dose stage uses 16 independent training replicates (cumulative archives at 1, 5, 25
+seeds; 4 test seeds per replicate). Learned needs an exact Page trend across the trained doses
+**and** the top dose beating dose 0 replicate by replicate, each at α = 0.05.
+
+The selection rule was applied to the finished mega run (record in `docs/runs/dice11/`) and
+picked **attempt 39**: gliders, 64², innate on, field strength 0.75, decay 0, similarity 0.40,
+sharpen 1.75, 12 crystals, coupling 0.45 (the baseline; inert until the dose stage). Its mega
+result was Yoked 49/15, Scrambled 56/8 (the latter from the defective null).
+
+The follow-up therefore runs `startLadder()` on that recipe under `dice12`, at the code of the
+commit that adds this amendment, with stages and α exactly as above. Nothing else changes.

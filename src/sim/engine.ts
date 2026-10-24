@@ -849,9 +849,10 @@ export class MorphicLab {
   /**
    * Scrambled's memory pass, rate-matched to Field. It consults eligible sites (the shared
    * candidate list first, then its own stream) and, at each, finds its best permuted
-   * crystal by the same score Field uses (Dice × strength × recency) with no threshold.
-   * It then writes the predicted centre at the `target` best-scoring sites where that
-   * prediction differs from Conway. Permuted shapes rarely clear Field's similarity bar,
+   * crystal by Field's ranking (Diceᵉ × strength × recency) with the similarity bar at
+   * zero. It then writes the predicted centre at the `target` best-scoring sites where that
+   * prediction differs from Conway. The permutation keeps the centre cell, so a scrambled
+   * crystal predicts the same centre as its real one. Permuted shapes rarely clear Field's similarity bar,
    * so with the bar kept the null fired about a third as often, and "Field beats
    * Scrambled" partly meant "Field wrote more cells". This keeps the machinery and the
    * count, and removes the content.
@@ -861,6 +862,7 @@ export class MorphicLab {
     const { w, h } = this;
     const stamp = ++this.siteEpochS;
     const decay = this.config.temporalDecay;
+    const sharpen = this.config.influenceExponent;
     const found: { idx: number; score: number; value: number }[] = [];
     const want = target * SCRAMBLE_POOL;
     const visit = (x: number, y: number) => {
@@ -872,8 +874,11 @@ export class MorphicLab {
       let best = -1;
       let value = 0;
       for (const twin of twins) {
+        // Field's ranking, clearanceᵉ × strength × recency, with the similarity bar at zero.
         const score =
-          bestDice(patch, twin.forms).score * twin.strength * Math.exp(-decay * twin.age);
+          Math.pow(bestDice(patch, twin.forms).score, sharpen) *
+          twin.strength *
+          Math.exp(-decay * twin.age);
         if (score > best) {
           best = score;
           value = twin.nextCenter;

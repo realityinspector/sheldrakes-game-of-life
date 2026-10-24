@@ -257,3 +257,34 @@ describe("rate-matched Scrambled", () => {
     });
   }
 });
+
+describe("Scrambled writes both ways", () => {
+  it("adds and deletes cells in proportion to Field, on every seed", () => {
+    // With the centre permuted away, some seeds made Scrambled delete-only or add-only.
+    for (let seed = 1; seed <= 10; seed++) {
+      const l = lab({ fieldStrength: 1, similarityThreshold: 0.6 }, 1000 + seed, "soup", 48);
+      let fBirth = 0;
+      let fTotal = 0;
+      let sBirth = 0;
+      let sTotal = 0;
+      for (let t = 0; t < 80; t++) {
+        l.step();
+        for (let i = 0; i < l.field.length; i++) {
+          if (l.influenced[i]) {
+            fTotal++;
+            fBirth += l.field[i];
+          }
+          if (l.influencedS[i]) {
+            sTotal++;
+            sBirth += l.scrambled[i];
+          }
+        }
+      }
+      assert.ok(sTotal > 20 && fTotal > 20, `seed ${seed}: too few flips`);
+      const fShare = fBirth / fTotal;
+      const sShare = sBirth / sTotal;
+      assert.ok(sShare > 0.05 && sShare < 0.95, `seed ${seed}: scrambled births ${sBirth}/${sTotal}`);
+      assert.ok(Math.abs(sShare - fShare) < 0.45, `seed ${seed}: field ${fShare} vs scrambled ${sShare}`);
+    }
+  });
+});

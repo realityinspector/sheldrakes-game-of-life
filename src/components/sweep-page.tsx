@@ -680,7 +680,8 @@ function ConfirmBlock({
         {result.scrambled.p < 0.001 ? "< 0.001" : result.scrambled.p.toFixed(3)}, median{" "}
         {result.scrambled.median.toFixed(3)} (CI {result.scrambled.lo.toFixed(3)} to{" "}
         {result.scrambled.hi.toFixed(3)}
-        ). Ties are dropped, and medians are of the non-tied differences. Both must pass an exact
+        ). Flips over the batch: field {result.flips.field}, yoked {result.flips.yoked}, scrambled{" "}
+        {result.flips.scrambled}. Ties are dropped, and medians are of the non-tied differences. Both must pass an exact
         two-sided sign test at α = {formatAlpha(result.alpha)}
         {result.alpha < 0.05 ? " (this run's share of 0.05, spent across its attempts)" : ""}, with
         more seeds favoring the field than against it.
@@ -695,29 +696,25 @@ function ConfirmBlock({
 }
 
 function DoseBlock({ dose }: { dose: DoseCurve }) {
+  const fmt = (p: number) => (p < 0.001 ? p.toExponential(2) : p.toFixed(3));
   return (
     <aside className="mt-4 rounded-lab border border-line bg-panel px-4 py-4">
       <p className="text-xs tracking-widest text-mist uppercase">
         {dose.learned ? "Learned · still the table" : "Dose curve · Learned not reached"}
       </p>
       <p className="mt-2 text-sm text-pretty text-bone">{dose.reason}</p>
-      {dose.points.length > 0 ? (
+      {dose.replicates > 0 ? (
         <p className="mt-2 text-sm text-mist tabular-nums">
-          Coupling {dose.coupling.toFixed(2)}.{" "}
-          {dose.points
-            .map(
-              (point) =>
-                `dose ${point.dose}: spec ${point.spec.toFixed(3)}, gap ${point.gap.toFixed(3)}`,
-            )
-            .join(" · ")}
+          Coupling {dose.coupling.toFixed(2)} · {dose.replicates} replicates ·{" "}
+          {dose.points.map((point) => `dose ${point.dose}: ${point.spec.toFixed(3)}`).join(" · ")}
         </p>
       ) : null}
-      {dose.trend ? (
+      {dose.trend && dose.top ? (
         <p className="mt-1 text-sm text-mist tabular-nums">
-          Page&apos;s trend test across doses, paired by {dose.trend.n} test seeds: z ={" "}
-          {dose.trend.z.toFixed(2)}, one-sided p{" "}
-          {dose.trend.p < 0.001 ? dose.trend.p.toExponential(2) : dose.trend.p.toFixed(3)} against α
-          = {formatAlpha(dose.alpha)}.
+          Trend across trained doses (exact Page, {dose.trend.n} replicates): z ={" "}
+          {dose.trend.z.toFixed(2)}, p {fmt(dose.trend.p)}. Top dose vs dose 0: {dose.top.pos} up,{" "}
+          {dose.top.neg} down, p {fmt(dose.top.p)}. Both one-sided against α ={" "}
+          {formatAlpha(dose.alpha)}.
         </p>
       ) : null}
     </aside>

@@ -69,10 +69,14 @@ export function MethodPage() {
             learned mid-run. Strength and recency are copied from the field’s table. Permuted shapes
             rarely clear the similarity bar on real Life patches, so with the bar kept this null
             fired about a third as often as Field. It is now rate-matched: at each consulted site it
-            scores its best permuted crystal the same way Field does, with no bar, and writes the
-            predicted center at the best-scoring sites where that changes the cell, exactly as many
-            as Field changed (fewer only if the board offers no such site). It keeps the machinery
-            and the count, and loses the shape.
+            ranks its permuted crystals the way Field does (Diceᵉ × strength × recency) with the
+            bar at zero, and writes the predicted center at the best-ranked sites where that changes
+            the cell, as many as Field changed. The permutation never moves the center cell, so a
+            permuted crystal predicts the same center as its real one; moving it made the null only
+            delete, or only add, cells on some seeds, which collapsed its board and favored Field.
+            On a sparse board the null can run out of places to write; every result shows the flip
+            totals of all three arms so a shortfall is visible. It keeps the machinery and the
+            count, and loses the shape.
           </p>
           <p>
             A cell is binary, so a remembered form can do one thing to it: flip it or leave it.
@@ -227,12 +231,15 @@ export function MethodPage() {
           <p>
             <strong className="font-medium text-bone">Learned.</strong> Specific on a frozen recipe,
             then Specific again with innate forms off, an empty archive, and coupling at 0. Only
-            then a dose curve: that naive rule trains on 0, 1, 10, and 100 seeds, and the same 64
-            test seeds, none of them ever a training seed, are scored after each dose on the frozen
-            recipe’s trained forms. Field specificity has to rise with dose on those paired seeds:
-            Page’s trend test, ranks within each test seed, one-sided, at the attempt’s α. A strict
-            rise of four means is shown but is not the bar: it happens one time in 24 with no
-            effect, and fails by coin flip on a real effect that levels off once the table is full.
+            then a dose curve. Sixteen independent replicates each train one table on 25 seeds of
+            their own, cumulatively, and snapshot it after 1, 5 and 25; each replicate scores the
+            untrained table and every snapshot on 4 test seeds of its own, on the frozen recipe’s
+            trained forms. The replicate is the unit: tables vary from one training run to the
+            next, and scoring every test seed against one shared table counted that variation as
+            a trend. Learned needs both an increase across the trained doses (exact Page test,
+            one row per replicate, one-sided) and the most-trained table beating the untrained
+            one replicate by replicate (sign test), each at the attempt’s α. The trend is taken
+            among trained doses only, so “the untrained table is lowest” cannot pass by itself.
             If the frozen coupling is 0, archive import does nothing, so those dose tests run at
             coupling 0.25 and say so. A mega run does this only after an armed illustration clears
             the gap bar. It does not round one seed up to Learned. Even a rising curve is the table
