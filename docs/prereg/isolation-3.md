@@ -36,3 +36,14 @@ p-values of isolation-1, -2 and -3.
 
 Expected power: about 75% against a true effect of +1.58%, given the reported 80%-power
 minimum detectable effect of about 1.75%.
+
+## Outcome (appended after the run)
+
+isolation-3 (code `ba43eb6`, unchanged during the run): T1 −0.70%, 95% CI −1.94% to +0.56%,
+one-sided p 0.835, Holm 1.00. Every block was audited and passed, and the code hash was
+re-verified at the reveal. **The primary criterion was not met.** Per this pre-registration,
+the isolation-2 anomaly is treated as chance, and it will not be replicated again on this host.
+
+The secondary, descriptive combination is Stouffer's over isolation-1, -2 and -3, using the
+one-sided T1 p-values (z = −2.12, +2.72, −0.97). It gives z −0.21, one-sided p 0.58. The three
+estimates (−1.45%, +1.58%, −0.70%) scatter around zero.

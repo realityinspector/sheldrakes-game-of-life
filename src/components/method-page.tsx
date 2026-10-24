@@ -366,14 +366,15 @@ export function MethodPage() {
             replaying the tester’s bytes.
           </p>
           <p>
-            First run (rig/1, pre-registered, one host): a deliberate 2% leak was detected; with no
-            leak, 60 blocks and 49 million training occurrences, the trained form was not
-            over-represented (estimate −1.45%, Holm p = 0.98; about 1.6% would have been seen). An
-            independent review then found side channels the rig itself offered (a public log hash
-            that encoded the target, readable files, form-dependent timing). The honest tester used
-            none of them, but rig/2 closes them and repeats the test. Reports are in rig/reports. A
-            positive there would need replication on physically separate machines before it meant
-            anything.
+            Results, all pre-registered on one host: both deliberate 2% leaks were detected, so the
+            rig can see an effect that small. Three runs without a leak, each with 60 blocks and 49
+            million training occurrences, estimated −1.45%, +1.58% and −0.70%. The second crossed
+            the bar (Holm p = 0.0065); its pre-registered replication did not (Holm p = 1.00), so it
+            is treated as chance. Together the three sit at zero (Stouffer p = 0.58), and about
+            +1.75% would have been seen in each. An independent review of the first version found
+            side channels the rig itself offered (a public log hash that encoded the target,
+            readable files, form-dependent timing); the honest tester used none, and the hardened
+            rig/2 closed them before runs two and three. Reports are in rig/reports.
           </p>
         </Section>
 

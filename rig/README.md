@@ -70,25 +70,35 @@ git history.
 
 ## Results so far
 
-| Run | Rig | Result |
-|---|---|---|
-| `positive-control-2pct` | 1 | Deliberate +2% leak detected, estimate +3.2%, Holm p 4e-5 |
-| `isolation-1` | 1 | No effect: −1.45% (CI −2.64% to −0.20%), Holm p 0.98, MDE about 1.6% |
+| Run | Rig | Leak | T1 estimate (95% CI) | Holm p |
+|---|---|---|---|---|
+| `positive-control-2pct` | 1 | +2% declared | +3.17% (+1.97% to +4.37%) | 4e-5 · detected |
+| `isolation-1` | 1 | none | −1.45% (−2.64% to −0.20%) | 0.98 |
+| `positive-control-2pct-v2` | 2 | +2% declared | +1.49% (+0.27% to +2.72%) | 0.011 · detected |
+| `isolation-2` | 2 | none | +1.58% (+0.44% to +2.76%) | 0.0065 · anomaly |
+| `isolation-3` (pre-registered replication of isolation-2) | 2 | none | −0.70% (−1.94% to +0.56%) | 1.00 |
 
-The rig/2 runs are listed in `rig/reports/` once they have run. isolation-1's interval
-lies just below zero. That is the wrong direction for the hypothesis, wasn't
-pre-registered, and is the kind of result chance gives a few times in a hundred.
+**What the runs show.**
+- **The rig can see a 2% effect.** Both declared 2% leaks were detected.
+- **isolation-2 was chance.** It crossed the bar, but its pre-registered replication
+  (`docs/prereg/isolation-3.md`) did not.
+- **Across all three isolation runs there is no effect.** The estimates scatter around zero
+  (−1.45%, +1.58%, −0.70%). A descriptive Stouffer combination gives z −0.21, p 0.58.
+- **Sensitivity.** Each run would have seen about +1.75% with 80% power.
 
-An independent review of rig/1 found channels the rig itself provided, all closed in
-rig/2:
+**Scope of the null.** No sign that making a form occur about 49 million times in one
+process biases which forms arise from OS entropy in another, on this host, at this
+sensitivity.
+
+**Side channels in rig/1.** An independent review found channels the rig itself
+provided, all closed in rig/2:
 - an unauthenticated log head that let the target be recovered from training-record
   hashes;
 - world-readable data files;
 - training time that varied with the form;
 - a code hash that couldn't fail.
 
-The honest rig/1 tester used none of them, so isolation-1's counts are unaffected. Its
-isolation claim was stronger than its design.
+The honest rig/1 tester used none of them, so isolation-1's counts are unaffected.
 
 ## What a result can mean
 
