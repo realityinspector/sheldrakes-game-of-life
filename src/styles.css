@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Outfit", system-ui, sans-serif;
+  --color-ink: #0c1210;
+  --color-panel: #16201c;
+  --color-panel-2: #1c2823;
+  --color-line: #2c3b34;
+  --color-bone: #f3ecdc;
+  --color-mist: #8d978f;
+  --color-life: #3dba86;
+  --color-amber: #e39a3c;
+  --radius-lab: 0.9rem;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-ink);
+    color: var(--color-bone);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    min-height: 100%;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-amber) 45%, transparent);
+    color: var(--color-bone);
+  }
+}
+
+@utility lab-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
