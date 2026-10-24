@@ -67,6 +67,7 @@ export function SweepPage() {
   const [sweepSize, setSweepSize] = useState(true);
   const [sweepInnate, setSweepInnate] = useState(false);
   const [ignoreArchive, setIgnoreArchive] = useState(true);
+  const [fullLadder, setFullLadder] = useState(false);
   const [preset, setPreset] = useState<PresetId>("soup");
   const [view, setView] = useState(0);
   const paintAt = useRef(0);
@@ -141,7 +142,8 @@ export function SweepPage() {
   function start() {
     pilot.on = false;
     applyPlan();
-    runner.start();
+    if (mode === "confirm" && fullLadder) runner.startLadder();
+    else runner.start();
     setView((n) => n + 1);
   }
 
@@ -183,9 +185,11 @@ export function SweepPage() {
 
   function restart() {
     pilot.on = false;
-    const wasMega = runner.mode === "mega" || runner.mega !== null;
+    const wasLadder = runner.isSingleLadder;
+    const wasMega = !wasLadder && (runner.mode === "mega" || runner.mega !== null);
     applyPlan();
-    if (wasMega) runner.startMega();
+    if (wasLadder) runner.startLadder();
+    else if (wasMega) runner.startMega();
     else runner.restart();
     setView((n) => n + 1);
   }
@@ -318,13 +322,25 @@ export function SweepPage() {
                   {[8, 16, 32, 64].map((count) => (
                     <Choice
                       key={count}
-                      pressed={seedCount === count}
+                      pressed={!fullLadder && seedCount === count}
                       label={String(count)}
-                      disabled={locked}
+                      disabled={locked || fullLadder}
                       onClick={() => setSeedCount(count)}
                     />
                   ))}
+                  <Choice
+                    pressed={fullLadder}
+                    label="Full ladder"
+                    disabled={locked}
+                    onClick={() => setFullLadder((value) => !value)}
+                  />
                 </div>
+                {fullLadder ? (
+                  <p className="mt-2 text-xs text-pretty text-mist">
+                    64 seeds against both nulls at α = 0.05, then the naive retest, then the dose
+                    curve, each at α = 0.05. A miss at any stage ends the run.
+                  </p>
+                ) : null}
               </div>
             )}
           </div>

@@ -279,3 +279,38 @@ describe("mega screen", () => {
     }
   });
 });
+
+describe("single-recipe ladder", () => {
+  it("tests one frozen recipe at the full α and ends on the first miss or on Learned", () => {
+    const runner = new SweepRunner();
+    runner.setPlan({
+      mode: "confirm",
+      goal: "gap",
+      generations: 80,
+      granularity: 25,
+      seedCount: 64,
+      axes: [],
+      sweepSize: false,
+      sweepInnate: false,
+      ignoreArchive: true,
+      preset: "garden",
+      baseline: small,
+      archive: [],
+      seed: 1,
+    });
+    runner.startLadder();
+    const r = runner as any;
+    assert.equal(runner.isSingleLadder, true);
+    assert.equal(r.ladder.mode, "confirm");
+    assert.equal(r.ladder.alpha, ALPHA);
+    for (let guard = 0; guard < 2_000_000 && runner.status === "running"; guard++)
+      runner.tick(4000);
+    assert.equal(runner.status, "done");
+    const m = r.mega;
+    assert.equal(m.sealed.length, 1);
+    assert.equal(m.sealed[0].alpha, ALPHA);
+    assert.equal(m.screened, 0, "no screen in a single pre-registered ladder");
+    if (!m.proof.specific) assert.equal(m.naive, null);
+    if (m.dose?.trend) assert.equal(m.dose.alpha, ALPHA);
+  });
+});

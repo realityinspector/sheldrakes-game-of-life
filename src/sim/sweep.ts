@@ -420,6 +420,12 @@ export class SweepRunner {
   private ladder: Ladder | null = null;
   /** Confirmatory attempts opened in this mega run; the k-th spends alphaForAttempt(k). */
   private confirmAttempts = 0;
+  /** True for startLadder(): one pre-registered recipe, no search, full α. */
+  private singleLadder = false;
+
+  get isSingleLadder(): boolean {
+    return this.singleLadder;
+  }
   private testedKeys = new Set<string>();
   private candidates: Candidate[] = [];
   private pass = 1;
@@ -475,6 +481,7 @@ export class SweepRunner {
     this.bestLabel = "";
     this.ladder = null;
     this.confirmAttempts = 0;
+    this.singleLadder = false;
     this.testedKeys.clear();
     this.candidates = [];
     this.pass = 1;
@@ -525,6 +532,28 @@ export class SweepRunner {
     }
   }
 
+  /**
+   * The full ladder on one frozen recipe, as a single pre-registered test: 64-seed sign
+   * test at α = 0.05, then the naive retest, then the dose curve, each at α = 0.05. No
+   * search and no screen; a miss at any stage ends the run. Learned needs all three, so a
+   * false Learned is at most 0.05.
+   */
+  startLadder() {
+    this.startMega();
+    const mega = this.mega;
+    if (!mega) return;
+    this.singleLadder = true;
+    const config = canonicalFrozen(this.baseline, this.preset);
+    const label = `${differs(config, DEFAULT_CONFIG) || "defaults"} · ${PRESET_LABEL[this.preset]}`;
+    this.bestConfig = config;
+    this.bestPreset = this.preset;
+    this.bestLabel = label;
+    mega.frozen = label;
+    mega.focus = "full ladder";
+    this.openConfirm(config, this.preset, targetsFor(config, this.preset, []));
+    this.note = `Full ladder on one frozen recipe (${label}): a 64-seed sign test against both nulls at α = ${ALPHA}, then the naive retest, then the dose curve, each at α = ${ALPHA}. Seeds come from the first-row hash. A miss at any stage ends the run. None of it is morphic resonance.`;
+  }
+
   startMega() {
     this.dropMegaImages();
     const lattice = megaLattice(this.granularity);
@@ -542,6 +571,7 @@ export class SweepRunner {
     this.bestLabel = "";
     this.ladder = null;
     this.confirmAttempts = 0;
+    this.singleLadder = false;
     this.testedKeys.clear();
     this.candidates = [];
     this.pass = 1;
@@ -1036,13 +1066,16 @@ export class SweepRunner {
     if (!mega) return;
     this.confirmAttempts += 1;
     const candidate = { config, label: mega.frozen };
-    const alpha = alphaForAttempt(this.confirmAttempts);
+    // A single pre-registered recipe is one test of its family, at the full α.
+    const alpha = this.singleLadder ? ALPHA : alphaForAttempt(this.confirmAttempts);
     const row = rowHash("confirm", candidate.config, preset, {
       seeds: PUBLISHED_SEEDS,
       archive: [],
       attempt: this.confirmAttempts,
       alpha,
       targets,
+      // Only single ladders carry this, so mega rows (and their seeds) are unchanged.
+      ...(this.singleLadder ? { single: true } : {}),
     });
     this.ladder = freshLadder(
       "confirm",
@@ -1365,6 +1398,12 @@ export class SweepRunner {
   }
 
   private resumeSearch(note: string) {
+    if (this.singleLadder) {
+      // A single pre-registered recipe has no search to return to: a miss is the result.
+      this.endLadder(`${note} This was a single pre-registered recipe, so the run ends here.`);
+      this.status = "done";
+      return;
+    }
     const mega = this.mega;
     this.ladder = null;
     this.lab = null;
