@@ -5,7 +5,24 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { mulberry32 } from "../src/sim/protocol.ts";
 import { analyze, type BlockCounts } from "./analysis.ts";
-import { ChainLog, FORM_IDS, canonical, countForms, stampLattice, testSoup, validateProtocol, type Protocol } from "./common.ts";
+import { spawn, type ChildProcess } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import {
+  ChainLog,
+  FORM_IDS,
+  call,
+  canonical,
+  countForms,
+  mixWithBeacon,
+  sha256hex,
+  sleep,
+  stampLattice,
+  testBlock,
+  testSoup,
+  token,
+  validateProtocol,
+  type Protocol,
+} from "./common.ts";
 
 const FORMS = ["block", "blinker", "beehive", "loaf", "boat"];
 const RATES = [1650, 1950, 980, 355, 365];
@@ -92,10 +109,92 @@ describe("rig mechanics", () => {
   });
 
   it("rejects unbalanced or leaky-by-mistake protocols", () => {
-    const base: Protocol = JSON.parse(readFileSync(new URL("./protocols/isolation-1.json", import.meta.url), "utf8"));
+    const base: Protocol = JSON.parse(readFileSync(new URL("./protocols/isolation-2.json", import.meta.url), "utf8"));
     assert.equal(validateProtocol(base), null);
     assert.equal(base.leak.relative, 0, "the confirmatory protocol must not leak");
     assert.notEqual(validateProtocol({ ...base, blocks: base.blocks + 1 }), null);
     assert.notEqual(validateProtocol({ ...base, forms: ["block", "block"] }), null);
+  });
+});
+
+describe("beacon", () => {
+  it("changes the soups, and replays exactly", () => {
+    const raw = new Uint8Array(128 * 3).map((_, i) => (i * 37 + 11) & 255);
+    const spec = { soups: 3, size: 32, generations: 60 };
+    const a = testBlock(raw, "aa", spec, FORMS);
+    assert.deepEqual(testBlock(raw, "aa", spec, FORMS), a);
+    assert.notDeepEqual(mixWithBeacon(raw.subarray(0, 128), "aa", 0), mixWithBeacon(raw.subarray(0, 128), "bb", 0));
+    assert.notDeepEqual(mixWithBeacon(raw.subarray(0, 128), "aa", 0), mixWithBeacon(raw.subarray(0, 128), "aa", 1));
+  });
+});
+
+describe("registrar channels", () => {
+  it("withholds the log head, enforces order, and gives the tester nothing but go and a beacon", async () => {
+    const here = fileURLToPath(new URL(".", import.meta.url));
+    const tokens = { admin: token(), trainer: token(), tester: token() };
+    const port = 30000 + Math.floor(Math.random() * 20000);
+    const url = `http://127.0.0.1:${port}`;
+    const child: ChildProcess = spawn(process.execPath, ["--experimental-strip-types", "--no-warnings", join(here, "registrar.ts")], {
+      env: {
+        PATH: process.env.PATH ?? "",
+        PORT: String(port),
+        RIG_DATA_DIR: mkdtempSync(join(tmpdir(), "rig-reg-")),
+        RIG_ROOT: join(here, ".."),
+        RIG_ADMIN_TOKEN: tokens.admin,
+        RIG_TRAINER_TOKEN: tokens.trainer,
+        RIG_TESTER_TOKEN: tokens.tester,
+      },
+      stdio: "ignore",
+    });
+    try {
+      for (let i = 0; i < 100; i++) {
+        try {
+          await call(`${url}/health`);
+          break;
+        } catch {
+          await sleep(50);
+        }
+      }
+      const protocol: Protocol = JSON.parse(readFileSync(new URL("./protocols/smoke.json", import.meta.url), "utf8"));
+      const opened = await call<{ session: string }>(`${url}/session`, { token: tokens.admin, body: { protocol } });
+      const q = `?session=${opened.session}`;
+      const status = await call<Record<string, unknown>>(`${url}/status${q}`);
+      assert.equal(status.log, undefined, "no log head before the reveal");
+      await assert.rejects(call(`${url}/trainer/next${q}`, { token: tokens.tester }), /403/);
+      await assert.rejects(
+        call(`${url}/trainer/done`, { token: tokens.trainer, body: { session: opened.session, block: 0, occurrences: 1, trainingHash: "0".repeat(64) } }),
+        /not handed out/,
+      );
+      const next = await call<{ block: number; target: string }>(`${url}/trainer/next${q}`, { token: tokens.trainer });
+      assert.equal(next.block, 0);
+      await assert.rejects(
+        call(`${url}/trainer/done`, { token: tokens.trainer, body: { session: opened.session, block: 1, occurrences: 1, trainingHash: "0".repeat(64) } }),
+        /not handed out/,
+      );
+      await call(`${url}/trainer/done`, { token: tokens.trainer, body: { session: opened.session, block: 0, occurrences: 5, trainingHash: sha256hex("x") } });
+      const go = await call<Record<string, unknown>>(`${url}/tester/next${q}`, { token: tokens.tester });
+      assert.equal(go.block, 0);
+      // "go" is the block, the spec, and every candidate form in protocol order: nothing that varies with the target.
+      assert.deepEqual(Object.keys(go).sort(), ["block", "forms", "spec"]);
+      assert.deepEqual(go.forms, protocol.forms);
+      const counts = Object.fromEntries(protocol.forms.map((f) => [f, 1]));
+      await assert.rejects(
+        call(`${url}/tester/result`, { token: tokens.tester, body: { session: opened.session, block: 0, counts } }),
+        /committed/,
+      );
+      const { beacon } = await call<{ beacon: string }>(`${url}/tester/commit`, {
+        token: tokens.tester,
+        body: { session: opened.session, block: 0, bytesHash: sha256hex("bytes") },
+      });
+      assert.match(beacon, /^[0-9a-f]{64}$/);
+      await assert.rejects(
+        call(`${url}/tester/commit`, { token: tokens.tester, body: { session: opened.session, block: 0, bytesHash: sha256hex("other") } }),
+        /already committed/,
+      );
+      await call(`${url}/tester/result`, { token: tokens.tester, body: { session: opened.session, block: 0, counts } });
+      await assert.rejects(call(`${url}/reveal`, { token: tokens.tester, body: { session: opened.session } }), /403/);
+    } finally {
+      child.kill();
+    }
   });
 });

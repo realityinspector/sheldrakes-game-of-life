@@ -1,12 +1,18 @@
 /**
  * Trainer: asks the registrar for its target one block at a time and makes that form
  * occur many times (a lattice of non-interacting copies run under Conway). It never
- * talks to the tester. Its per-block records are served for audit only after the
- * registrar has revealed the session, so it cannot be used as a side channel.
+ * talks to the tester.
+ *
+ * Every block takes at least `spec.blockMillis`, whatever the form, so the tester cannot
+ * tell the target from how long training took; a block that overruns is flagged. Each
+ * block record carries a random salt, so its hash cannot be brute-forced back to the
+ * target. Records stay on this host, readable only by this user, and are served for audit
+ * only after the registrar has revealed the session.
  *
  * Env: PORT, RIG_DATA_DIR, RIG_REGISTRAR_URL, RIG_TRAINER_TOKEN, RIG_SESSION.
  */
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { randomBytes } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   FORM_IDS,
@@ -26,7 +32,7 @@ const registrar = env("RIG_REGISTRAR_URL");
 const tokenValue = env("RIG_TRAINER_TOKEN");
 const sessionId = env("RIG_SESSION");
 const dataDir = env("RIG_DATA_DIR");
-mkdirSync(dataDir, { recursive: true });
+mkdirSync(dataDir, { recursive: true, mode: 0o700 });
 
 /** Occurrences = Σ over boards and census points of (copies of the target present) × censusEvery. */
 function train(target: string, spec: TrainerSpec): { occurrences: number; perBoard: number[] } {
@@ -40,7 +46,9 @@ function train(target: string, spec: TrainerSpec): { occurrences: number; perBoa
       const t = a;
       a = b;
       b = t;
-      if (g % spec.censusEvery === 0) seen += (censusCounts(a, spec.size, spec.size, true).get(FORM_IDS[target]) ?? 0) * spec.censusEvery;
+      if (g % spec.censusEvery === 0) {
+        seen += (censusCounts(a, spec.size, spec.size, true).get(FORM_IDS[target]) ?? 0) * spec.censusEvery;
+      }
     }
     perBoard.push(seen);
   }
@@ -75,19 +83,38 @@ for (;;) {
     await sleep(25);
     continue;
   }
-  const started = new Date().toISOString();
+  const t0 = Date.now();
   const result = train(next.target, next.spec);
-  const record = { block: next.block, target: next.target, spec: next.spec, started, finished: new Date().toISOString(), ...result };
-  writeFileSync(join(dataDir, `block-${next.block}.json`), JSON.stringify(record));
+  const elapsed = Date.now() - t0;
+  const overran = elapsed > next.spec.blockMillis;
+  if (!overran) await sleep(next.spec.blockMillis - elapsed);
+  const record = {
+    block: next.block,
+    target: next.target,
+    spec: next.spec,
+    salt: randomBytes(32).toString("hex"),
+    trainMillis: elapsed,
+    overran,
+    ...result,
+  };
+  writeFileSync(join(dataDir, `block-${next.block}.json`), JSON.stringify(record), { mode: 0o600 });
   await call(`${registrar}/trainer/done`, {
     token: tokenValue,
-    body: { session: sessionId, block: next.block, occurrences: result.occurrences, trainingHash: sha256hex(canonical(record)) },
+    body: {
+      session: sessionId,
+      block: next.block,
+      occurrences: result.occurrences,
+      trainingHash: sha256hex(canonical(record)),
+      overran,
+    },
   });
 }
 
-// Stay up for audit until the registrar has revealed, then exit.
+// Stay up for audit until the registrar has revealed, then linger and exit.
 for (let i = 0; i < 2400; i++) {
-  const status = await call<{ revealed: boolean }>(`${registrar}/status?session=${sessionId}`).catch(() => ({ revealed: true }));
+  const status = await call<{ revealed: boolean }>(`${registrar}/status?session=${sessionId}`).catch(() => ({
+    revealed: true,
+  }));
   if (status.revealed) break;
   await sleep(250);
 }

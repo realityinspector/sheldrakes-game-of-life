@@ -1217,8 +1217,17 @@ export class SweepRunner {
     mega.alpha = alphaForAttempt(this.confirmAttempts + 1);
     mega.ladderDone = PUBLISHED_SEEDS;
     if (!result.specific) {
+      const arms = [
+        result.yoked.p < ladder.alpha && result.yoked.pos > result.yoked.neg ? null : "Yoked",
+        result.scrambled.p < ladder.alpha && result.scrambled.pos > result.scrambled.neg
+          ? null
+          : "Scrambled",
+      ].filter(Boolean);
+      const missed = `The field did not beat ${arms.join(" or ")} at α = ${formatAlpha(ladder.alpha)}, so it is not Specific.`;
       this.resumeSearch(
-        `Sign test ${mega.trials} did not replicate (armed gap ${this.bestGoal.toFixed(2)}). Both nulls were not beaten, so it is not Specific. The walk is still going. This is not morphic resonance.`,
+        this.singleLadder
+          ? `The 64-seed test sealed. ${missed} This is not morphic resonance.`
+          : `Sign test ${mega.trials} did not replicate (armed gap ${this.bestGoal.toFixed(2)}). ${missed} The walk is still going. This is not morphic resonance.`,
       );
       return;
     }
@@ -1304,7 +1313,16 @@ export class SweepRunner {
       from: ladder.row,
     });
     this.ladder = {
-      ...freshLadder("dose", config, ladder.source, ladder.preset, row, jobs.length, ladder.targets, ladder.alpha),
+      ...freshLadder(
+        "dose",
+        config,
+        ladder.source,
+        ladder.preset,
+        row,
+        jobs.length,
+        ladder.targets,
+        ladder.alpha,
+      ),
       jobs,
       testCoupling,
       couplingSubstituted: substituted,
@@ -1352,17 +1370,23 @@ export class SweepRunner {
     if (job.kind === "train") {
       ladder.repArchive = mergeArchive(ladder.repArchive, lab.toArchive());
       const count = job.i + 1;
-      if (ladder.doses.includes(count)) ladder.repArchives[count] = ladder.repArchive.map((e) => ({ ...e }));
+      if (ladder.doses.includes(count))
+        ladder.repArchives[count] = ladder.repArchive.map((e) => ({ ...e }));
     } else {
       const k = ladder.doses.indexOf(job.dose);
       ladder.repSums[k] = (ladder.repSums[k] ?? 0) + lab.snapshot().specField;
       const next = ladder.jobs[ladder.index + 1];
       if (!next || next.rep !== job.rep) {
-        ladder.repMeans.push(ladder.doses.map((_, d) => (ladder.repSums[d] ?? 0) / DOSE_TESTS_PER_REPLICATE));
+        ladder.repMeans.push(
+          ladder.doses.map((_, d) => (ladder.repSums[d] ?? 0) / DOSE_TESTS_PER_REPLICATE),
+        );
         ladder.repSums = [];
         ladder.repArchive = [];
         ladder.repArchives = {};
-        mega.dose = { ...this.doseState(ladder, false, null, null), reason: mega.dose?.reason ?? "" };
+        mega.dose = {
+          ...this.doseState(ladder, false, null, null),
+          reason: mega.dose?.reason ?? "",
+        };
       }
     }
     this.lab = null;
@@ -1464,7 +1488,7 @@ export class SweepRunner {
           ? "Stopped before the 64 seeds finished. The batch is void. Naive and the dose curve were not run."
           : "Stopped before the naive 64 finished. That retest is void. Learned was not reached.",
         ladder.alpha,
-      { field: ladder.flipsF, yoked: ladder.flipsY, scrambled: ladder.flipsS },
+        { field: ladder.flipsF, yoked: ladder.flipsY, scrambled: ladder.flipsS },
       );
       if (ladder.mode === "confirm") {
         mega.proof = result;
@@ -1582,7 +1606,8 @@ export function doseJobs(
   const jobs: DoseJob[] = [];
   for (let rep = 0; rep < replicates; rep++) {
     for (let i = 0; i < top; i++) jobs.push({ kind: "train", rep, i });
-    for (const dose of doses) for (let j = 0; j < tests; j++) jobs.push({ kind: "test", rep, dose, j });
+    for (const dose of doses)
+      for (let j = 0; j < tests; j++) jobs.push({ kind: "test", rep, dose, j });
   }
   return jobs;
 }

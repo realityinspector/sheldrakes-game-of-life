@@ -69,9 +69,9 @@ export function MethodPage() {
             learned mid-run. Strength and recency are copied from the field’s table. Permuted shapes
             rarely clear the similarity bar on real Life patches, so with the bar kept this null
             fired about a third as often as Field. It is now rate-matched: at each consulted site it
-            ranks its permuted crystals the way Field does (Diceᵉ × strength × recency) with the
-            bar at zero, and writes the predicted center at the best-ranked sites where that changes
-            the cell, as many as Field changed. The permutation never moves the center cell, so a
+            ranks its permuted crystals the way Field does (Diceᵉ × strength × recency) with the bar
+            at zero, and writes the predicted center at the best-ranked sites where that changes the
+            cell, as many as Field changed. The permutation never moves the center cell, so a
             permuted crystal predicts the same center as its real one; moving it made the null only
             delete, or only add, cells on some seeds, which collapsed its board and favored Field.
             On a sparse board the null can run out of places to write; every result shows the flip
@@ -234,17 +234,16 @@ export function MethodPage() {
             then a dose curve. Sixteen independent replicates each train one table on 25 seeds of
             their own, cumulatively, and snapshot it after 1, 5 and 25; each replicate scores the
             untrained table and every snapshot on 4 test seeds of its own, on the frozen recipe’s
-            trained forms. The replicate is the unit: tables vary from one training run to the
-            next, and scoring every test seed against one shared table counted that variation as
-            a trend. Learned needs both an increase across the trained doses (exact Page test,
-            one row per replicate, one-sided) and the most-trained table beating the untrained
-            one replicate by replicate (sign test), each at the attempt’s α. The trend is taken
-            among trained doses only, so “the untrained table is lowest” cannot pass by itself.
-            If the frozen coupling is 0, archive import does nothing, so those dose tests run at
-            coupling 0.25 and say so. A mega run does this only after an armed illustration clears
-            the gap bar. It does not round one seed up to Learned. Even a rising curve is the table
-            learning, not morphic resonance. If the curve was not run, or does not rise, Learned is
-            not reached.
+            trained forms. The replicate is the unit: tables vary from one training run to the next,
+            and scoring every test seed against one shared table counted that variation as a trend.
+            Learned needs both an increase across the trained doses (exact Page test, one row per
+            replicate, one-sided) and the most-trained table beating the untrained one replicate by
+            replicate (sign test), each at the attempt’s α. The trend is taken among trained doses
+            only, so “the untrained table is lowest” cannot pass by itself. If the frozen coupling
+            is 0, archive import does nothing, so those dose tests run at coupling 0.25 and say so.
+            A mega run does this only after an armed illustration clears the gap bar. It does not
+            round one seed up to Learned. Even a rising curve is the table learning, not morphic
+            resonance. If the curve was not run, or does not rise, Learned is not reached.
           </p>
           <p>
             A batch is 8, 16, 32, or 64 seeds. 64 is the published size. A paired sign test on 64
@@ -356,20 +355,25 @@ export function MethodPage() {
           <p>
             Nothing on these pages can test morphic resonance, because the memory is a table in the
             same process. The repository also holds a rig that can: three servers. A registrar draws
-            which form each block trains from OS entropy and publishes only a SHA-256 commitment
-            before anything runs. A trainer, told only its own target, makes that form occur
-            hundreds of thousands of times. A tester, never told the target and holding no table,
-            runs plain Conway on soups drawn from OS entropy and counts every candidate form,
-            keeping its random bytes so anyone can replay it. The registrar reveals and scores only
-            when every block is in, with an exact randomization test fixed in advance.
+            which form each block trains from OS entropy and publishes only a SHA-256 commitment and
+            a hash of the rig’s code before anything runs. A trainer, told only its own target,
+            makes that form occur hundreds of thousands of times, padded to a fixed duration so
+            timing reveals nothing. A tester, never told the target and holding no table, commits to
+            raw OS entropy, then mixes in a registrar beacon, runs plain Conway on the resulting
+            soups, and counts every candidate form. Run locally, each server is its own system user
+            with a private directory. The registrar reveals and scores only when every block is in,
+            with an exact randomization test fixed in advance, and every block is audited by
+            replaying the tester’s bytes.
           </p>
           <p>
-            First run (pre-registered, one host): a deliberate 2% leak was detected, so the rig can
-            see an effect that small. With no leak, 60 blocks and 49 million training occurrences,
-            the trained form was not over-represented: estimate −1.45%, Holm p = 0.98. An effect of
-            +1.6% or more would have been detected with about 80% power. The reports are in
-            rig/reports. A positive there would need replication on physically separate machines
-            before it meant anything.
+            First run (rig/1, pre-registered, one host): a deliberate 2% leak was detected; with no
+            leak, 60 blocks and 49 million training occurrences, the trained form was not
+            over-represented (estimate −1.45%, Holm p = 0.98; about 1.6% would have been seen). An
+            independent review then found side channels the rig itself offered (a public log hash
+            that encoded the target, readable files, form-dependent timing). The honest tester used
+            none of them, but rig/2 closes them and repeats the test. Reports are in rig/reports. A
+            positive there would need replication on physically separate machines before it meant
+            anything.
           </p>
         </Section>
 

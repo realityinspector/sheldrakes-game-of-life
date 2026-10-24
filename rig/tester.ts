@@ -1,8 +1,10 @@
 /**
- * Tester: pure Conway, no field, no table, no knowledge of the target. For each block
- * it draws fresh soups from OS entropy (crypto.randomBytes, one bit per cell), runs
- * them, and counts every candidate form. It keeps the raw bytes so anyone can replay
- * its counts exactly (GET /audit/<block>).
+ * Tester: pure Conway, no field, no table, no knowledge of the target. For each block it
+ * draws fresh bytes from OS entropy (crypto.randomBytes, one bit per cell), commits to
+ * their hash with the registrar, receives a beacon, and only then turns bytes ⊕ beacon
+ * keystream into soups, runs them, and counts every candidate form. Committing first means
+ * a tester that somehow knew the target still could not keep drawing until it liked its
+ * soups. It keeps the raw bytes so anyone can replay its counts (GET /audit/<block>).
  *
  * The only way it is ever told the target is a declared positive-control protocol
  * (leak.relative > 0), where it deliberately inflates that count by a known fraction.
@@ -12,13 +14,13 @@
 import { randomBytes } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { call, env, serve, sha256hex, sleep, testSoup, type TesterSpec } from "./common.ts";
+import { call, env, serve, sha256hex, sleep, testBlock, type TesterSpec } from "./common.ts";
 
 const registrar = env("RIG_REGISTRAR_URL");
 const tokenValue = env("RIG_TESTER_TOKEN");
 const sessionId = env("RIG_SESSION");
 const dataDir = env("RIG_DATA_DIR");
-mkdirSync(dataDir, { recursive: true });
+mkdirSync(dataDir, { recursive: true, mode: 0o700 });
 
 const server = await serve(
   {
@@ -52,30 +54,31 @@ for (;;) {
     continue;
   }
   const { spec, forms } = go;
-  const perSoup = (spec.size * spec.size) / 8;
-  const all = Buffer.alloc(perSoup * spec.soups);
-  const counts: Record<string, number> = Object.fromEntries(forms.map((f) => [f, 0]));
-  for (let i = 0; i < spec.soups; i++) {
-    const bytes = randomBytes(perSoup);
-    bytes.copy(all, i * perSoup);
-    const c = testSoup(bytes, spec, forms);
-    for (const f of forms) counts[f] += c[f];
-  }
+  const raw = randomBytes(((spec.size * spec.size) / 8) * spec.soups);
+  writeFileSync(join(dataDir, `block-${go.block}.bin`), raw, { mode: 0o600 });
+  const { beacon } = await call<{ beacon: string }>(`${registrar}/tester/commit`, {
+    token: tokenValue,
+    body: { session: sessionId, block: go.block, bytesHash: sha256hex(raw) },
+  });
+  const counts = testBlock(raw, beacon, spec, forms);
   let leakExtra = 0;
   if (go.leak) {
     // Positive control: each counted target object is duplicated with probability `relative`.
     const draws = randomBytes(4 * counts[go.leak.target]);
-    for (let k = 0; k < counts[go.leak.target]; k++) if (draws.readUInt32LE(4 * k) / 2 ** 32 < go.leak.relative) leakExtra++;
+    for (let k = 0; k < counts[go.leak.target]; k++) {
+      if (draws.readUInt32LE(4 * k) / 2 ** 32 < go.leak.relative) leakExtra++;
+    }
   }
-  writeFileSync(join(dataDir, `block-${go.block}.bin`), all);
   await call(`${registrar}/tester/result`, {
     token: tokenValue,
-    body: { session: sessionId, block: go.block, counts, leakExtra, entropyHash: sha256hex(all) },
+    body: { session: sessionId, block: go.block, counts, leakExtra },
   });
 }
 
 for (let i = 0; i < 2400; i++) {
-  const status = await call<{ revealed: boolean }>(`${registrar}/status?session=${sessionId}`).catch(() => ({ revealed: true }));
+  const status = await call<{ revealed: boolean }>(`${registrar}/status?session=${sessionId}`).catch(() => ({
+    revealed: true,
+  }));
   if (status.revealed) break;
   await sleep(250);
 }

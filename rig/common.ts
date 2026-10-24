@@ -10,7 +10,7 @@ import { appendFileSync, existsSync, readFileSync } from "node:fs";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { censusCounts, rowsToMask, shapeId } from "../src/sim/protocol.ts";
 
-export const RIG_VERSION = "sheldrake-rig/1";
+export const RIG_VERSION = "sheldrake-rig/2";
 
 /** Every form the rig can train or count. A protocol picks a subset by name. */
 export const FORM_ROWS: Record<string, string[]> = {
@@ -35,6 +35,8 @@ export type TrainerSpec = {
   spacing: number;
   generations: number;
   censusEvery: number;
+  /** Every block takes at least this long, so the tester cannot time which form was trained. */
+  blockMillis: number;
 };
 
 export type Protocol = {
@@ -60,8 +62,19 @@ export function validateProtocol(p: Protocol): string | null {
   }
   if (p.tester.size % 8 !== 0) return "tester size must be a multiple of 8 (one entropy bit per cell)";
   if (!(p.leak.relative >= 0 && p.leak.relative < 1)) return "leak.relative must be in [0, 1)";
+  if (!(p.trainer.blockMillis > 0)) return "trainer.blockMillis must be positive";
   return null;
 }
+
+/** Files whose bytes define a run. Hashed at commit and again at reveal. */
+export const CODE_FILES = [
+  "rig/common.ts",
+  "rig/analysis.ts",
+  "rig/registrar.ts",
+  "rig/trainer.ts",
+  "rig/tester.ts",
+  "src/sim/protocol.ts",
+];
 
 // ---------------------------------------------------------------- hashing
 
@@ -127,6 +140,22 @@ export function evolve(grid: Uint8Array, w: number, h: number, generations: numb
   return a;
 }
 
+/**
+ * The registrar's beacon, expanded into a keystream and XORed into the tester's bytes for soup
+ * `index`. The tester commits to its bytes before it sees the beacon, so it cannot keep
+ * drawing until it likes a soup: it cannot predict the soup its bytes will become.
+ */
+export function mixWithBeacon(raw: Uint8Array, beacon: string, index: number): Uint8Array {
+  const out = new Uint8Array(raw.length);
+  let block = 0;
+  let stream = new Uint8Array(0);
+  for (let k = 0; k < raw.length; k++) {
+    if (k % 32 === 0) stream = createHash("sha256").update(`${beacon}:${index}:${block++}`).digest();
+    out[k] = raw[k] ^ stream[k % 32];
+  }
+  return out;
+}
+
 /** A soup with one entropy bit per cell (density 1/2). */
 export function soupFromBytes(bytes: Uint8Array, size: number): Uint8Array {
   const grid = new Uint8Array(size * size);
@@ -145,6 +174,17 @@ export function countForms(grid: Uint8Array, size: number, forms: string[]): Rec
 /** The tester's whole computation for one soup: bytes in, form counts out. Pure and replayable. */
 export function testSoup(bytes: Uint8Array, spec: TesterSpec, forms: string[]): Record<string, number> {
   return countForms(evolve(soupFromBytes(bytes, spec.size), spec.size, spec.size, spec.generations), spec.size, forms);
+}
+
+/** Counts for a whole block: each soup's raw bytes mixed with the beacon, then run. */
+export function testBlock(raw: Uint8Array, beacon: string, spec: TesterSpec, forms: string[]): Record<string, number> {
+  const per = (spec.size * spec.size) / 8;
+  const counts: Record<string, number> = Object.fromEntries(forms.map((f) => [f, 0]));
+  for (let i = 0; i < spec.soups; i++) {
+    const c = testSoup(mixWithBeacon(raw.subarray(i * per, (i + 1) * per), beacon, i), spec, forms);
+    for (const f of forms) counts[f] += c[f];
+  }
+  return counts;
 }
 
 /** Stamp a form on a regular lattice so copies never interact. */
@@ -185,7 +225,7 @@ export class ChainLog {
     const body = { seq: this.seq, at: new Date().toISOString(), type, data, prev: this.head };
     const hash = sha256hex(this.head + canonical(body));
     const entry = { ...body, hash };
-    appendFileSync(this.file, JSON.stringify(entry) + "\n");
+    appendFileSync(this.file, JSON.stringify(entry) + "\n", { mode: 0o600 });
     this.head = hash;
     this.seq += 1;
     return entry;
