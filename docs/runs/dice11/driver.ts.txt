@@ -1,0 +1,122 @@
+import { writeFileSync } from "node:fs";
+import { DEFAULT_CONFIG } from "/home/claude/sheldrakes-game-of-life/src/sim/engine.ts";
+import { SweepRunner } from "/home/claude/sheldrakes-game-of-life/src/sim/sweep.ts";
+import { interpret } from "/home/claude/sheldrakes-game-of-life/src/sim/interpret.ts";
+import { ANALYSIS_VERSION, seedFromRow } from "/home/claude/sheldrakes-game-of-life/src/sim/protocol.ts";
+
+const MERGE = process.env.RUN_TAG ?? "04171085c13c113fd8707323211ecdd99ee6a5b0";
+const BUDGET_MS = Number(process.env.BUDGET_MS ?? 20 * 60 * 1000);
+const OUT = process.argv[2];
+const t0 = Date.now();
+const ts = () => `[${((Date.now() - t0) / 1000).toFixed(0).padStart(5)}s]`;
+const log = (s: string) => console.log(`${ts()} ${s}`);
+const p = (x: number) => (x < 0.001 ? x.toExponential(2) : x.toFixed(4));
+const a = (x: number) => (x >= 0.01 ? x.toFixed(4) : x.toExponential(2));
+
+const baseline = { ...DEFAULT_CONFIG, cells: 48 };
+const plan = (mode: "confirm" | "seek", seed: number) => ({
+  mode, goal: "armed" as const, generations: 80, granularity: 25, seedCount: 64,
+  axes: ["fieldStrength", "similarityThreshold", "density"] as any, sweepSize: true, sweepInnate: false,
+  ignoreArchive: true, preset: "soup" as const, baseline, archive: [], seed,
+});
+const arm = (t: any) => `${t.pos}/${t.neg} p=${p(t.p)} med=${t.median.toFixed(3)} CI[${t.lo.toFixed(3)},${t.hi.toFixed(3)}]`;
+
+log(`analysis ${ANALYSIS_VERSION} · merge ${MERGE.slice(0, 7)}`);
+
+// 1) One confirmatory batch on the lab defaults (64 seeds, α = 0.05).
+const SKIP_DEFAULTS = process.env.SKIP_DEFAULTS === "1";
+let cr: any = {};
+const c = new SweepRunner();
+c.setPlan(plan("confirm", 1));
+if (!SKIP_DEFAULTS) {
+c.start();
+while (c.status === "running") c.tick(4000);
+cr = c.confirm!;
+
+log(`CONFIRM defaults (soup 48², innate on, coupling ${baseline.coupling}, strength ${baseline.fieldStrength}, sim ${baseline.similarityThreshold}) row ${cr.row.slice(0, 12)}`);
+log(`  yoked ${arm(cr.yoked)}`);
+log(`  scrambled ${arm(cr.scrambled)}`);
+const rates = c.cards.map((card) => card.flipRate);
+log(`  mean flip rate ${(rates.reduce((x, y) => x + y, 0) / rates.length * 100).toFixed(2)}% · levels ${JSON.stringify(c.cards.reduce((m: any, k) => ((m[k.level] = (m[k.level] ?? 0) + 1), m), {}))}`);
+log(`  => ${cr.specific ? "SPECIFIC" : "not specific"} at α=${cr.alpha}`);
+}
+
+// 2) Mega run: search -> 64-seed sign test -> naive -> dose, with α-spending.
+const illus = seedFromRow(MERGE, "mega-illustration");
+const r = new SweepRunner();
+r.setPlan(plan("seek", illus));
+r.startMega();
+log(`MEGA start · illustration seed ${illus} · lattice ${r.mega!.total.toString()} configs`);
+let stage = r.mega!.stage;
+let sealedSeen = 0;
+let screensSeen = 0;
+let lastProgress = Date.now();
+let lastNaive: any = null;
+let lastDose: any = null;
+const attempts: any[] = [];
+const HARD_MS = BUDGET_MS + 6 * 60 * 1000;
+// After the budget, keep going only until any open test seals, so nothing is voided.
+while (r.status === "running" && (Date.now() - t0 < BUDGET_MS || (r.mega!.stage !== "search" && Date.now() - t0 < HARD_MS))) {
+  r.tick(480);
+  const m = r.mega!;
+  if (m.screened > screensSeen) {
+    screensSeen = m.screened;
+    const sc = m.lastScreen!;
+    log(`  screen ${m.screened} ${sc.passed ? "PASS" : "fail"} · yoked ${sc.yoked}/${sc.seeds} scrambled ${sc.scrambled}/${sc.seeds} · ${sc.label}`);
+  }
+  if (m.stage !== stage) {
+    if (m.stage === "confirm") log(`  attempt ${m.sealed.length + 1} OPEN α=${a(m.alpha)} · ${m.frozen}`);
+    if (m.stage === "naive") log(`  naive retest OPEN (innate off, coupling 0, empty archive)`);
+    if (m.stage === "dose") log(`  dose curve OPEN (coupling ${m.dose?.coupling})`);
+    stage = m.stage;
+  }
+  if (m.sealed.length > sealedSeen) {
+    const s = m.sealed[m.sealed.length - 1];
+    const pr = m.proof!;
+    attempts.push({ k: s.attempt, alpha: s.alpha, label: s.label, specific: s.specific,
+      yoked: { pos: pr.yoked.pos, neg: pr.yoked.neg, p: pr.yoked.p, median: pr.yoked.median },
+      scrambled: { pos: pr.scrambled.pos, neg: pr.scrambled.neg, p: pr.scrambled.p, median: pr.scrambled.median } });
+    log(`  attempt ${s.attempt} SEALED α=${a(s.alpha)} · yoked ${arm(pr.yoked)} · scrambled ${arm(pr.scrambled)} => ${s.specific ? "SPECIFIC" : "miss"}`);
+    sealedSeen = m.sealed.length;
+  }
+  if (m.naive && m.naive !== lastNaive) {
+    lastNaive = m.naive;
+    log(`  naive SEALED · yoked ${arm(m.naive.yoked)} · scrambled ${arm(m.naive.scrambled)} => ${m.naive.specific ? "SPECIFIC" : "miss"}`);
+  }
+  if (m.dose && m.dose.trend && m.dose !== lastDose) {
+    lastDose = m.dose;
+    log(`  dose SEALED · ${m.dose.points.map((q) => `${q.dose}→${q.spec.toFixed(3)}`).join(" ")} · Page z=${m.dose.trend.z.toFixed(2)} p=${p(m.dose.trend.p)} α=${a(m.dose.alpha)} => ${m.dose.learned ? "LEARNED" : "not learned"}`);
+  }
+  if (Date.now() - lastProgress > 120000) {
+    lastProgress = Date.now();
+    log(`  progress: screened ${m.screened} passed ${m.screenPassed} · ${m.done} tried · armed ${m.tally.armed} loud ${m.tally.loud} unarmed ${m.tally.unarmed} off ${m.tally.off} · best gap ${m.tally.bestGap.toFixed(3)} · queued ${m.queued} · stage ${m.stage}`);
+  }
+}
+const timedOut = r.status === "running";
+if (timedOut) r.stop();
+const m = r.mega!;
+const passFlat = (t: any) => t.p < 0.05 && t.pos > t.neg;
+const n = attempts.length;
+const cnt = (f: (x: any) => boolean) => attempts.filter(f).length;
+log(`SUMMARY over ${n} sealed 64-seed attempts (different recipes; descriptive, not a test):`);
+log(`  Specific at spent α: ${cnt((x) => x.specific)}`);
+log(`  would pass both arms at flat α=0.05 (old rule): ${cnt((x) => passFlat(x.yoked) && passFlat(x.scrambled))}`);
+log(`  yoked arm p<0.05 favouring field: ${cnt((x) => passFlat(x.yoked))} · against field: ${cnt((x) => x.yoked.p < 0.05 && x.yoked.neg > x.yoked.pos)}`);
+log(`  scrambled arm p<0.05 favouring field: ${cnt((x) => passFlat(x.scrambled))} · against field: ${cnt((x) => x.scrambled.p < 0.05 && x.scrambled.neg > x.scrambled.pos)}`);
+log(`  median >0: yoked ${cnt((x) => x.yoked.median > 0)}/${n} · scrambled ${cnt((x) => x.scrambled.median > 0)}/${n}`);
+const presets: any = {};
+for (const x of attempts) { const key = x.label.split(" · ").slice(-3).join(" "); presets[key] = (presets[key] ?? 0) + 1; }
+log(`  frozen recipes by size/innate/preset: ${JSON.stringify(presets)}`);
+if (n) log(`  last α spent: ${a(attempts[n - 1].alpha)}`);
+const v = interpret({ cards: r.cards, confirm: r.confirm, history: [], running: false, autopilot: false, campaign: "", reason: "", mega: m });
+log(`MEGA ${timedOut ? "stopped at time budget" : r.status} · ${m.done} illustration cards · ${m.sealed.length} sealed attempts`);
+log(`  tally armed ${m.tally.armed} loud ${m.tally.loud} unarmed ${m.tally.unarmed} off ${m.tally.off} · best single-seed gap ${m.tally.bestGap.toFixed(3)} (${m.tally.bestLabel})`);
+log(`  verdict: ${v.title} — ${v.line}`);
+log(`  chips: ${v.chips.map((ch) => `${ch.label}=${ch.value}`).join(" · ")}`);
+writeFileSync(OUT, JSON.stringify({
+  analysis: ANALYSIS_VERSION, merge: MERGE, illustrationSeed: illus, budgetMs: BUDGET_MS, timedOut,
+  screens: { screened: m.screened, passed: m.screenPassed },
+  confirmDefaults: { row: cr.row, alpha: cr.alpha, yoked: cr.yoked, scrambled: cr.scrambled, specific: cr.specific, cards: c.cards.map(({ image, ...rest }) => rest) },
+  mega: { done: m.done.toString(), tally: m.tally, attempts, sealed: m.sealed, proof: m.proof, naive: m.naive, dose: m.dose, verdict: v },
+}, null, 2));
+log(`DONE`);

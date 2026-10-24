@@ -1,0 +1,1494 @@
+{
+  "analysis": "2026-10-24.dice11",
+  "merge": "f39661d9ccf49f03fba8510d398af64c03904c37",
+  "illustrationSeed": 3937601339,
+  "budgetMs": 1500000,
+  "timedOut": true,
+  "screens": {
+    "screened": 530,
+    "passed": 54
+  },
+  "confirmDefaults": {
+    "cards": []
+  },
+  "mega": {
+    "done": "4954",
+    "tally": {
+      "off": 240,
+      "unarmed": 2193,
+      "armed": 2507,
+      "loud": 14,
+      "bestGap": 1.6254087456476483,
+      "bestLabel": "strength 0.25 · decay 0.000 · sim 0.53 · sharpen 1.00 · density 0.17 · 12 crystals · 40² · innate on · garden"
+    },
+    "attempts": [
+      {
+        "k": 1,
+        "alpha": 0.03039635509270134,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 28² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 39,
+          "neg": 25,
+          "p": 0.10342187831608057,
+          "median": 0.07280843322494895
+        },
+        "scrambled": {
+          "pos": 44,
+          "neg": 20,
+          "p": 0.0036899642765400543,
+          "median": 0.34960521733615246
+        }
+      },
+      {
+        "k": 2,
+        "alpha": 0.007599088773175335,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 15 crystals · 40² · innate on · garden",
+        "specific": false,
+        "yoked": {
+          "pos": 40,
+          "neg": 24,
+          "p": 0.05994118956699909,
+          "median": 0.13211142976912624
+        },
+        "scrambled": {
+          "pos": 48,
+          "neg": 16,
+          "p": 0.00007733076881287033,
+          "median": 0.36414791803222646
+        }
+      },
+      {
+        "k": 3,
+        "alpha": 0.0033773727880779263,
+        "label": "strength 0.75 · decay 0.000 · sim 0.66 · sharpen 1.75 · density 0.17 · 15 crystals · 40² · innate off · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 34,
+          "neg": 30,
+          "p": 0.7079807541347666,
+          "median": 0.044208969497495865
+        },
+        "scrambled": {
+          "pos": 34,
+          "neg": 30,
+          "p": 0.7079807541347666,
+          "median": 0.029204156813382037
+        }
+      },
+      {
+        "k": 4,
+        "alpha": 0.0018997721932938337,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate off · garden",
+        "specific": false,
+        "yoked": {
+          "pos": 32,
+          "neg": 32,
+          "p": 1,
+          "median": 0.006286080675505623
+        },
+        "scrambled": {
+          "pos": 45,
+          "neg": 19,
+          "p": 0.0015627893448280355,
+          "median": 0.24182142931351075
+        }
+      },
+      {
+        "k": 5,
+        "alpha": 0.0012158542037080534,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 15 crystals · 40² · innate on · garden",
+        "specific": false,
+        "yoked": {
+          "pos": 36,
+          "neg": 28,
+          "p": 0.3817327947933375,
+          "median": 0.1015686922253714
+        },
+        "scrambled": {
+          "pos": 47,
+          "neg": 17,
+          "p": 0.00022688238288328072,
+          "median": 0.29820460460379555
+        }
+      },
+      {
+        "k": 6,
+        "alpha": 0.0008443431970194816,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 2.50 · density 0.17 · 15 crystals · 40² · innate off · garden",
+        "specific": false,
+        "yoked": {
+          "pos": 37,
+          "neg": 27,
+          "p": 0.2604354765766536,
+          "median": 0.0880653803376425
+        },
+        "scrambled": {
+          "pos": 42,
+          "neg": 22,
+          "p": 0.016858190044281136,
+          "median": 0.2696150256642479
+        }
+      },
+      {
+        "k": 7,
+        "alpha": 0.0006203337774020681,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · gun",
+        "specific": false,
+        "yoked": {
+          "pos": 32,
+          "neg": 32,
+          "p": 1,
+          "median": 0.00988900032593086
+        },
+        "scrambled": {
+          "pos": 39,
+          "neg": 23,
+          "p": 0.05589722669971084,
+          "median": 0.08768245294309535
+        }
+      },
+      {
+        "k": 8,
+        "alpha": 0.00047494304832345843,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 15 crystals · 40² · innate off · garden",
+        "specific": false,
+        "yoked": {
+          "pos": 32,
+          "neg": 32,
+          "p": 1,
+          "median": -0.018055343008822472
+        },
+        "scrambled": {
+          "pos": 35,
+          "neg": 28,
+          "p": 0.4499625362902244,
+          "median": 0.060049594530694805
+        }
+      },
+      {
+        "k": 9,
+        "alpha": 0.0003752636431197696,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 44,
+          "neg": 20,
+          "p": 0.0036899642765400543,
+          "median": 0.20224343968162053
+        },
+        "scrambled": {
+          "pos": 40,
+          "neg": 24,
+          "p": 0.05994118956699909,
+          "median": 0.15722457672803256
+        }
+      },
+      {
+        "k": 10,
+        "alpha": 0.00030396355092701335,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 2.50 · density 0.17 · 12 crystals · 40² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 37,
+          "neg": 27,
+          "p": 0.2604354765766536,
+          "median": 0.07312945329064097
+        },
+        "scrambled": {
+          "pos": 42,
+          "neg": 22,
+          "p": 0.016858190044281136,
+          "median": 0.3454967938963118
+        }
+      },
+      {
+        "k": 11,
+        "alpha": 0.0002512095462206722,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 45,
+          "neg": 19,
+          "p": 0.0015627893448280355,
+          "median": 0.1885584050752871
+        },
+        "scrambled": {
+          "pos": 47,
+          "neg": 17,
+          "p": 0.00022688238288328072,
+          "median": 0.30773467567690377
+        }
+      },
+      {
+        "k": 12,
+        "alpha": 0.0002110857992548704,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 36,
+          "neg": 28,
+          "p": 0.3817327947933375,
+          "median": 0.021825770343084805
+        },
+        "scrambled": {
+          "pos": 47,
+          "neg": 17,
+          "p": 0.00022688238288328072,
+          "median": 0.44159715420712853
+        }
+      },
+      {
+        "k": 13,
+        "alpha": 0.0001798600893059251,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 38,
+          "neg": 26,
+          "p": 0.1686429114397039,
+          "median": 0.16090974038753833
+        },
+        "scrambled": {
+          "pos": 49,
+          "neg": 15,
+          "p": 0.00002436457216293345,
+          "median": 0.3013998092404727
+        }
+      },
+      {
+        "k": 14,
+        "alpha": 0.00015508344435051703,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 46,
+          "neg": 18,
+          "p": 0.0006173782640671301,
+          "median": 0.2543688472105886
+        },
+        "scrambled": {
+          "pos": 54,
+          "neg": 10,
+          "p": 1.996498223786215e-8,
+          "median": 0.4568675928640491
+        }
+      },
+      {
+        "k": 15,
+        "alpha": 0.00013509491152311707,
+        "label": "strength 1.00 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 44,
+          "neg": 20,
+          "p": 0.0036899642765400543,
+          "median": 0.18015022426543673
+        },
+        "scrambled": {
+          "pos": 44,
+          "neg": 20,
+          "p": 0.0036899642765400543,
+          "median": 0.32038963299611234
+        }
+      },
+      {
+        "k": 16,
+        "alpha": 0.00011873576208086461,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 28² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 36,
+          "neg": 28,
+          "p": 0.3817327947933375,
+          "median": 0.06557745025317557
+        },
+        "scrambled": {
+          "pos": 45,
+          "neg": 19,
+          "p": 0.0015627893448280355,
+          "median": 0.241972902575383
+        }
+      },
+      {
+        "k": 17,
+        "alpha": 0.00010517769928270359,
+        "label": "strength 0.75 · decay 0.000 · sim 0.66 · sharpen 1.75 · density 0.17 · 15 crystals · 52² · innate off · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 31,
+          "neg": 33,
+          "p": 0.9006532462520358,
+          "median": -0.06941541820847108
+        },
+        "scrambled": {
+          "pos": 40,
+          "neg": 24,
+          "p": 0.05994118956699909,
+          "median": 0.2113101828137588
+        }
+      },
+      {
+        "k": 18,
+        "alpha": 0.0000938159107799424,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 28² · innate on · R-pentomino",
+        "specific": false,
+        "yoked": {
+          "pos": 27,
+          "neg": 31,
+          "p": 0.6940040940761332,
+          "median": -0.02005673250500635
+        },
+        "scrambled": {
+          "pos": 28,
+          "neg": 30,
+          "p": 0.8956832138895895,
+          "median": -0.020364614901009867
+        }
+      },
+      {
+        "k": 19,
+        "alpha": 0.0000842004296196713,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 33,
+          "neg": 29,
+          "p": 0.703536671355274,
+          "median": 0.05295611627420024
+        },
+        "scrambled": {
+          "pos": 34,
+          "neg": 26,
+          "p": 0.3662940067032937,
+          "median": 0.09526750650586205
+        }
+      },
+      {
+        "k": 20,
+        "alpha": 0.00007599088773175334,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.00 · density 0.17 · 12 crystals · 40² · innate on · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 31,
+          "neg": 27,
+          "p": 0.6940040940761332,
+          "median": 0.05807463354437889
+        },
+        "scrambled": {
+          "pos": 34,
+          "neg": 27,
+          "p": 0.44262600494647414,
+          "median": 0.09855717004553383
+        }
+      },
+      {
+        "k": 21,
+        "alpha": 0.00006892597526689647,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 33,
+          "neg": 28,
+          "p": 0.6089207154048313,
+          "median": 0.12770640594149774
+        },
+        "scrambled": {
+          "pos": 36,
+          "neg": 24,
+          "p": 0.1550019040032608,
+          "median": 0.1970460013977285
+        }
+      },
+      {
+        "k": 22,
+        "alpha": 0.00006280238655516806,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 34,
+          "neg": 28,
+          "p": 0.5257733601756518,
+          "median": 0.10627560566498914
+        },
+        "scrambled": {
+          "pos": 39,
+          "neg": 19,
+          "p": 0.01192813971576314,
+          "median": 0.1586645030715102
+        }
+      },
+      {
+        "k": 23,
+        "alpha": 0.00005746002853062634,
+        "label": "strength 0.50 · decay 0.100 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 29,
+          "neg": 33,
+          "p": 0.703536671355274,
+          "median": -0.031926601485374406
+        },
+        "scrambled": {
+          "pos": 27,
+          "neg": 34,
+          "p": 0.44262600494647414,
+          "median": -0.06385320297074884
+        }
+      },
+      {
+        "k": 24,
+        "alpha": 0.0000527714498137176,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.00 · density 0.17 · 12 crystals · 28² · innate off · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 31,
+          "neg": 31,
+          "p": 1,
+          "median": 0.0057785694263699505
+        },
+        "scrambled": {
+          "pos": 34,
+          "neg": 30,
+          "p": 0.7079807541347666,
+          "median": 0.03509183478654657
+        }
+      },
+      {
+        "k": 25,
+        "alpha": 0.00004863416814832214,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 15 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 37,
+          "neg": 27,
+          "p": 0.2604354765766536,
+          "median": 0.16248978852887355
+        },
+        "scrambled": {
+          "pos": 51,
+          "neg": 12,
+          "p": 7.459722282164677e-7,
+          "median": 0.43706344518331003
+        }
+      },
+      {
+        "k": 26,
+        "alpha": 0.000044965022326481274,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 2.50 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 35,
+          "neg": 29,
+          "p": 0.5323087760278424,
+          "median": 0.0690266411583455
+        },
+        "scrambled": {
+          "pos": 40,
+          "neg": 24,
+          "p": 0.05994118956699909,
+          "median": 0.18289084811149572
+        }
+      },
+      {
+        "k": 27,
+        "alpha": 0.00004169596034664107,
+        "label": "strength 1.00 · decay 0.000 · sim 0.66 · sharpen 1.75 · density 0.17 · 9 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 35,
+          "neg": 29,
+          "p": 0.5323087760278424,
+          "median": 0.06347167720501401
+        },
+        "scrambled": {
+          "pos": 34,
+          "neg": 30,
+          "p": 0.7079807541347666,
+          "median": 0.03938890856797114
+        }
+      },
+      {
+        "k": 28,
+        "alpha": 0.000038770861087629257,
+        "label": "strength 1.00 · decay 0.100 · sim 0.66 · sharpen 1.75 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 41,
+          "neg": 23,
+          "p": 0.03276575909882325,
+          "median": 0.21507546953534037
+        },
+        "scrambled": {
+          "pos": 37,
+          "neg": 27,
+          "p": 0.2604354765766536,
+          "median": 0.12619544639067226
+        }
+      },
+      {
+        "k": 29,
+        "alpha": 0.00003614310950380659,
+        "label": "strength 1.00 · decay 0.000 · sim 0.66 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate off · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 31,
+          "neg": 31,
+          "p": 1,
+          "median": -0.019384683018989962
+        },
+        "scrambled": {
+          "pos": 27,
+          "neg": 33,
+          "p": 0.518958003189655,
+          "median": -0.03305913530494915
+        }
+      },
+      {
+        "k": 30,
+        "alpha": 0.00003377372788077927,
+        "label": "strength 1.00 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · gun",
+        "specific": false,
+        "yoked": {
+          "pos": 37,
+          "neg": 26,
+          "p": 0.20736789985685483,
+          "median": 0.06326357923598143
+        },
+        "scrambled": {
+          "pos": 40,
+          "neg": 24,
+          "p": 0.05994118956699909,
+          "median": 0.11415162119867095
+        }
+      },
+      {
+        "k": 31,
+        "alpha": 0.00003162992205275893,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · soup",
+        "specific": false,
+        "yoked": {
+          "pos": 29,
+          "neg": 35,
+          "p": 0.5323087760278424,
+          "median": -0.07203653066855736
+        },
+        "scrambled": {
+          "pos": 35,
+          "neg": 29,
+          "p": 0.5323087760278424,
+          "median": 0.028402842799238243
+        }
+      },
+      {
+        "k": 32,
+        "alpha": 0.000029683940520216152,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 2.50 · density 0.17 · 12 crystals · 52² · innate on · pulsar",
+        "specific": false,
+        "yoked": {
+          "pos": 36,
+          "neg": 27,
+          "p": 0.31350305329645356,
+          "median": 0.024788328520908953
+        },
+        "scrambled": {
+          "pos": 47,
+          "neg": 16,
+          "p": 0.00011705541630032328,
+          "median": 0.20117973905426245
+        }
+      },
+      {
+        "k": 33,
+        "alpha": 0.000027912171802296913,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 52² · innate on · pulsar",
+        "specific": false,
+        "yoked": {
+          "pos": 47,
+          "neg": 16,
+          "p": 0.00011705541630032328,
+          "median": 0.16976543551914924
+        },
+        "scrambled": {
+          "pos": 52,
+          "neg": 12,
+          "p": 4.566610700445412e-7,
+          "median": 0.3019692892624262
+        }
+      },
+      {
+        "k": 34,
+        "alpha": 0.000026294424820675897,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.00 · density 0.17 · 12 crystals · 52² · innate on · pulsar",
+        "specific": false,
+        "yoked": {
+          "pos": 35,
+          "neg": 29,
+          "p": 0.5323087760278424,
+          "median": 0.02830516177910153
+        },
+        "scrambled": {
+          "pos": 42,
+          "neg": 22,
+          "p": 0.016858190044281136,
+          "median": 0.20650210207553168
+        }
+      },
+      {
+        "k": 35,
+        "alpha": 0.000024813351096082723,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 33,
+          "neg": 29,
+          "p": 0.703536671355274,
+          "median": 0.020364614901009825
+        },
+        "scrambled": {
+          "pos": 41,
+          "neg": 17,
+          "p": 0.002232551619942915,
+          "median": 0.2746530721670274
+        }
+      },
+      {
+        "k": 36,
+        "alpha": 0.0000234539776949856,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 52² · innate on · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 40,
+          "neg": 22,
+          "p": 0.030015864349067174,
+          "median": 0.10539993459813929
+        },
+        "scrambled": {
+          "pos": 40,
+          "neg": 17,
+          "p": 0.0032015437674503726,
+          "median": 0.13732653608351372
+        }
+      },
+      {
+        "k": 37,
+        "alpha": 0.000022203327313879722,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.00 · density 0.17 · 12 crystals · 28² · innate off · gun",
+        "specific": false,
+        "yoked": {
+          "pos": 39,
+          "neg": 25,
+          "p": 0.10342187831608057,
+          "median": 0.11467618491803139
+        },
+        "scrambled": {
+          "pos": 39,
+          "neg": 25,
+          "p": 0.10342187831608057,
+          "median": 0.09280083406006251
+        }
+      },
+      {
+        "k": 38,
+        "alpha": 0.000021050107404917825,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 15 crystals · 64² · innate on · gun",
+        "specific": false,
+        "yoked": {
+          "pos": 36,
+          "neg": 28,
+          "p": 0.3817327947933375,
+          "median": 0.0673263186679245
+        },
+        "scrambled": {
+          "pos": 50,
+          "neg": 14,
+          "p": 0.000007069487542545708,
+          "median": 0.20154523717191397
+        }
+      },
+      {
+        "k": 39,
+        "alpha": 0.000019984454367325005,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 49,
+          "neg": 15,
+          "p": 0.00002436457216293345,
+          "median": 0.22951965232745256
+        },
+        "scrambled": {
+          "pos": 56,
+          "neg": 8,
+          "p": 5.562672242319717e-10,
+          "median": 0.5454760111450667
+        }
+      },
+      {
+        "k": 40,
+        "alpha": 0.000018997721932938334,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 43,
+          "neg": 21,
+          "p": 0.008146902228698566,
+          "median": 0.24409427027543443
+        },
+        "scrambled": {
+          "pos": 52,
+          "neg": 12,
+          "p": 4.566610700445412e-7,
+          "median": 0.4291319111069012
+        }
+      },
+      {
+        "k": 41,
+        "alpha": 0.000018082305230637322,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.00 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 41,
+          "neg": 23,
+          "p": 0.03276575909882325,
+          "median": 0.2577812904279151
+        },
+        "scrambled": {
+          "pos": 49,
+          "neg": 15,
+          "p": 0.00002436457216293345,
+          "median": 0.32717728043553757
+        }
+      },
+      {
+        "k": 42,
+        "alpha": 0.000017231493816724116,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 45,
+          "neg": 19,
+          "p": 0.0015627893448280355,
+          "median": 0.2555944979614932
+        },
+        "scrambled": {
+          "pos": 53,
+          "neg": 11,
+          "p": 1.0058579844832568e-7,
+          "median": 0.49345366494259735
+        }
+      },
+      {
+        "k": 43,
+        "alpha": 0.00001643934834651235,
+        "label": "strength 1.00 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 39,
+          "neg": 24,
+          "p": 0.07692583360960922,
+          "median": 0.12997147358064703
+        },
+        "scrambled": {
+          "pos": 53,
+          "neg": 11,
+          "p": 1.0058579844832568e-7,
+          "median": 0.3795349067099605
+        }
+      },
+      {
+        "k": 44,
+        "alpha": 0.000015700596638792014,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 41,
+          "neg": 22,
+          "p": 0.022574972673257303,
+          "median": 0.182675229200837
+        },
+        "scrambled": {
+          "pos": 43,
+          "neg": 20,
+          "p": 0.00515239704209208,
+          "median": 0.393138709328574
+        }
+      },
+      {
+        "k": 45,
+        "alpha": 0.000015010545724790785,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 15 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 39,
+          "neg": 25,
+          "p": 0.10342187831608057,
+          "median": 0.09347823479061104
+        },
+        "scrambled": {
+          "pos": 44,
+          "neg": 20,
+          "p": 0.0036899642765400543,
+          "median": 0.28587805028301283
+        }
+      },
+      {
+        "k": 46,
+        "alpha": 0.000014365007132656586,
+        "label": "strength 0.50 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 40,
+          "neg": 24,
+          "p": 0.05994118956699909,
+          "median": 0.15101000117115573
+        },
+        "scrambled": {
+          "pos": 51,
+          "neg": 13,
+          "p": 0.0000018809621564294038,
+          "median": 0.3482387318627691
+        }
+      },
+      {
+        "k": 47,
+        "alpha": 0.000013760233179131433,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · gun",
+        "specific": false,
+        "yoked": {
+          "pos": 31,
+          "neg": 33,
+          "p": 0.9006532462520358,
+          "median": -0.035611734293615915
+        },
+        "scrambled": {
+          "pos": 42,
+          "neg": 22,
+          "p": 0.016858190044281136,
+          "median": 0.07387031737717796
+        }
+      },
+      {
+        "k": 48,
+        "alpha": 0.0000131928624534294,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 2.50 · density 0.17 · 12 crystals · 52² · innate on · pulsar",
+        "specific": false,
+        "yoked": {
+          "pos": 39,
+          "neg": 24,
+          "p": 0.07692583360960922,
+          "median": 0.10591223254840054
+        },
+        "scrambled": {
+          "pos": 36,
+          "neg": 28,
+          "p": 0.3817327947933375,
+          "median": 0.05776618134520828
+        }
+      },
+      {
+        "k": 49,
+        "alpha": 0.000012659873008205472,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.00 · density 0.17 · 12 crystals · 64² · innate off · acorn",
+        "specific": false,
+        "yoked": {
+          "pos": 25,
+          "neg": 37,
+          "p": 0.1618814055255972,
+          "median": -0.1264294493869651
+        },
+        "scrambled": {
+          "pos": 33,
+          "neg": 31,
+          "p": 0.9006532462520358,
+          "median": 0.02982556331043784
+        }
+      },
+      {
+        "k": 50,
+        "alpha": 0.000012158542037080535,
+        "label": "strength 0.50 · decay 0.100 · sim 0.53 · sharpen 1.00 · density 0.17 · 12 crystals · 40² · innate on · garden",
+        "specific": false,
+        "yoked": {
+          "pos": 26,
+          "neg": 38,
+          "p": 0.1686429114397039,
+          "median": -0.03990606492761259
+        },
+        "scrambled": {
+          "pos": 41,
+          "neg": 23,
+          "p": 0.03276575909882325,
+          "median": 0.1512334635913731
+        }
+      },
+      {
+        "k": 51,
+        "alpha": 0.00001168641103141151,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.00 · density 0.17 · 12 crystals · 52² · innate on · garden",
+        "specific": false,
+        "yoked": {
+          "pos": 28,
+          "neg": 36,
+          "p": 0.3817327947933375,
+          "median": -0.07170248666516044
+        },
+        "scrambled": {
+          "pos": 44,
+          "neg": 20,
+          "p": 0.0036899642765400543,
+          "median": 0.2611484569420994
+        }
+      },
+      {
+        "k": 52,
+        "alpha": 0.000011241255581620319,
+        "label": "strength 1.00 · decay 0.000 · sim 0.66 · sharpen 2.50 · density 0.17 · 12 crystals · 64² · innate off · soup",
+        "specific": false,
+        "yoked": {
+          "pos": 26,
+          "neg": 38,
+          "p": 0.1686429114397039,
+          "median": -0.029799466211082565
+        },
+        "scrambled": {
+          "pos": 33,
+          "neg": 31,
+          "p": 0.9006532462520358,
+          "median": 0.04215605498807394
+        }
+      },
+      {
+        "k": 53,
+        "alpha": 0.000010821059128765161,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 51,
+          "neg": 13,
+          "p": 0.0000018809621564294038,
+          "median": 0.38237165410002516
+        },
+        "scrambled": {
+          "pos": 46,
+          "neg": 18,
+          "p": 0.0006173782640671301,
+          "median": 0.4914179835692992
+        }
+      },
+      {
+        "k": 54,
+        "alpha": 0.000010423990086660268,
+        "label": "strength 0.50 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "yoked": {
+          "pos": 45,
+          "neg": 19,
+          "p": 0.0015627893448280355,
+          "median": 0.2148104270444504
+        },
+        "scrambled": {
+          "pos": 45,
+          "neg": 19,
+          "p": 0.0015627893448280355,
+          "median": 0.35412126974568553
+        }
+      }
+    ],
+    "sealed": [
+      {
+        "attempt": 1,
+        "alpha": 0.03039635509270134,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 28² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 2,
+        "alpha": 0.007599088773175335,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 15 crystals · 40² · innate on · garden",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 3,
+        "alpha": 0.0033773727880779263,
+        "label": "strength 0.75 · decay 0.000 · sim 0.66 · sharpen 1.75 · density 0.17 · 15 crystals · 40² · innate off · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 4,
+        "alpha": 0.0018997721932938337,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate off · garden",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 5,
+        "alpha": 0.0012158542037080534,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 15 crystals · 40² · innate on · garden",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 6,
+        "alpha": 0.0008443431970194816,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 2.50 · density 0.17 · 15 crystals · 40² · innate off · garden",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 7,
+        "alpha": 0.0006203337774020681,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · gun",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 8,
+        "alpha": 0.00047494304832345843,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 15 crystals · 40² · innate off · garden",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 9,
+        "alpha": 0.0003752636431197696,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 10,
+        "alpha": 0.00030396355092701335,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 2.50 · density 0.17 · 12 crystals · 40² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 11,
+        "alpha": 0.0002512095462206722,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 12,
+        "alpha": 0.0002110857992548704,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 13,
+        "alpha": 0.0001798600893059251,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 14,
+        "alpha": 0.00015508344435051703,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 15,
+        "alpha": 0.00013509491152311707,
+        "label": "strength 1.00 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 16,
+        "alpha": 0.00011873576208086461,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 28² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 17,
+        "alpha": 0.00010517769928270359,
+        "label": "strength 0.75 · decay 0.000 · sim 0.66 · sharpen 1.75 · density 0.17 · 15 crystals · 52² · innate off · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 18,
+        "alpha": 0.0000938159107799424,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 28² · innate on · R-pentomino",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 19,
+        "alpha": 0.0000842004296196713,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 20,
+        "alpha": 0.00007599088773175334,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.00 · density 0.17 · 12 crystals · 40² · innate on · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 21,
+        "alpha": 0.00006892597526689647,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 22,
+        "alpha": 0.00006280238655516806,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 23,
+        "alpha": 0.00005746002853062634,
+        "label": "strength 0.50 · decay 0.100 · sim 0.53 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 24,
+        "alpha": 0.0000527714498137176,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.00 · density 0.17 · 12 crystals · 28² · innate off · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 25,
+        "alpha": 0.00004863416814832214,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 15 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 26,
+        "alpha": 0.000044965022326481274,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 2.50 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 27,
+        "alpha": 0.00004169596034664107,
+        "label": "strength 1.00 · decay 0.000 · sim 0.66 · sharpen 1.75 · density 0.17 · 9 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 28,
+        "alpha": 0.000038770861087629257,
+        "label": "strength 1.00 · decay 0.100 · sim 0.66 · sharpen 1.75 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 29,
+        "alpha": 0.00003614310950380659,
+        "label": "strength 1.00 · decay 0.000 · sim 0.66 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate off · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 30,
+        "alpha": 0.00003377372788077927,
+        "label": "strength 1.00 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 40² · innate on · gun",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 31,
+        "alpha": 0.00003162992205275893,
+        "label": "strength 0.75 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · soup",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 32,
+        "alpha": 0.000029683940520216152,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 2.50 · density 0.17 · 12 crystals · 52² · innate on · pulsar",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 33,
+        "alpha": 0.000027912171802296913,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 52² · innate on · pulsar",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 34,
+        "alpha": 0.000026294424820675897,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.00 · density 0.17 · 12 crystals · 52² · innate on · pulsar",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 35,
+        "alpha": 0.000024813351096082723,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 36,
+        "alpha": 0.0000234539776949856,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 52² · innate on · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 37,
+        "alpha": 0.000022203327313879722,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.00 · density 0.17 · 12 crystals · 28² · innate off · gun",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 38,
+        "alpha": 0.000021050107404917825,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 15 crystals · 64² · innate on · gun",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 39,
+        "alpha": 0.000019984454367325005,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 40,
+        "alpha": 0.000018997721932938334,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 41,
+        "alpha": 0.000018082305230637322,
+        "label": "strength 0.75 · decay 0.000 · sim 0.40 · sharpen 1.00 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 42,
+        "alpha": 0.000017231493816724116,
+        "label": "strength 1.00 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 43,
+        "alpha": 0.00001643934834651235,
+        "label": "strength 1.00 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 44,
+        "alpha": 0.000015700596638792014,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 45,
+        "alpha": 0.000015010545724790785,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 15 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 46,
+        "alpha": 0.000014365007132656586,
+        "label": "strength 0.50 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 64² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 47,
+        "alpha": 0.000013760233179131433,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.75 · density 0.17 · 9 crystals · 40² · innate on · gun",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 48,
+        "alpha": 0.0000131928624534294,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 2.50 · density 0.17 · 12 crystals · 52² · innate on · pulsar",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 49,
+        "alpha": 0.000012659873008205472,
+        "label": "strength 1.00 · decay 0.000 · sim 0.53 · sharpen 1.00 · density 0.17 · 12 crystals · 64² · innate off · acorn",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 50,
+        "alpha": 0.000012158542037080535,
+        "label": "strength 0.50 · decay 0.100 · sim 0.53 · sharpen 1.00 · density 0.17 · 12 crystals · 40² · innate on · garden",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 51,
+        "alpha": 0.00001168641103141151,
+        "label": "strength 0.50 · decay 0.000 · sim 0.40 · sharpen 1.00 · density 0.17 · 12 crystals · 52² · innate on · garden",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 52,
+        "alpha": 0.000011241255581620319,
+        "label": "strength 1.00 · decay 0.000 · sim 0.66 · sharpen 2.50 · density 0.17 · 12 crystals · 64² · innate off · soup",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 53,
+        "alpha": 0.000010821059128765161,
+        "label": "strength 0.50 · decay 0.000 · sim 0.53 · sharpen 1.75 · density 0.17 · 9 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      },
+      {
+        "attempt": 54,
+        "alpha": 0.000010423990086660268,
+        "label": "strength 0.50 · decay 0.100 · sim 0.40 · sharpen 1.75 · density 0.17 · 12 crystals · 52² · innate on · gliders",
+        "specific": false,
+        "naive": null,
+        "learned": null
+      }
+    ],
+    "proof": {
+      "row": "260067987fa8d6a451d078d765c3cb5cf42b3ec3544a00d5a29481f488e5b795",
+      "seeds": 64,
+      "alpha": 0.000010423990086660268,
+      "yoked": {
+        "n": 64,
+        "pos": 45,
+        "neg": 19,
+        "p": 0.0015627893448280355,
+        "median": 0.2148104270444504,
+        "lo": 0.13211518552482307,
+        "hi": 0.33471189029008397
+      },
+      "scrambled": {
+        "n": 64,
+        "pos": 45,
+        "neg": 19,
+        "p": 0.0015627893448280355,
+        "median": 0.35412126974568553,
+        "lo": 0.21268836953678458,
+        "hi": 0.4904939470366775
+      },
+      "specific": false,
+      "learnedReason": "The frozen recipe did not replicate. Field facilitation did not beat both nulls on 64 derived seeds. The naive retest and the dose curve were not run. This is not morphic resonance.",
+      "key": {
+        "ash": "field",
+        "birch": "yoked",
+        "cedar": "scrambled"
+      },
+      "voided": false
+    },
+    "naive": null,
+    "dose": null,
+    "verdict": {
+      "resonance": "no",
+      "title": "No",
+      "line": "Morphic resonance was not found. Proof: no. The frozen recipe failed the 64-seed sign test.",
+      "detail": "Tried 4,954 illustration cards, then 64 derived seeds. The field did not beat both the yoked null and the scrambled null. The naive retest and the dose curve were not run. Frozen recipe: strength 0.25 · decay 0.000 · sim 0.40 · sharpen 1.00 · density 0.17 · 12 crystals · 64² · innate on · soup. 2,507 armed cards mean the memory term was writing inside the 1–12% band. Writing is required and is not morphic resonance. 14 loud cards are the table replacing Conway. Loud is not a finding and does not add proof. Extent: an illustration that did not replicate.",
+      "chips": [
+        {
+          "label": "Resonance",
+          "value": "No",
+          "hint": "not found"
+        },
+        {
+          "label": "Proof",
+          "value": "No",
+          "hint": "64 seeds, failed"
+        },
+        {
+          "label": "Extent",
+          "value": "Not replicated",
+          "hint": "one seed, then a miss"
+        },
+        {
+          "label": "Loud",
+          "value": "14",
+          "hint": "not a finding"
+        }
+      ]
+    }
+  }
+}
