@@ -1,0 +1,56 @@
+{
+  "analysis": "2026-10-24.dice12",
+  "recipe": {
+    "fieldStrength": 0.75,
+    "temporalDecay": 0,
+    "similarityThreshold": 0.4,
+    "influenceExponent": 1.75,
+    "crystalCount": 12,
+    "coupling": 0.45,
+    "density": 0.17,
+    "wrap": true,
+    "speed": 12,
+    "innate": true,
+    "cells": 64
+  },
+  "preset": "gliders",
+  "proof": {
+    "row": "e1292fe3bc1babe601d38cdb331c5c9c80e58453dc8b847a88735dc1a6d9dc2b",
+    "seeds": 64,
+    "alpha": 0.05,
+    "flips": {
+      "field": 10237,
+      "yoked": 10134,
+      "scrambled": 8737
+    },
+    "yoked": {
+      "n": 64,
+      "pos": 44,
+      "neg": 20,
+      "p": 0.0036899642765400543,
+      "median": 0.23496724858346385,
+      "lo": 0.06866326804175699,
+      "hi": 0.373100400377725
+    },
+    "scrambled": {
+      "n": 64,
+      "pos": 39,
+      "neg": 25,
+      "p": 0.10342187831608057,
+      "median": 0.20476049611738278,
+      "lo": -0.04599636296007309,
+      "hi": 0.31038163514233463
+    },
+    "specific": false,
+    "learnedReason": "The frozen recipe did not replicate. Field facilitation did not beat both nulls on 64 derived seeds. The naive retest and the dose curve were not run. This is not morphic resonance.",
+    "key": {
+      "ash": "yoked",
+      "birch": "scrambled",
+      "cedar": "field"
+    },
+    "voided": false
+  },
+  "naive": null,
+  "dose": null,
+  "note": "Sign test 1 did not replicate (armed gap -Infinity). Both nulls were not beaten, so it is not Specific. The walk is still going. This is not morphic resonance. This was a single pre-registered recipe, so the run ends here."
+}

@@ -67,6 +67,7 @@ export function SweepPage() {
   const [sweepSize, setSweepSize] = useState(true);
   const [sweepInnate, setSweepInnate] = useState(false);
   const [ignoreArchive, setIgnoreArchive] = useState(true);
+  const [fullLadder, setFullLadder] = useState(false);
   const [preset, setPreset] = useState<PresetId>("soup");
   const [view, setView] = useState(0);
   const paintAt = useRef(0);
@@ -141,7 +142,8 @@ export function SweepPage() {
   function start() {
     pilot.on = false;
     applyPlan();
-    runner.start();
+    if (mode === "confirm" && fullLadder) runner.startLadder();
+    else runner.start();
     setView((n) => n + 1);
   }
 
@@ -183,9 +185,11 @@ export function SweepPage() {
 
   function restart() {
     pilot.on = false;
-    const wasMega = runner.mode === "mega" || runner.mega !== null;
+    const wasLadder = runner.isSingleLadder;
+    const wasMega = !wasLadder && (runner.mode === "mega" || runner.mega !== null);
     applyPlan();
-    if (wasMega) runner.startMega();
+    if (wasLadder) runner.startLadder();
+    else if (wasMega) runner.startMega();
     else runner.restart();
     setView((n) => n + 1);
   }
@@ -318,13 +322,25 @@ export function SweepPage() {
                   {[8, 16, 32, 64].map((count) => (
                     <Choice
                       key={count}
-                      pressed={seedCount === count}
+                      pressed={!fullLadder && seedCount === count}
                       label={String(count)}
-                      disabled={locked}
+                      disabled={locked || fullLadder}
                       onClick={() => setSeedCount(count)}
                     />
                   ))}
+                  <Choice
+                    pressed={fullLadder}
+                    label="Full ladder"
+                    disabled={locked}
+                    onClick={() => setFullLadder((value) => !value)}
+                  />
                 </div>
+                {fullLadder ? (
+                  <p className="mt-2 text-xs text-pretty text-mist">
+                    64 seeds against both nulls at α = 0.05, then the naive retest, then the dose
+                    curve, each at α = 0.05. A miss at any stage ends the run.
+                  </p>
+                ) : null}
               </div>
             )}
           </div>
@@ -488,6 +504,8 @@ export function SweepPage() {
 }
 
 function megaProgress(mega: MegaState): string {
+  if (mega.stage === "screen")
+    return `Screen ${mega.screened + 1} · ${mega.ladderDone}/${mega.ladderTotal} · no α spent`;
   if (mega.stage === "confirm") return `64-seed sign test · ${mega.ladderDone}/${mega.ladderTotal}`;
   if (mega.stage === "naive")
     return `Naive 64 · innate off · ${mega.ladderDone}/${mega.ladderTotal}`;
@@ -662,7 +680,8 @@ function ConfirmBlock({
         {result.scrambled.p < 0.001 ? "< 0.001" : result.scrambled.p.toFixed(3)}, median{" "}
         {result.scrambled.median.toFixed(3)} (CI {result.scrambled.lo.toFixed(3)} to{" "}
         {result.scrambled.hi.toFixed(3)}
-        ). Ties are dropped, and medians are of the non-tied differences. Both must pass an exact
+        ). Flips over the batch: field {result.flips.field}, yoked {result.flips.yoked}, scrambled{" "}
+        {result.flips.scrambled}. Ties are dropped, and medians are of the non-tied differences. Both must pass an exact
         two-sided sign test at α = {formatAlpha(result.alpha)}
         {result.alpha < 0.05 ? " (this run's share of 0.05, spent across its attempts)" : ""}, with
         more seeds favoring the field than against it.
@@ -677,27 +696,24 @@ function ConfirmBlock({
 }
 
 function DoseBlock({ dose }: { dose: DoseCurve }) {
+  const fmt = (p: number) => (p < 0.001 ? p.toExponential(2) : p.toFixed(3));
   return (
     <aside className="mt-4 rounded-lab border border-line bg-panel px-4 py-4">
       <p className="text-xs tracking-widest text-mist uppercase">
         {dose.learned ? "Learned · still the table" : "Dose curve · Learned not reached"}
       </p>
       <p className="mt-2 text-sm text-pretty text-bone">{dose.reason}</p>
-      {dose.points.length > 0 ? (
+      {dose.replicates > 0 ? (
         <p className="mt-2 text-sm text-mist tabular-nums">
-          Coupling {dose.coupling.toFixed(2)}.{" "}
-          {dose.points
-            .map(
-              (point) =>
-                `dose ${point.dose}: spec ${point.spec.toFixed(3)}, gap ${point.gap.toFixed(3)}`,
-            )
-            .join(" · ")}
+          Coupling {dose.coupling.toFixed(2)} · {dose.replicates} replicates ·{" "}
+          {dose.points.map((point) => `dose ${point.dose}: ${point.spec.toFixed(3)}`).join(" · ")}
         </p>
       ) : null}
-      {dose.trend ? (
+      {dose.trend && dose.top ? (
         <p className="mt-1 text-sm text-mist tabular-nums">
-          Dose 100 vs dose 0, paired by test seed: {dose.trend.pos} up, {dose.trend.neg} down, p{" "}
-          {dose.trend.p < 0.001 ? "< 0.001" : dose.trend.p.toFixed(3)} against α ={" "}
+          Trend across trained doses (exact Page, {dose.trend.n} replicates): z ={" "}
+          {dose.trend.z.toFixed(2)}, p {fmt(dose.trend.p)}. Top dose vs dose 0: {dose.top.pos} up,{" "}
+          {dose.top.neg} down, p {fmt(dose.top.p)}. Both one-sided against α ={" "}
           {formatAlpha(dose.alpha)}.
         </p>
       ) : null}

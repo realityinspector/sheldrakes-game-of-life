@@ -1,0 +1,33 @@
+import { writeFileSync } from "node:fs";
+import { DEFAULT_CONFIG } from "/home/claude/sheldrakes-game-of-life/src/sim/engine.ts";
+import { SweepRunner } from "/home/claude/sheldrakes-game-of-life/src/sim/sweep.ts";
+import { ANALYSIS_VERSION } from "/home/claude/sheldrakes-game-of-life/src/sim/protocol.ts";
+const OUT = process.argv[2];
+const t0 = Date.now();
+const log = (s: string) => console.log(`[${((Date.now() - t0) / 1000).toFixed(0).padStart(5)}s] ${s}`);
+const recipe = { ...DEFAULT_CONFIG, fieldStrength: 0.75, temporalDecay: 0, similarityThreshold: 0.4, influenceExponent: 1.75, crystalCount: 12, cells: 64, innate: true, coupling: 0.45, density: 0.17 };
+const r = new SweepRunner();
+r.setPlan({ mode: "confirm", goal: "gap", generations: 80, granularity: 25, seedCount: 64, axes: [], sweepSize: false, sweepInnate: false, ignoreArchive: true, preset: "gliders", baseline: recipe, archive: [], seed: 1 });
+r.startLadder();
+const m = () => r.mega!;
+log(`analysis ${ANALYSIS_VERSION} · ${m().frozen}`);
+const arm = (t: any) => `${t.pos}/${t.neg} p=${t.p < 0.001 ? t.p.toExponential(2) : t.p.toFixed(4)} med=${t.median.toFixed(3)} CI[${t.lo.toFixed(3)},${t.hi.toFixed(3)}]`;
+let stage = m().stage; let lastRep = 0;
+while (r.status === "running") {
+  r.tick(2000);
+  const g = m();
+  if (g.stage !== stage) {
+    if (stage === "confirm" && g.proof) log(`CONFIRM sealed α=${g.proof.alpha} · yoked ${arm(g.proof.yoked)} · scrambled ${arm(g.proof.scrambled)} · flips F/Y/S ${g.proof.flips.field}/${g.proof.flips.yoked}/${g.proof.flips.scrambled} => ${g.proof.specific ? "SPECIFIC" : "not specific"}`);
+    if (stage === "naive" && g.naive) log(`NAIVE sealed · yoked ${arm(g.naive.yoked)} · scrambled ${arm(g.naive.scrambled)} · flips F/Y/S ${g.naive.flips.field}/${g.naive.flips.yoked}/${g.naive.flips.scrambled} => ${g.naive.specific ? "SPECIFIC" : "not specific"}`);
+    stage = g.stage;
+    log(`stage → ${stage}`);
+  }
+  if (g.dose && g.dose.replicates > lastRep) { lastRep = g.dose.replicates; if (lastRep % 4 === 0) log(`  dose replicates ${lastRep}/16 · ${g.dose.points.map((p) => `${p.dose}→${p.spec.toFixed(3)}`).join(" ")}`); }
+}
+const g = m();
+if (stage === "confirm" && g.proof) log(`CONFIRM sealed α=${g.proof.alpha} · yoked ${arm(g.proof.yoked)} · scrambled ${arm(g.proof.scrambled)} · flips F/Y/S ${g.proof.flips.field}/${g.proof.flips.yoked}/${g.proof.flips.scrambled} => ${g.proof.specific ? "SPECIFIC" : "not specific"}`);
+if (stage === "naive" && g.naive) log(`NAIVE sealed · yoked ${arm(g.naive.yoked)} · scrambled ${arm(g.naive.scrambled)} => ${g.naive.specific ? "SPECIFIC" : "not specific"}`);
+if (g.dose?.trend) log(`DOSE sealed · ${g.dose.points.map((p) => `${p.dose}→${p.spec.toFixed(3)}`).join(" ")} · Page z=${g.dose.trend.z.toFixed(2)} p=${g.dose.trend.p.toExponential(2)} · top ${g.dose.top!.pos}/${g.dose.top!.neg} p=${g.dose.top!.p.toExponential(2)} => ${g.dose.learned ? "LEARNED" : "not learned"}`);
+log(`NOTE ${r.note}`);
+writeFileSync(OUT, JSON.stringify({ analysis: ANALYSIS_VERSION, recipe, preset: "gliders", proof: g.proof, naive: g.naive, dose: g.dose, note: r.note }, null, 2));
+log("DONE");

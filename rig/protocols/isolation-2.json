@@ -1,0 +1,34 @@
+{
+  "rig": "sheldrake-rig/2",
+  "label": "isolation-2",
+  "hypothesis": "Replication of isolation-1 on the hardened rig (rig/2: separate system users, private data, no pre-reveal log head, salted training records, fixed block duration, tester commits to its entropy before a registrar beacon). If morphic resonance acts on physical randomness, a still life or oscillator that is made to occur hundreds of thousands of times by the trainer will be over-represented, in the same block, among the forms that emerge in the tester's pure-Conway soups drawn from OS entropy, relative to that form's count in blocks where another form was trained (T1, primary). Secondary (T2): a form's count rises with how many times it has been trained so far.",
+  "forms": [
+    "block",
+    "blinker",
+    "beehive",
+    "loaf",
+    "boat"
+  ],
+  "blocks": 60,
+  "tester": {
+    "soups": 1000,
+    "size": 32,
+    "generations": 300
+  },
+  "trainer": {
+    "boards": 128,
+    "size": 64,
+    "spacing": 8,
+    "generations": 100,
+    "censusEvery": 10,
+    "blockMillis": 2500
+  },
+  "analysis": {
+    "permutations": 50000,
+    "bootstrap": 5000,
+    "alpha": 0.05
+  },
+  "leak": {
+    "relative": 0
+  }
+}

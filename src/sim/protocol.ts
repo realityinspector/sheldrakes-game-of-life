@@ -6,8 +6,15 @@
  * (translation-normalized shapes), learning from an empty table, per-board sampling,
  * dose seed namespaces, and α-spending across mega attempts. dice10 made Yoked's flip
  * count exact, skipped repeated candidate sites, and spent α on every ladder stage.
+ * dice11 rate-matched Scrambled, scaled consultations with board area, added the mega
+ * screen, moved Learned to Page's trend test on 64 paired dose seeds, and armed the
+ * default recipe. Exploration for dice11 ran under "dice11-dev", so none of its seeds
+ * can reappear here. dice12 kept the permutation's centre cell fixed (the moving centre
+ * made Scrambled delete-only or add-only on some seeds), ranked Scrambled's sites by
+ * Field's formula, made the dose stage's unit the training replicate, and computes Page's
+ * test exactly.
  */
-export const ANALYSIS_VERSION = "2026-10-24.dice10";
+export const ANALYSIS_VERSION = "2026-10-24.dice12";
 
 export const PATCH = 5;
 export const PATCH_CELLS = 25;
@@ -24,10 +31,19 @@ export const CENTER3 =
   (1 << 18);
 
 export const WINDOW_GENS = 80;
-/** Eligible patches each memory board consults per generation. */
+/** Minimum eligible patches the field consults per generation. */
 export const SAMPLES_PER_GEN = 8;
-/** Candidate sites (and coins) drawn per generation, shared by Field and Scrambled. */
-export const CANDIDATES_PER_GEN = 48;
+/** One consultation per this many cells: a fixed 8 is negligible on a large board. */
+export const CELLS_PER_SAMPLE = 32;
+/** Candidate sites (and coins) drawn per consultation owed, shared by Field and Scrambled. */
+export const CANDIDATES_PER_SAMPLE = 6;
+/** Kept for the minimum board: CANDIDATES_PER_SAMPLE × SAMPLES_PER_GEN. */
+export const CANDIDATES_PER_GEN = SAMPLES_PER_GEN * CANDIDATES_PER_SAMPLE;
+
+/** Eligible patches consulted per generation on a board of `cells` cells. */
+export function samplesFor(cells: number): number {
+  return Math.max(SAMPLES_PER_GEN, Math.round(cells / CELLS_PER_SAMPLE));
+}
 /** Pseudo-count added to a crystal's alpha each time its form echoes on the board. */
 export const ECHO_BOOST = 0.4;
 export const ARMED_LO = 0.01;
@@ -42,14 +58,12 @@ export const CENSUS_UNTIL = 300;
 
 export type LevelName = "off" | "unarmed" | "armed" | "loud";
 
+/** Population count of a (≤ 32-bit) mask, branch-free. */
 export function pop25(n: number): number {
-  let c = 0;
-  let x = n;
-  while (x) {
-    x &= x - 1;
-    c++;
-  }
-  return c;
+  let x = n - ((n >>> 1) & 0x55555555);
+  x = (x & 0x33333333) + ((x >>> 2) & 0x33333333);
+  x = (x + (x >>> 4)) & 0x0f0f0f0f;
+  return Math.imul(x, 0x01010101) >>> 24;
 }
 
 /** Live cells only. Empty-against-anything is 0, including empty-against-empty. */
@@ -388,6 +402,106 @@ export function signTest(diffs: number[]): {
   return { n, pos, neg: n - pos, p: Math.min(1, 2 * acc), median: median(nz) };
 }
 
+/** Complementary error function (Numerical Recipes erfcc; fractional error < 1.2e-7). */
+export function erfc(x: number): number {
+  const z = Math.abs(x);
+  const t = 1 / (1 + 0.5 * z);
+  const r =
+    t *
+    Math.exp(
+      -z * z -
+        1.26551223 +
+        t *
+          (1.00002368 +
+            t *
+              (0.37409196 +
+                t *
+                  (0.09678418 +
+                    t *
+                      (-0.18628806 +
+                        t *
+                          (0.27886807 +
+                            t *
+                              (-1.13520398 +
+                                t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))),
+    );
+  return x >= 0 ? r : 2 - r;
+}
+
+/** Midranks (1-based) of a short vector. */
+function midranks(values: number[]): number[] {
+  const order = values.map((v, i) => [v, i] as const).sort((a, b) => a[0] - b[0]);
+  const ranks = new Array<number>(values.length);
+  for (let i = 0; i < order.length;) {
+    let j = i;
+    while (j + 1 < order.length && order[j + 1][0] === order[i][0]) j++;
+    for (let k = i; k <= j; k++) ranks[order[k][1]] = (i + j) / 2 + 1;
+    i = j + 1;
+  }
+  return ranks;
+}
+
+function permutationsOf(values: number[]): number[][] {
+  if (values.length <= 1) return [values.slice()];
+  const out: number[][] = [];
+  values.forEach((v, i) => {
+    for (const rest of permutationsOf([...values.slice(0, i), ...values.slice(i + 1)])) out.push([v, ...rest]);
+  });
+  return out;
+}
+
+/**
+ * Page's L test for an increasing trend across ordered conditions, paired by row.
+ * rows[i][j] is the outcome of unit i under condition j (j in increasing order, k ≤ 6).
+ * Ranks are taken within each row (midranks for ties). Under the null the ranks in a row
+ * are exchangeable, so the exact null distribution of L is the convolution, over rows, of
+ * each row's L under all k! orderings of its own ranks. p is that exact upper tail. z is
+ * the normal score with the tie-corrected permutation variance, for display. n counts rows
+ * that are not fully tied.
+ */
+export function pageTest(rows: number[][]): { n: number; L: number; z: number; p: number } {
+  let L2 = 0;
+  let mean = 0;
+  let variance = 0;
+  let n = 0;
+  // Distribution of 2L (always an integer: midranks are multiples of ½).
+  let dist = new Map<number, number>([[0, 1]]);
+  for (const row of rows) {
+    const k = row.length;
+    if (k < 2) continue;
+    const r = midranks(row);
+    const rbar = r.reduce((s, v) => s + v, 0) / k;
+    const abar = (k + 1) / 2;
+    let sa = 0;
+    let sr = 0;
+    let li2 = 0;
+    for (let j = 0; j < k; j++) {
+      li2 += Math.round(2 * (j + 1) * r[j]);
+      sa += (j + 1 - abar) ** 2;
+      sr += (r[j] - rbar) ** 2;
+    }
+    L2 += li2;
+    mean += k * abar * rbar;
+    variance += (sa * sr) / (k - 1);
+    if (sr > 0) n++;
+    const rowDist = new Map<number, number>();
+    const perms = permutationsOf(r);
+    for (const perm of perms) {
+      let v = 0;
+      for (let j = 0; j < k; j++) v += Math.round(2 * (j + 1) * perm[j]);
+      rowDist.set(v, (rowDist.get(v) ?? 0) + 1 / perms.length);
+    }
+    const next = new Map<number, number>();
+    for (const [a, pa] of dist) for (const [b, pb] of rowDist) next.set(a + b, (next.get(a + b) ?? 0) + pa * pb);
+    dist = next;
+  }
+  const L = L2 / 2;
+  if (variance <= 0) return { n, L, z: 0, p: 1 };
+  let p = 0;
+  for (const [v, pv] of dist) if (v >= L2) p += pv;
+  return { n, L, z: (L - mean) / Math.sqrt(variance), p: Math.min(1, p) };
+}
+
 export function bootstrapMedianCI(
   diffs: number[],
   iters = 400,
@@ -426,22 +540,29 @@ export function mixSeed(seed: number, salt: number): number {
   return (x ^ (x >>> 16)) >>> 0;
 }
 
+/**
+ * The Scrambled null's permutation of the 25 patch cells. The centre stays put: a crystal's
+ * prediction is its next centre, so moving the centre made every scrambled crystal predict
+ * the same source cell, and on some seeds the null only ever deleted (or only ever added)
+ * cells. With the centre fixed, each scrambled crystal predicts what its real crystal
+ * predicts; only the shape it matches on is permuted.
+ */
 export function permutation(seed: number): number[] {
   const rng = mulberry32(mixSeed(seed, 0x5c5a1117));
-  const order = Array.from({ length: PATCH_CELLS }, (_, index) => index);
-  for (let i = order.length - 1; i > 0; i--) {
+  const others = Array.from({ length: PATCH_CELLS }, (_, index) => index).filter((i) => i !== CENTER_BIT);
+  for (let i = others.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    const swap = order[i];
-    order[i] = order[j];
-    order[j] = swap;
+    const swap = others[i];
+    others[i] = others[j];
+    others[j] = swap;
   }
-  let moved = false;
-  for (let i = 0; i < order.length; i++) if (order[i] !== i) moved = true;
-  if (!moved) {
-    const swap = order[0];
-    order[0] = order[1];
-    order[1] = swap;
+  if (others.every((value, i) => value === (i < CENTER_BIT ? i : i + 1))) {
+    const swap = others[0];
+    others[0] = others[1];
+    others[1] = swap;
   }
+  const order: number[] = [];
+  for (let i = 0, k = 0; i < PATCH_CELLS; i++) order.push(i === CENTER_BIT ? CENTER_BIT : others[k++]);
   return order;
 }
 

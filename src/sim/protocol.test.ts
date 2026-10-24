@@ -10,9 +10,12 @@ import {
   censusCounts,
   dStar,
   dice,
+  erfc,
+  pageTest,
   mulberry32,
   normalizeMask,
   objectShape,
+  permutation,
   orientations,
   rowsToMask,
   seedFromRow,
@@ -300,5 +303,66 @@ describe("statistics", () => {
       if (a !== b) d++;
     }
     assert.ok(Math.abs(dStar(d / n, p / n, q / n) - 1) < 0.03);
+  });
+});
+
+describe("Page's trend test", () => {
+  it("matches the textbook mean and variance", () => {
+    const t = pageTest([[1, 2, 3, 4]]);
+    assert.equal(t.L, 30);
+    // E[L] = n k (k+1)^2 / 4 = 25, Var[L] = n k^2 (k+1)(k^2-1) / 144 = 25/3
+    assert.ok(Math.abs(t.z - 5 / Math.sqrt(25 / 3)) < 1e-12);
+  });
+
+  it("is calibrated under the null and ignores fully tied rows", () => {
+    const rng = mulberry32(17);
+    let hits = 0;
+    for (let rep = 0; rep < 1000; rep++) {
+      const rows = Array.from({ length: 16 }, () => [rng(), rng(), rng()]);
+      if (pageTest(rows).p < 0.05) hits++;
+    }
+    // Exact and discrete, so at most 5%: Binomial(1000, ≤0.05), mean ≤ 50, sd ≈ 6.9.
+    assert.ok(hits > 25 && hits < 66, `false positives ${hits}/1000`);
+    assert.deepEqual(pageTest([[2, 2, 2, 2]]), { n: 0, L: 25, z: 0, p: 1 });
+  });
+
+  it("p is exact: one row of three distinct values", () => {
+    // Orders of (1,2,3): L = 14 once, 13 twice, 11 twice, 10 once.
+    assert.ok(Math.abs(pageTest([[1, 2, 3]]).p - 1 / 6) < 1e-12);
+    assert.ok(Math.abs(pageTest([[1, 3, 2]]).p - 3 / 6) < 1e-12);
+    const exact = pageTest([
+      [1, 2, 3],
+      [1, 2, 3],
+    ]).p;
+    assert.ok(Math.abs(exact - 1 / 36) < 1e-12);
+  });
+
+  it("detects a monotone shift and not a decreasing one", () => {
+    const rng = mulberry32(3);
+    const up = Array.from({ length: 64 }, () => [0, 0.1, 0.2, 0.3].map((m) => m + rng() - 0.5));
+    const down = up.map((row) => row.slice().reverse());
+    assert.ok(pageTest(up).p < 1e-4);
+    assert.ok(pageTest(down).p > 0.99);
+  });
+
+  it("erfc is accurate in the tail", () => {
+    const cases: [number, number][] = [
+      [0, 1],
+      [1, 0.157299207050285],
+      [3, 2.209049699858544e-5],
+      [-1, 1.842700792949715],
+    ];
+    for (const [x, v] of cases) assert.ok(Math.abs(erfc(x) - v) / v < 2e-7, `erfc(${x})`);
+  });
+});
+
+describe("Scrambled permutation", () => {
+  it("never moves the centre cell, always moves something, and is a bijection", () => {
+    for (let seed = 1; seed <= 500; seed++) {
+      const order = permutation(seed);
+      assert.equal(order[12], 12);
+      assert.equal(new Set(order).size, 25);
+      assert.ok(order.some((v, i) => v !== i));
+    }
   });
 });

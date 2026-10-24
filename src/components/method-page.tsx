@@ -66,8 +66,17 @@ export function MethodPage() {
             Field, with every crystal’s cells permuted inside its 5×5 frame. Live count is kept, and
             the same permutation is applied to the mask it expects next. One permutation is drawn
             from the run seed and applied to every crystal in the field’s table, including echoes
-            learned mid-run. Strength and recency are copied from the field’s table, so the null
-            keeps the machinery and loses the shape.
+            learned mid-run. Strength and recency are copied from the field’s table. Permuted shapes
+            rarely clear the similarity bar on real Life patches, so with the bar kept this null
+            fired about a third as often as Field. It is now rate-matched: at each consulted site it
+            ranks its permuted crystals the way Field does (Diceᵉ × strength × recency) with the bar
+            at zero, and writes the predicted center at the best-ranked sites where that changes the
+            cell, as many as Field changed. The permutation never moves the center cell, so a
+            permuted crystal predicts the same center as its real one; moving it made the null only
+            delete, or only add, cells on some seeds, which collapsed its board and favored Field.
+            On a sparse board the null can run out of places to write; every result shows the flip
+            totals of all three arms so a shortfall is visible. It keeps the machinery and the
+            count, and loses the shape.
           </p>
           <p>
             A cell is binary, so a remembered form can do one thing to it: flip it or leave it.
@@ -79,12 +88,12 @@ export function MethodPage() {
           </p>
           <p>
             Each memory pass draws from named streams derived from the seed: one for patch sampling,
-            one for acceptance, one for Yoked positions. Every generation the field draws 48
-            candidate sites, each with its coin, whatever the boards hold. Field and Scrambled each
-            consult their own first eight eligible sites from that one list, so identical boards
-            make identical draws, their difference is mask content rather than luck, and neither
-            board’s sampling depends on the other board’s cells. Control reads none. The initial
-            pattern uses a fourth stream, and only at generation 0.
+            one for acceptance, one for Yoked positions, one for Scrambled’s extra sites. Every
+            generation the field draws six candidate sites, each with its coin, per consultation it
+            owes, whatever the boards hold. Field consults its first eligible sites from that list;
+            Scrambled walks the same list first. Identical boards make identical draws, and Field’s
+            sampling never depends on another board’s cells. Control reads none. The initial pattern
+            uses a fifth stream, and only at generation 0.
           </p>
         </Section>
 
@@ -99,11 +108,13 @@ export function MethodPage() {
             and coupling is 0.
           </p>
           <p>
-            Eight times a generation the field samples a patch. A patch is eligible only if it holds
-            at least 3 live cells and its center 3×3 holds at least one. The choice is made on those
-            samples, not on every cell. Eight writes cannot be 1% of a 48×48 board, so the Armed
-            rate below is the share of consulted occupied neighborhoods, not the share of the whole
-            grid. The board-wide share is recorded beside it and is not the bar.
+            Each generation the field consults one patch per 32 cells of board, and never fewer than
+            eight: 32 on a 32×32 board, 72 on 48×48, 128 on 64×64. A fixed eight was a negligible
+            push on a large board. A patch is eligible only if it holds at least 3 live cells and
+            its center 3×3 holds at least one, and no site is consulted twice in a generation. The
+            Armed rate below is the share of consulted occupied neighborhoods that were rewritten,
+            not the share of the whole grid. The board-wide share is recorded beside it and is not
+            the bar.
           </p>
           <p>
             Similarity counts live cells only: Dice overlap, 2|A∩B| / (|A| + |B|), best of the eight
@@ -211,22 +222,28 @@ export function MethodPage() {
             k-th attempt must clear 0.05 · 6 / (π² k²), about 0.030, then 0.0076, then 0.0034, and
             that attempt’s naive retest and dose trend test use the same level. All attempts
             together cannot exceed 0.05, for Specific or for Learned. The budget belongs to one run:
-            starting Mega run again, or Restart, opens a new one. This is still a fact about the
-            table.
+            starting Mega run again, or Restart, opens a new one. Before a mega recipe may spend an
+            attempt at all, it is screened on 16 seeds of its own: the field has to lead each null
+            on at least 11 of them. A single armed seed is mostly noise, and without the screen a
+            run spent hundreds of attempts, and its α, on recipes that were not there. The screen
+            spends no α and its seeds are never test seeds. This is still a fact about the table.
           </p>
           <p>
             <strong className="font-medium text-bone">Learned.</strong> Specific on a frozen recipe,
             then Specific again with innate forms off, an empty archive, and coupling at 0. Only
-            then a dose curve: that naive rule trains on 0, 1, 10, and 100 seeds, and the same 16
-            test seeds, none of them ever a training seed, are scored after each dose on the frozen
-            recipe’s trained forms. Mean field specificity has to rise strictly with that count, and
-            dose 100 has to beat dose 0 seed for seed on those paired test seeds (exact sign test,
-            at the attempt’s α). A strict rise alone happens about one time in 24 with no dose
-            effect at all. If the frozen coupling is 0, archive import does nothing, so those dose
-            tests run at coupling 0.25 and say so. A mega run does this only after an armed
-            illustration clears the gap bar. It does not round one seed up to Learned. Even a rising
-            curve is the table learning, not morphic resonance. If the curve was not run, or does
-            not rise, Learned is not reached.
+            then a dose curve. Sixteen independent replicates each train one table on 25 seeds of
+            their own, cumulatively, and snapshot it after 1, 5 and 25; each replicate scores the
+            untrained table and every snapshot on 4 test seeds of its own, on the frozen recipe’s
+            trained forms. The replicate is the unit: tables vary from one training run to the next,
+            and scoring every test seed against one shared table counted that variation as a trend.
+            Learned needs both an increase across the trained doses (exact Page test, one row per
+            replicate, one-sided) and the most-trained table beating the untrained one replicate by
+            replicate (sign test), each at the attempt’s α. The trend is taken among trained doses
+            only, so “the untrained table is lowest” cannot pass by itself. If the frozen coupling
+            is 0, archive import does nothing, so those dose tests run at coupling 0.25 and say so.
+            A mega run does this only after an armed illustration clears the gap bar. It does not
+            round one seed up to Learned. Even a rising curve is the table learning, not morphic
+            resonance. If the curve was not run, or does not rise, Learned is not reached.
           </p>
           <p>
             A batch is 8, 16, 32, or 64 seeds. 64 is the published size. A paired sign test on 64
@@ -323,7 +340,7 @@ export function MethodPage() {
             <Factor
               n="12"
               title="Walking every knob"
-              body="A mega run does not march the sliders from zero. It sorts clusters toward the armed band, bounces between patterns, and after a card scores it fans out to every parameter within one sweep step. When that pass runs out, it keeps combing the rest of the grid, then starts another pass from a new seed. One illustration seed is not a 64-seed batch. Every armed gap of 0.20 or wider gets its own 64-seed sign test; recipes that differ only in a knob the run ignores are one recipe. Coupling is not walked at all: with an empty archive it does nothing until the dose stage, which uses the lab’s coupling. A miss does not end the walk, and it does not raise the gap bar so that weaker armed recipes are skipped. It does lower the α the next attempt must clear, at every stage, so a walk that keeps testing cannot buy a false Specific or a false Learned. The walk stays open until a batch wins — Specific, then the naive retest and the dose curve — or until you stop it. Stopping before a seed list finishes voids that batch. None of this is morphic resonance. Old pictures are dropped."
+              body="A mega run does not march the sliders from zero. It sorts clusters toward the armed band, bounces between patterns, and after a card scores it fans out to every parameter within one sweep step. When that pass runs out, it keeps combing the rest of the grid, then starts another pass from a new seed. One illustration seed is not a 64-seed batch. Every armed gap of 0.20 or wider is screened on 16 seeds of its own, and only a recipe that holds up there gets a 64-seed sign test; recipes that differ only in a knob the run ignores are one recipe. Coupling is not walked at all: with an empty archive it does nothing until the dose stage, which uses the lab’s coupling. A miss does not end the walk, and it does not raise the gap bar so that weaker armed recipes are skipped. It does lower the α the next attempt must clear, at every stage, so a walk that keeps testing cannot buy a false Specific or a false Learned. The walk stays open until a batch wins — Specific, then the naive retest and the dose curve — or until you stop it. Stopping before a seed list finishes voids that batch. None of this is morphic resonance. Old pictures are dropped."
             />
           </ol>
           <p>
@@ -331,6 +348,33 @@ export function MethodPage() {
             Memory passes do, through separate streams. They cannot touch the classical board. They
             can change which echoes a field learns, so batches are comparable only when they share a
             first row.
+          </p>
+        </Section>
+
+        <Section title="The isolation rig">
+          <p>
+            Nothing on these pages can test morphic resonance, because the memory is a table in the
+            same process. The repository also holds a rig that can: three servers. A registrar draws
+            which form each block trains from OS entropy and publishes only a SHA-256 commitment and
+            a hash of the rig’s code before anything runs. A trainer, told only its own target,
+            makes that form occur hundreds of thousands of times, padded to a fixed duration so
+            timing reveals nothing. A tester, never told the target and holding no table, commits to
+            raw OS entropy, then mixes in a registrar beacon, runs plain Conway on the resulting
+            soups, and counts every candidate form. Run locally, each server is its own system user
+            with a private directory. The registrar reveals and scores only when every block is in,
+            with an exact randomization test fixed in advance, and every block is audited by
+            replaying the tester’s bytes.
+          </p>
+          <p>
+            Results, all pre-registered on one host: both deliberate 2% leaks were detected, so the
+            rig can see an effect that small. Three runs without a leak, each with 60 blocks and 49
+            million training occurrences, estimated −1.45%, +1.58% and −0.70%. The second crossed
+            the bar (Holm p = 0.0065); its pre-registered replication did not (Holm p = 1.00), so it
+            is treated as chance. Together the three sit at zero (Stouffer p = 0.58), and about
+            +1.75% would have been seen in each. An independent review of the first version found
+            side channels the rig itself offered (a public log hash that encoded the target,
+            readable files, form-dependent timing); the honest tester used none, and the hardened
+            rig/2 closed them before runs two and three. Reports are in rig/reports.
           </p>
         </Section>
 

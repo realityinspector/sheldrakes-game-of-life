@@ -228,6 +228,20 @@ function readMega(mega: MegaState): Verdict {
       : "No card was armed, so the memory term did not stay in the band where a memory effect could even be discussed.";
   const frozen = mega.frozen ? ` Frozen recipe: ${mega.frozen}.` : "";
 
+  if (stage === "screen" && going) {
+    return megaVerdict(
+      true,
+      "Not yet",
+      `Morphic resonance has not been found. A candidate is being screened on ${mega.ladderTotal || 16} seeds of its own before it may spend a 64-seed test (${mega.ladderDone}/${mega.ladderTotal || 16}).`,
+      `A single armed seed is mostly noise, so a recipe has to keep the field ahead of both nulls on most of a small separate batch first. The screen spends no α and its seeds are never test seeds.${frozen} ${mega.screened} screened so far, ${mega.screenPassed} promoted. ${loudNote}`,
+      "Screening",
+      "no α spent",
+      `${mega.ladderDone}/${mega.ladderTotal || 16}`,
+      "screen open",
+      loud,
+    );
+  }
+
   if (stage === "confirm" && going) {
     return megaVerdict(
       true,
@@ -264,7 +278,7 @@ function readMega(mega: MegaState): Verdict {
       true,
       "Not yet",
       "Both 64-seed tests passed. That is still the table. The dose curve is running, and Learned is not reached until facilitation rises with dose.",
-      `${dose?.reason ?? "Dose curve is running."}${soFar} Learned requires mean field specificity to rise strictly across 0, 1, 10, and 100. A rising curve would still be the table.`,
+      `${dose?.reason ?? "Dose curve is running."}${soFar} Learned requires a rise across the trained doses and the top dose beating dose 0, replicate by replicate. A rising curve would still be the table.`,
       "Specific",
       "dose not sealed",
       `${mega.ladderDone}/${mega.ladderTotal || 1}`,
@@ -331,7 +345,7 @@ function readMega(mega: MegaState): Verdict {
       true,
       "Not yet",
       "Learned was not reached. The dose curve did not rise, and the search resumed. That is not morphic resonance.",
-      `Both 64-seed tests were Specific. The dose curve did not rise strictly (${curve}). ${dose.reason} The next published batch waits for an armed gap of at least ${bar}.`,
+      `Both 64-seed tests were Specific. The dose curve did not show learning (${curve}). ${dose.reason} The next published batch waits for an armed gap of at least ${bar}.`,
       "Specific",
       "dose flat",
       bar,
@@ -410,7 +424,7 @@ function readMega(mega: MegaState): Verdict {
         : "Specific twice, and that is not morphic resonance. Learned was not reached.",
       stopped
         ? `The frozen recipe and the naive retest both beat both nulls. ${dose.reason}`
-        : `The frozen recipe and the naive retest both beat both nulls. The dose curve did not rise strictly (${curve}). ${dose.reason}`,
+        : `The frozen recipe and the naive retest both beat both nulls. The dose curve did not show learning (${curve}). ${dose.reason}`,
       "Specific",
       stopped ? "dose void" : "dose flat",
       "Not learned",

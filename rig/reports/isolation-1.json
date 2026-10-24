@@ -1,0 +1,1326 @@
+{
+  "label": "isolation-1",
+  "positiveControl": false,
+  "leakRelative": 0,
+  "protocolFile": "rig/protocols/isolation-1.json",
+  "protocolFileSha256": "5815737c8a6a3a2372731140a73e5317da335efbfea8d3550a8e015caafcbfba",
+  "protocolHash": "b759c4e4876d37437900824049724a1f4c2ebb3a884b3f857cd6256d8a5919ff",
+  "analysisHash": "01dff4c7cdf895693d1436d64df398f802a90dc69032382308661b492f71dac2",
+  "commitment": "3fc73dc0cc07cf323ec54168186ac00917e5c84d9196343e3eb9d5d887633135",
+  "nonce": "0fd959ac640c6612b7ca73fb1a8c3655d402b67e7ec29f5d4b5b3dff1137cb25",
+  "logHead": "b100e98bd4c9a763da5e6cd499b02a1d6df9764e78198271510baa60fdc4a7b0",
+  "logChainValid": true,
+  "logEntries": 122,
+  "gitHead": "e3010f2639932e167f86012a59a8442f1dd16c15",
+  "environment": {
+    "topology": "three processes on one host (separate data dirs, separate secrets, HTTP only)",
+    "entropy": "node:crypto randomBytes (OS CSPRNG)",
+    "node": "v22.23.4",
+    "platform": "linux 6.18.44-fc-v153",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz"
+  },
+  "seconds": 281,
+  "trainingOccurrences": 49152000,
+  "audits": [
+    {
+      "block": 26,
+      "testerReplay": true,
+      "entropyHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 2,
+      "testerReplay": true,
+      "entropyHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 10,
+      "testerReplay": true,
+      "entropyHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 47,
+      "testerReplay": true,
+      "entropyHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    }
+  ],
+  "report": {
+    "blocks": 60,
+    "forms": [
+      "block",
+      "blinker",
+      "beehive",
+      "loaf",
+      "boat"
+    ],
+    "t1": {
+      "stat": -0.014589568169852307,
+      "p": 0.9828203435931281,
+      "effect": -0.014483656116148137,
+      "ci": [
+        -0.026406134352226343,
+        -0.002010796179633567
+      ],
+      "nullQ95": 0.009660987747126346,
+      "mde80": 0.01612072900381961
+    },
+    "t2": {
+      "stat": 0.01836872054033139,
+      "p": 0.16863662726745465
+    },
+    "holm": {
+      "t1": 0.9828203435931281,
+      "t2": 0.3372732545349093
+    },
+    "alpha": 0.05,
+    "detected": false,
+    "perForm": [
+      {
+        "form": "block",
+        "trained": 1890,
+        "untrained": 1882,
+        "ratio": 1.004250797024442,
+        "timesTrained": 12
+      },
+      {
+        "form": "blinker",
+        "trained": 1917,
+        "untrained": 1937.4375,
+        "ratio": 0.9894512726216975,
+        "timesTrained": 12
+      },
+      {
+        "form": "beehive",
+        "trained": 988.3333333333334,
+        "untrained": 987.5625,
+        "ratio": 1.0007805413159505,
+        "timesTrained": 12
+      },
+      {
+        "form": "loaf",
+        "trained": 331.5,
+        "untrained": 338.4166666666667,
+        "ratio": 0.9795616843142083,
+        "timesTrained": 12
+      },
+      {
+        "form": "boat",
+        "trained": 307.5,
+        "untrained": 320.8958333333333,
+        "ratio": 0.9582548854119328,
+        "timesTrained": 12
+      }
+    ]
+  },
+  "assignment": [
+    "beehive",
+    "beehive",
+    "loaf",
+    "loaf",
+    "boat",
+    "boat",
+    "boat",
+    "block",
+    "block",
+    "boat",
+    "block",
+    "loaf",
+    "boat",
+    "block",
+    "loaf",
+    "block",
+    "block",
+    "blinker",
+    "beehive",
+    "block",
+    "loaf",
+    "blinker",
+    "boat",
+    "blinker",
+    "boat",
+    "beehive",
+    "beehive",
+    "beehive",
+    "blinker",
+    "beehive",
+    "blinker",
+    "block",
+    "boat",
+    "blinker",
+    "blinker",
+    "block",
+    "blinker",
+    "beehive",
+    "loaf",
+    "boat",
+    "block",
+    "beehive",
+    "loaf",
+    "boat",
+    "blinker",
+    "blinker",
+    "block",
+    "boat",
+    "loaf",
+    "blinker",
+    "beehive",
+    "loaf",
+    "block",
+    "beehive",
+    "beehive",
+    "loaf",
+    "boat",
+    "loaf",
+    "blinker",
+    "loaf"
+  ],
+  "blocks": [
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "6429a2733c29e9a560b5404091580801921068ae894794fe615a1bc993aeb79a",
+        "at": "2026-10-24T16:34:00.989Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 2010,
+          "blinker": 1913,
+          "beehive": 1027,
+          "loaf": 329,
+          "boat": 340
+        },
+        "leakExtra": 0,
+        "entropyHash": "e4e8fdc87e00087b333f8725eb4d07c1e5c53733f8426ad74d0f56c262d41ed2",
+        "at": "2026-10-24T16:34:04.642Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "3cc1d4e7887b707a161362c0ab9b48475eff78670d255664ddf3dee2067d9380",
+        "at": "2026-10-24T16:34:05.372Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1895,
+          "blinker": 1957,
+          "beehive": 1034,
+          "loaf": 336,
+          "boat": 335
+        },
+        "leakExtra": 0,
+        "entropyHash": "cf6e0500b21f97f3131f10edb6a526e74877696ccc7bea84daea74b7cd066513",
+        "at": "2026-10-24T16:34:08.935Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "242c906e5656841a5b8985d5e199ae9c16ff77df35ed6d91b1bf0b470d50df94",
+        "at": "2026-10-24T16:34:09.771Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1882,
+          "blinker": 2031,
+          "beehive": 1000,
+          "loaf": 334,
+          "boat": 328
+        },
+        "leakExtra": 0,
+        "entropyHash": "781b312c113545186b148efe1124c51336a9666d4c291a2c7f0cee2ddb34e97e",
+        "at": "2026-10-24T16:34:13.451Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "3b58bdeea47fce74fe0ebd723cac652e6780682a4b17ec32e59ebb5bff469758",
+        "at": "2026-10-24T16:34:14.329Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1846,
+          "blinker": 1843,
+          "beehive": 992,
+          "loaf": 312,
+          "boat": 286
+        },
+        "leakExtra": 0,
+        "entropyHash": "b32bb58dda6310dcd735fbf7b6897a99f5b8983266c505b089905a1b2d3ad236",
+        "at": "2026-10-24T16:34:17.980Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "131e8a8ca86c8715f891c2594c787d05cc6b91b9cc36d6988d04223771ade79a",
+        "at": "2026-10-24T16:34:18.685Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1962,
+          "blinker": 1924,
+          "beehive": 847,
+          "loaf": 331,
+          "boat": 314
+        },
+        "leakExtra": 0,
+        "entropyHash": "6ab8559d08156ebfd9b0698316f144fecd0015dc5fb96a6f8bf3f46f521d7344",
+        "at": "2026-10-24T16:34:22.178Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "0a7bd2e0253e42e751d4cb36af8c64bfa3f5b37d6c0542036ed3569695c766b8",
+        "at": "2026-10-24T16:34:22.865Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1905,
+          "blinker": 1959,
+          "beehive": 982,
+          "loaf": 350,
+          "boat": 286
+        },
+        "leakExtra": 0,
+        "entropyHash": "c3672eb9daa41b622d55d3357f70ef7d62d8390ee60d417ab71d0c06850626e5",
+        "at": "2026-10-24T16:34:26.297Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "555e20fe12cc374972ae53a6e03cf68d00955854cde5f7775957e756f23435b3",
+        "at": "2026-10-24T16:34:27.005Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1880,
+          "blinker": 1953,
+          "beehive": 995,
+          "loaf": 377,
+          "boat": 294
+        },
+        "leakExtra": 0,
+        "entropyHash": "02996077fbccd7b0743c5d56ea1148076331df6de07f0e17484be0085fdecd19",
+        "at": "2026-10-24T16:34:30.749Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "cf7db984398a6d21d4d10926227e994faf591f3f378272ddb70c7fcd37251017",
+        "at": "2026-10-24T16:34:31.444Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1870,
+          "blinker": 1883,
+          "beehive": 948,
+          "loaf": 363,
+          "boat": 326
+        },
+        "leakExtra": 0,
+        "entropyHash": "8fc12dbd29445690fe53898e04b43e6d75be72a11ce4dd33861f2515c67ddf11",
+        "at": "2026-10-24T16:34:35.488Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "fd768ea2b9e3da6895ebd1ba11bbff064eacfec6d9abfb0cead6388b59ea21f1",
+        "at": "2026-10-24T16:34:36.383Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1864,
+          "blinker": 2010,
+          "beehive": 955,
+          "loaf": 318,
+          "boat": 352
+        },
+        "leakExtra": 0,
+        "entropyHash": "ed995070251f4863311df1f41d722d3bae2f945ecc2ad5a627c1c0bb08322ca5",
+        "at": "2026-10-24T16:34:40.346Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "b1cb56cb45f018bcc2bad8f41fbb80da8dd97c76c073f9d49eccedf297c12faf",
+        "at": "2026-10-24T16:34:41.139Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1870,
+          "blinker": 1943,
+          "beehive": 968,
+          "loaf": 344,
+          "boat": 330
+        },
+        "leakExtra": 0,
+        "entropyHash": "b33c6d084390c894fb33f5bb6b1302a29360ee108385b2a302e97174f1393ba1",
+        "at": "2026-10-24T16:34:45.114Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "8adcf29d37030da48070eb38e779a738caa121cc6423cb92f5367bf2ca12862f",
+        "at": "2026-10-24T16:34:45.968Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1909,
+          "blinker": 1914,
+          "beehive": 964,
+          "loaf": 353,
+          "boat": 295
+        },
+        "leakExtra": 0,
+        "entropyHash": "8626b5cc35600d36931518b6b3358b3257604d52e3e0e68819bccc890b171ba7",
+        "at": "2026-10-24T16:34:50.189Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "f3931f9bf67b38b313d36f3f980b3afe012adb472baca7b42e975a3454dd9a61",
+        "at": "2026-10-24T16:34:51.033Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1835,
+          "blinker": 1960,
+          "beehive": 921,
+          "loaf": 321,
+          "boat": 293
+        },
+        "leakExtra": 0,
+        "entropyHash": "808433bf6a59fcce508afc9a812e438906dab6fbc348e262abd6ad582902a832",
+        "at": "2026-10-24T16:34:54.966Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "0d85e0333b9ccf6c73959d2236f57631816112fbf377479bcf70a70bd246c68c",
+        "at": "2026-10-24T16:34:55.801Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1862,
+          "blinker": 1941,
+          "beehive": 1026,
+          "loaf": 354,
+          "boat": 317
+        },
+        "leakExtra": 0,
+        "entropyHash": "513228960a736cc2dd3c46a3ac4c9d6d737928a04f0ea53ffb3ef79da00e8fae",
+        "at": "2026-10-24T16:34:59.707Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "4036987439d0101ef187db758990d77736ef6731d1288f254632adea3228e13b",
+        "at": "2026-10-24T16:35:00.445Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1845,
+          "blinker": 1962,
+          "beehive": 1002,
+          "loaf": 359,
+          "boat": 289
+        },
+        "leakExtra": 0,
+        "entropyHash": "c0adadc4eea1ff1d88ca00dee05ae3130f2bd5274992bf16fdafc5321c550025",
+        "at": "2026-10-24T16:35:04.105Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "4be5488b59b7959166fe4cbf78c13274ec09a7b0a680a8df45b4ff2b39837fbc",
+        "at": "2026-10-24T16:35:04.942Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1919,
+          "blinker": 1919,
+          "beehive": 898,
+          "loaf": 367,
+          "boat": 316
+        },
+        "leakExtra": 0,
+        "entropyHash": "57cb214f7398ab1ceac707b6679245ececc92d11522bcd85c3151697d240b91f",
+        "at": "2026-10-24T16:35:08.632Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "b4f0a5a28c202e0b128d200f9bc61fddaa749bdc9aab2b9b561a6763a678b673",
+        "at": "2026-10-24T16:35:09.309Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1879,
+          "blinker": 1923,
+          "beehive": 968,
+          "loaf": 366,
+          "boat": 330
+        },
+        "leakExtra": 0,
+        "entropyHash": "6ec54b034626ec0cda5fa132aca204b3549b5a986364a94c0ff21e39fe77fe3b",
+        "at": "2026-10-24T16:35:12.826Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "626e9c5a28a042af4dffaba5f848ccd11a46d40e144d528ef1b29ae128152e14",
+        "at": "2026-10-24T16:35:13.524Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1956,
+          "blinker": 1923,
+          "beehive": 1026,
+          "loaf": 344,
+          "boat": 328
+        },
+        "leakExtra": 0,
+        "entropyHash": "ff2c9083bf435f133c7109cb6d1296627a389540b4daeb42293652c6444832c8",
+        "at": "2026-10-24T16:35:17.177Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "2b782e1cc60eefee4bfd58f6b7a60b7ba4b3c56f70cf35adc49672d2aeea613f",
+        "at": "2026-10-24T16:35:17.912Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1864,
+          "blinker": 1895,
+          "beehive": 1014,
+          "loaf": 317,
+          "boat": 318
+        },
+        "leakExtra": 0,
+        "entropyHash": "39d7d210e8c59357b647ba02252cbad52e8a35ac432e18eb730fbc6a098c1036",
+        "at": "2026-10-24T16:35:21.682Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "00c889f5414a7c72a073a500144fa2ffc2389589b90a1c3bb8cda4b5c39e59a3",
+        "at": "2026-10-24T16:35:22.522Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1850,
+          "blinker": 1907,
+          "beehive": 932,
+          "loaf": 317,
+          "boat": 336
+        },
+        "leakExtra": 0,
+        "entropyHash": "2d948bd9f1ee46953200b4442df8aa25aaca6677d92aaa0e1b783c4edc99d71c",
+        "at": "2026-10-24T16:35:26.486Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "e1d0cb267292a134362c0720135516ab1985616151ce716d57974e7b6373a3d9",
+        "at": "2026-10-24T16:35:27.210Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1885,
+          "blinker": 1862,
+          "beehive": 960,
+          "loaf": 317,
+          "boat": 327
+        },
+        "leakExtra": 0,
+        "entropyHash": "c858d3b53ba6f806b0c742532132d99ff2a387d203d665c49ae0e7c538aa170b",
+        "at": "2026-10-24T16:35:30.695Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "b10b7c781217b31465728e92e2a47f311fc69910a4e67c75013c75ba47724d3e",
+        "at": "2026-10-24T16:35:31.386Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1879,
+          "blinker": 1987,
+          "beehive": 944,
+          "loaf": 344,
+          "boat": 316
+        },
+        "leakExtra": 0,
+        "entropyHash": "f595ab5c17345c096c2b22ad5f6fb05c8eeadad72e525495ee4c6fb237656a15",
+        "at": "2026-10-24T16:35:34.968Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "fd4948ae1be58a037fd7222aa41781861f080b4b40957cd67658226369d78993",
+        "at": "2026-10-24T16:35:35.817Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1887,
+          "blinker": 1982,
+          "beehive": 968,
+          "loaf": 382,
+          "boat": 326
+        },
+        "leakExtra": 0,
+        "entropyHash": "44e82164a0970f5943c38ca2a83ff191a2de5e63024986daa32a4db0e446aac9",
+        "at": "2026-10-24T16:35:39.279Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "beff782918093b907173e57bbe6f1e010536a46c9735dd03d25947f3bc1a8a02",
+        "at": "2026-10-24T16:35:40.031Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1873,
+          "blinker": 1899,
+          "beehive": 1017,
+          "loaf": 311,
+          "boat": 328
+        },
+        "leakExtra": 0,
+        "entropyHash": "2d8fbbd243e11dc2d6c00462611913263fb55bd75c44586b5a8a8af497703294",
+        "at": "2026-10-24T16:35:44.022Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "168ba215ebd077ef55d1bddceb208e9a02a9558190e6624d8915bc1604881a92",
+        "at": "2026-10-24T16:35:44.777Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1902,
+          "blinker": 1866,
+          "beehive": 981,
+          "loaf": 332,
+          "boat": 338
+        },
+        "leakExtra": 0,
+        "entropyHash": "388be289f3befedfe5a7887d70d77678fab0dede4f879746cd3a3523bfb66da9",
+        "at": "2026-10-24T16:35:48.450Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "5ff7c352491101e49d2f1a930ebe0b501b5ec7c97566ac7a4e91f817783b4401",
+        "at": "2026-10-24T16:35:49.259Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1835,
+          "blinker": 2012,
+          "beehive": 946,
+          "loaf": 339,
+          "boat": 285
+        },
+        "leakExtra": 0,
+        "entropyHash": "b7faba17e837a1e4544cf65450fa6fa72b16563184f50ae5607e6dd0f819e6f2",
+        "at": "2026-10-24T16:35:52.961Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "3e8a1ad6eb62fac18325436628bbcfc4cc8f34a563249f316c98628f96f235b7",
+        "at": "2026-10-24T16:35:53.796Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1901,
+          "blinker": 1868,
+          "beehive": 948,
+          "loaf": 344,
+          "boat": 334
+        },
+        "leakExtra": 0,
+        "entropyHash": "da5ed25b2d2c6ec267629089faed281e56916d1b8b169ad85e45969ac3e628ce",
+        "at": "2026-10-24T16:35:57.851Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "582b73fd7bcd7e075189ab2530bd317ed5f3bf508934260cd90e7eb5871ee2fb",
+        "at": "2026-10-24T16:35:58.626Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1890,
+          "blinker": 1899,
+          "beehive": 968,
+          "loaf": 363,
+          "boat": 318
+        },
+        "leakExtra": 0,
+        "entropyHash": "41ba86103a79d063b31c410d15b94b219cf2e11ce7e1ca7f873bbcfffce7bcdb",
+        "at": "2026-10-24T16:36:02.442Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "759a25b7c5257ec075bb3d5e0c451e8bfbda9658a878dc1972fe1e39da15524d",
+        "at": "2026-10-24T16:36:03.184Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1890,
+          "blinker": 2016,
+          "beehive": 1042,
+          "loaf": 343,
+          "boat": 323
+        },
+        "leakExtra": 0,
+        "entropyHash": "1327e1619910f9e280163524a1fae499392603989a95bf8fbb6f90429085c016",
+        "at": "2026-10-24T16:36:06.793Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "00a9d2f97ceb214081e44c0b025118b06e22751bcc9edd162700e9f7a5187667",
+        "at": "2026-10-24T16:36:07.461Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1950,
+          "blinker": 1887,
+          "beehive": 1003,
+          "loaf": 330,
+          "boat": 351
+        },
+        "leakExtra": 0,
+        "entropyHash": "150d2795a8bafed65fe0ceede5801eab34b21e306e64f5b12b429a0d2e5e7a79",
+        "at": "2026-10-24T16:36:11.235Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "03e51a0b97784639a7113afe4de7021e3d6c1e695dab3c2f7a98ddb2dad80664",
+        "at": "2026-10-24T16:36:11.953Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1914,
+          "blinker": 1881,
+          "beehive": 1035,
+          "loaf": 336,
+          "boat": 292
+        },
+        "leakExtra": 0,
+        "entropyHash": "7bc493dd155c852c6eca6b006bdbd34f2156bd33c7f90e51968ce29a129158b4",
+        "at": "2026-10-24T16:36:15.540Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "bfac6d53b4f1f841be085e711f099306ce06468c2fd093800751c6fa1f22f8fd",
+        "at": "2026-10-24T16:36:16.233Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1833,
+          "blinker": 1863,
+          "beehive": 997,
+          "loaf": 316,
+          "boat": 320
+        },
+        "leakExtra": 0,
+        "entropyHash": "21d4269e9b61543e022d34789e6e3045567fee6b9a8f3f86e977410a5d7116b6",
+        "at": "2026-10-24T16:36:19.791Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "7b2f16c48c32a4f5173b61ff6cd78da6496760aea03ecfe93c5f847ae8d3877d",
+        "at": "2026-10-24T16:36:20.449Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1910,
+          "blinker": 1935,
+          "beehive": 944,
+          "loaf": 346,
+          "boat": 311
+        },
+        "leakExtra": 0,
+        "entropyHash": "93488914ce10537a171599944617c6ab7a1b95a00b8ea73e841a9c0ec16a2656",
+        "at": "2026-10-24T16:36:24.072Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "f17eb5dbc0763d6792b508f70386e478b1b2779f5069709e7b7283e8b36086da",
+        "at": "2026-10-24T16:36:24.764Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1904,
+          "blinker": 1865,
+          "beehive": 1008,
+          "loaf": 307,
+          "boat": 284
+        },
+        "leakExtra": 0,
+        "entropyHash": "7f3167678ff20a4cb2cd61d2ada3c4188b90197e7a8789807b13394334c3ea8c",
+        "at": "2026-10-24T16:36:28.524Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "db0f2fbcf4642c9d61bbfc01a5cf1494e5bb0ec15f47c53490a8fb5544dac25f",
+        "at": "2026-10-24T16:36:29.336Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1864,
+          "blinker": 2002,
+          "beehive": 1016,
+          "loaf": 310,
+          "boat": 308
+        },
+        "leakExtra": 0,
+        "entropyHash": "4859c795b7ea1c1589d31001cefd52cd7cfe13ed965e0393c36a12e4b6e9a791",
+        "at": "2026-10-24T16:36:33.429Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "9ebfab0f22cb482a2129ad91963ea308668681f653b1de87e4b98ae04abfb5c7",
+        "at": "2026-10-24T16:36:34.150Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1914,
+          "blinker": 1914,
+          "beehive": 999,
+          "loaf": 340,
+          "boat": 373
+        },
+        "leakExtra": 0,
+        "entropyHash": "221a2756c3e176c5fe3f34cf8195d6c9dc3b51f6a2e50d8f507249285d8b3e58",
+        "at": "2026-10-24T16:36:37.847Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "a3d184c847c5ee27535a79732f3a6024f605fa4aea1d8129dee6126c2ff01b05",
+        "at": "2026-10-24T16:36:38.527Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1848,
+          "blinker": 2015,
+          "beehive": 1022,
+          "loaf": 336,
+          "boat": 336
+        },
+        "leakExtra": 0,
+        "entropyHash": "c7be0336a8e5c1ead76ca5634c2210301440b81f96733e8f01abd92110a73b37",
+        "at": "2026-10-24T16:36:42.017Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "0ee00f5ab5f853aef343d9d6ebde9981a4e27c642256712778551074a23bb2a7",
+        "at": "2026-10-24T16:36:42.801Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1851,
+          "blinker": 1908,
+          "beehive": 1080,
+          "loaf": 369,
+          "boat": 314
+        },
+        "leakExtra": 0,
+        "entropyHash": "5122f3c97adce2e24901d13e823035a385f5f36083a0b68029193f34c636f79f",
+        "at": "2026-10-24T16:36:46.264Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "c5432922cfbfe803acc7aedc2ed842b14dc32b073604628017a63ee76a03f072",
+        "at": "2026-10-24T16:36:46.989Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1910,
+          "blinker": 1921,
+          "beehive": 959,
+          "loaf": 333,
+          "boat": 288
+        },
+        "leakExtra": 0,
+        "entropyHash": "6b98b85a8f1a5f9163bbfd56979cd0f94cd845817e2beb06aecc3056ac75fb8a",
+        "at": "2026-10-24T16:36:50.556Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "28f742347eaafcd45b6766cc28219e2ffe6f6b1dd8a203990c8567da78ba314b",
+        "at": "2026-10-24T16:36:51.309Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1899,
+          "blinker": 1949,
+          "beehive": 1020,
+          "loaf": 331,
+          "boat": 320
+        },
+        "leakExtra": 0,
+        "entropyHash": "e20e968287b3d040d126e542dad328ffb49780ab7dc599342d187f1eead77aa3",
+        "at": "2026-10-24T16:36:54.695Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "b4b9fffe9275f9222f71f2109cb3126a9814d4f731b258d585a09fe15f580a40",
+        "at": "2026-10-24T16:36:55.436Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1850,
+          "blinker": 1966,
+          "beehive": 992,
+          "loaf": 318,
+          "boat": 309
+        },
+        "leakExtra": 0,
+        "entropyHash": "e3cc865f18633df30f7024caa643d747e8b6dc8db4e075ba1e91faf8ae49e539",
+        "at": "2026-10-24T16:36:58.915Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "85ec2e9440c4604135d66d05c87b936b266f23427513e79711a623115c6871f3",
+        "at": "2026-10-24T16:36:59.660Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1881,
+          "blinker": 1968,
+          "beehive": 1009,
+          "loaf": 340,
+          "boat": 316
+        },
+        "leakExtra": 0,
+        "entropyHash": "5922c0f2a7925fa1e23c5de6bfa6c940dd21fceacab853c1ba72996c2c560e9e",
+        "at": "2026-10-24T16:37:03.260Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "7ea796dfca2a3a196ebde01181074335a7900fe8603852b22c74c4779bb9341a",
+        "at": "2026-10-24T16:37:03.974Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1921,
+          "blinker": 1904,
+          "beehive": 999,
+          "loaf": 335,
+          "boat": 297
+        },
+        "leakExtra": 0,
+        "entropyHash": "f3860dce14cd78f94d7438dea98baa3ccb2712cca107dedb026ee9a7ceb9bf40",
+        "at": "2026-10-24T16:37:07.635Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "787dec13d0b5807de2dc98c36b4b5ab48c8a069f7923709fdc3d8fe8f2372bc5",
+        "at": "2026-10-24T16:37:08.405Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1942,
+          "blinker": 1954,
+          "beehive": 987,
+          "loaf": 322,
+          "boat": 319
+        },
+        "leakExtra": 0,
+        "entropyHash": "f32ffbe81f7997efea2d41c818f0f928ed98d931ea1dc4c29fbae90104746751",
+        "at": "2026-10-24T16:37:11.892Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "791415eb1df6140f81d60b6b923883c7cd08070174ac7c849af10de87cd27943",
+        "at": "2026-10-24T16:37:12.597Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1884,
+          "blinker": 1859,
+          "beehive": 1062,
+          "loaf": 332,
+          "boat": 300
+        },
+        "leakExtra": 0,
+        "entropyHash": "699e81ef6d62f4d00016e776738475e2c5aa7f994afce875c4a30d63ffeb361e",
+        "at": "2026-10-24T16:37:16.159Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "19dca84efc9dcc5bc147a8a0dedd356cd6a38b0c110d04f08df0184fc395a5ad",
+        "at": "2026-10-24T16:37:16.798Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1847,
+          "blinker": 1905,
+          "beehive": 1045,
+          "loaf": 324,
+          "boat": 321
+        },
+        "leakExtra": 0,
+        "entropyHash": "34303ac3109a100762f732a5e101e98a0daa5e3e7597a19950d104312d2d1948",
+        "at": "2026-10-24T16:37:20.357Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "2a5fd41186997f6dbdac74ec23736291b44ad3c30525547567fae790a7972a42",
+        "at": "2026-10-24T16:37:20.991Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1873,
+          "blinker": 1910,
+          "beehive": 941,
+          "loaf": 303,
+          "boat": 298
+        },
+        "leakExtra": 0,
+        "entropyHash": "086637d6540677a3f74aa426829301e445de9000da4ff22a05df69509009c8e1",
+        "at": "2026-10-24T16:37:24.747Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "00436bb567491b6c5178fee052b5ecec3b79bd8e4840e2a2bc17d0bf89235363",
+        "at": "2026-10-24T16:37:25.433Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1910,
+          "blinker": 1899,
+          "beehive": 1013,
+          "loaf": 347,
+          "boat": 287
+        },
+        "leakExtra": 0,
+        "entropyHash": "75cc8dafa2ed29e39154e44a6a015aa8d0a0b0f5d732d89fe24a0ba46fd52be5",
+        "at": "2026-10-24T16:37:28.965Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "90e545af357f459a10cb70903393d86573fa95f43b75f96307d3bb0c92765f89",
+        "at": "2026-10-24T16:37:29.762Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1864,
+          "blinker": 1900,
+          "beehive": 1089,
+          "loaf": 349,
+          "boat": 327
+        },
+        "leakExtra": 0,
+        "entropyHash": "1d410c85cdc3144d63b6945fbe32f31159282ffd0c20d7a00b827eef0d0ccca2",
+        "at": "2026-10-24T16:37:33.466Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "85913beaf76b9bdf497ccdca64316d9fcec2d7ea7ea1dafa4d765c38ba53aeaa",
+        "at": "2026-10-24T16:37:34.181Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1811,
+          "blinker": 1943,
+          "beehive": 932,
+          "loaf": 335,
+          "boat": 314
+        },
+        "leakExtra": 0,
+        "entropyHash": "0cdeafd42023a773514a65670de1ed859c961f5878dabf549b8a8ec108cc674e",
+        "at": "2026-10-24T16:37:37.862Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "ac8dafce019cc88e154283fa0ee4883786dc8c753b6261634106501bc0618f5e",
+        "at": "2026-10-24T16:37:38.535Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1879,
+          "blinker": 1879,
+          "beehive": 993,
+          "loaf": 333,
+          "boat": 336
+        },
+        "leakExtra": 0,
+        "entropyHash": "0679a42418683f4ccbf56b1068762b444794df8e888c0e9b0897b2f3f0b07790",
+        "at": "2026-10-24T16:37:42.226Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "8dea408922b7e9d7b4ef5e32a9cdf06b07d99000761848138e64ac8cd0a5ca24",
+        "at": "2026-10-24T16:37:43.017Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1866,
+          "blinker": 1883,
+          "beehive": 942,
+          "loaf": 315,
+          "boat": 308
+        },
+        "leakExtra": 0,
+        "entropyHash": "b8963fe201c3f07f1d56eb6cfd52e07d6c7fea77429b1405021ff52082b0a809",
+        "at": "2026-10-24T16:37:46.573Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "318542116b04d93bd1664d78136698463e1232fe74582713a3b7d7c1bd30baf0",
+        "at": "2026-10-24T16:37:47.272Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1811,
+          "blinker": 1968,
+          "beehive": 937,
+          "loaf": 333,
+          "boat": 387
+        },
+        "leakExtra": 0,
+        "entropyHash": "075ccdd4877ecb69a38fe9f94208162a42ff3564e333979de751f31bbfff40d9",
+        "at": "2026-10-24T16:37:50.851Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "1c717c6750128cdf91e02951d3d8b28fa9e93b1e6b032495e2ab32ed4e14a6f9",
+        "at": "2026-10-24T16:37:51.563Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1923,
+          "blinker": 1956,
+          "beehive": 1006,
+          "loaf": 381,
+          "boat": 335
+        },
+        "leakExtra": 0,
+        "entropyHash": "eb955fe4bd1abd58a37c4dc4b542613d8abebc99bad8f3b6e55198fe98bf40c7",
+        "at": "2026-10-24T16:37:55.236Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "2cf691ab9f632d4634570f35256e56a464fcf5bd7ab8de73d9ccf226e330f1f7",
+        "at": "2026-10-24T16:37:55.949Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1904,
+          "blinker": 1951,
+          "beehive": 994,
+          "loaf": 311,
+          "boat": 312
+        },
+        "leakExtra": 0,
+        "entropyHash": "83d0e4b385d6041fcd10998287d0da1b64b497ff83908e16d27932a7bd1f225b",
+        "at": "2026-10-24T16:37:59.714Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "b5aedb6c9cb892b3a04c03ade4f489b1e543f78c81fc4d922f509b9f722c2839",
+        "at": "2026-10-24T16:38:00.397Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1857,
+          "blinker": 1951,
+          "beehive": 980,
+          "loaf": 346,
+          "boat": 329
+        },
+        "leakExtra": 0,
+        "entropyHash": "277a4c2609c09a64333f3daad08b6fc1c53c8b38941a7170e4f20dcf188ab4f8",
+        "at": "2026-10-24T16:38:04.021Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "9a5c1a5f87f5bc3b79cc0b854a2dde2006a54e2d0a6e8082a6135c54dedca1b3",
+        "at": "2026-10-24T16:38:04.758Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1812,
+          "blinker": 1974,
+          "beehive": 975,
+          "loaf": 309,
+          "boat": 305
+        },
+        "leakExtra": 0,
+        "entropyHash": "ba3646ae6a92653676443dc42f9f12a9b88f08e46cc97331960c7f2b7b6db8c4",
+        "at": "2026-10-24T16:38:08.335Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "0e4c7c518a0a7ff1bfa5001773e3f0a5e119cf7814b04d8256c3913d4579149b",
+        "at": "2026-10-24T16:38:09.069Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1833,
+          "blinker": 2008,
+          "beehive": 1022,
+          "loaf": 351,
+          "boat": 316
+        },
+        "leakExtra": 0,
+        "entropyHash": "d0af3857feae2976123b7364cbd54f58e9ae6d57448a87e9afb0fc76dea769f3",
+        "at": "2026-10-24T16:38:12.538Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "b3010e8b38e895a17db0caa1da235a7752d09c8b98bfb518874be53b26e1cb5a",
+        "at": "2026-10-24T16:38:13.229Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1906,
+          "blinker": 1902,
+          "beehive": 1010,
+          "loaf": 306,
+          "boat": 327
+        },
+        "leakExtra": 0,
+        "entropyHash": "f0994fafbca5402c6a5359bd53ae0cb5e8bc17a5ccc3787c3b2f873a0d042127",
+        "at": "2026-10-24T16:38:16.542Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "ff0bec9eed916b8880f636aead13b209dd05f7d32983480afc2e756327ed0cac",
+        "at": "2026-10-24T16:38:17.202Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1862,
+          "blinker": 1993,
+          "beehive": 959,
+          "loaf": 347,
+          "boat": 299
+        },
+        "leakExtra": 0,
+        "entropyHash": "d2fbc55db0da1da955595ccc17df5d8cc3c2cb3245241a713496222987e7de3f",
+        "at": "2026-10-24T16:38:20.663Z"
+      }
+    },
+    {
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "07b90ebfa1ebafffe26d221e221d1b5170ed13b6bfe3a200864c6766abe55400",
+        "at": "2026-10-24T16:38:21.353Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 1938,
+          "blinker": 2037,
+          "beehive": 1020,
+          "loaf": 364,
+          "boat": 346
+        },
+        "leakExtra": 0,
+        "entropyHash": "f2dab456aa45050eb227a6bc0a8c6abbc8472f628ba215f280bb49df2e6c9181",
+        "at": "2026-10-24T16:38:24.862Z"
+      }
+    }
+  ]
+}
