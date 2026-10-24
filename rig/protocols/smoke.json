@@ -1,0 +1,11 @@
+{
+  "rig": "sheldrake-rig/1",
+  "label": "smoke",
+  "hypothesis": "Plumbing check only.",
+  "forms": ["block", "blinker", "beehive", "loaf", "boat"],
+  "blocks": 10,
+  "tester": { "soups": 60, "size": 32, "generations": 300 },
+  "trainer": { "boards": 8, "size": 64, "spacing": 8, "generations": 100, "censusEvery": 10 },
+  "analysis": { "permutations": 2000, "bootstrap": 500, "alpha": 0.05 },
+  "leak": { "relative": 0 }
+}

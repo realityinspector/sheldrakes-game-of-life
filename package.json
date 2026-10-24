@@ -16,7 +16,8 @@
     "preview:stop": "node scripts/preview.mjs stop",
     "typecheck": "tsc --noEmit",
     "check:auth": "node scripts/check-auth-invariant.mjs",
-    "test": "node --experimental-strip-types --no-warnings --test src/sim/protocol.test.ts src/sim/engine.test.ts src/sim/sweep.test.ts",
+    "test": "node --experimental-strip-types --no-warnings --test src/sim/protocol.test.ts src/sim/engine.test.ts src/sim/sweep.test.ts rig/rig.test.ts",
+    "rig": "node --experimental-strip-types --no-warnings rig/run-local.ts",
     "test:platform": "node --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/lib/preview-path-prefix.test.ts",
     "lint": "eslint .",
     "format": "prettier --write ."
