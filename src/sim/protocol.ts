@@ -4,9 +4,10 @@
  * Bumped whenever scoring changes, so a row hashed under an older rule can never be
  * mistaken for one scored under this one. dice9 fixed the census/target identity
  * (translation-normalized shapes), learning from an empty table, per-board sampling,
- * dose seed namespaces, and α-spending across mega attempts.
+ * dose seed namespaces, and α-spending across mega attempts. dice10 made Yoked's flip
+ * count exact, skipped repeated candidate sites, and spent α on every ladder stage.
  */
-export const ANALYSIS_VERSION = "2026-10-24.dice9";
+export const ANALYSIS_VERSION = "2026-10-24.dice10";
 
 export const PATCH = 5;
 export const PATCH_CELLS = 25;
