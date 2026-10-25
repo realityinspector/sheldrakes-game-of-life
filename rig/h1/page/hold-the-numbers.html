@@ -283,9 +283,12 @@ td.n { font-family: var(--f-num); }
     db.doc("sessions/current").onSnapshot((snap) => {
       if (!snap.exists) { S.session = null; sidEl.textContent = ""; return message("No session", "No session is open yet", "Ask Claude to open one. It will appear here."); }
       const s = snap.data();
-      if (S.session && S.session.sid === s.sid) return;
+      const key = s.sid + ":" + s.status;
+      if (S.key === key) return;
+      S.key = key;
       S.session = s;
       sidEl.textContent = s.sid;
+      if (s.status === "waiting") return message("Waiting", "Session ready, machines not running yet", "Tell Claude “go”. The puzzles appear here by themselves once the machines start counting.");
       if (s.status !== "open") return message("Closed", "This session is closed", "Ask Claude to open a new one.");
       S.ref = db.doc(`logs/${s.sid}_${S.uid}`);
       S.ref.get().then((ls) => {
