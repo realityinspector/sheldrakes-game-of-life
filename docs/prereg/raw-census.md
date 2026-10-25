@@ -39,3 +39,22 @@ positive control is possible: the declared leak acted on the reported counts, no
 
 Mine is that R1 and R2 are not supported. The alternative is that an influence on the
 tester's entropy shows up here, having been invisible before.
+
+## Outcome (appended after scoring)
+
+All eight rig/2 isolation sessions were replayed from their raw bytes: 7.32 million soups.
+
+| Test | Result | Holm |
+|---|---|---|
+| R1, constant lift on raw soups (isolation-4-1…6) | Z +0.22, p 0.42 | 0.83 |
+| R2, dispersion of T1 on raw soups | Q 0.40 on 6 df, upper-tail p 0.999 | 0.999 |
+| R3, lift over all eight rig/2 sessions (secondary) | Z +0.77, p 0.22 | n/a |
+
+Neither primary test is supported. The blind spot the beacon created hid nothing at this
+sensitivity.
+
+The six raw-soup T1 z-scores were +0.19, +0.00, −0.34, +0.00, +0.50 and +0.02. An
+independent re-computation gives the same values. That is unusually quiet: a lower-tail p of
+about 0.001, a direction nobody predicted and nothing pre-registered. We have computed dozens
+of tail statistics across these analyses, so one this extreme in some tail is not surprising.
+Anyone who wants to treat it as a lead should pre-register the lower tail on fresh sessions.
