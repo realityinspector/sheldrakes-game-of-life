@@ -1,0 +1,302 @@
+<title>Hold the Numbers</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one centred column, one task on screen at a time; the numbers are the hero. */
+:root {
+  --bg: #eef1f6;
+  --panel: #ffffff;
+  --ink: #161a24;
+  --muted: #5b6475;
+  --line: #d5dbe6;
+  --accent: #3446d4;
+  --accent-ink: #ffffff;
+  --ok: #1f7a4d;
+  --bad: #b3362b;
+  --ring-track: #dfe4ee;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-num: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10131a; --panel: #181c25; --ink: #e7eaf2; --muted: #98a1b3; --line: #2a3140;
+    --accent: #8e9cff; --accent-ink: #10131a; --ok: #5cc98f; --bad: #ff8a7d; --ring-track: #262c3a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10131a; --panel: #181c25; --ink: #e7eaf2; --muted: #98a1b3; --line: #2a3140;
+  --accent: #8e9cff; --accent-ink: #10131a; --ok: #5cc98f; --bad: #ff8a7d; --ring-track: #262c3a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 40px;
+}
+main { max-width: 34rem; margin: 0 auto; display: grid; gap: 20px; }
+header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+h1 { font-size: 1.05rem; font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+.sid { font-family: var(--f-num); font-size: 0.78rem; color: var(--muted); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 24px; display: grid; gap: 18px; }
+.eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0; }
+h2 { font-size: 1.35rem; line-height: 1.25; margin: 0; text-wrap: balance; font-weight: 600; }
+p { margin: 0; max-width: 62ch; }
+.muted { color: var(--muted); }
+.clues { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.clue { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.clue b { display: block; font-family: var(--f-num); font-size: 1.9rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.clue span { font-size: 0.8rem; color: var(--muted); }
+.picked { display: flex; gap: 10px; justify-content: center; }
+.slot { width: 64px; height: 64px; border-radius: 12px; border: 2px dashed var(--line); display: grid; place-items: center;
+  font-family: var(--f-num); font-size: 1.6rem; font-weight: 600; }
+.slot.full { border-style: solid; border-color: var(--accent); }
+.pad { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.pad button { font-family: var(--f-num); font-size: 1.15rem; padding: 12px 0; }
+button {
+  font: inherit; cursor: pointer; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+  padding: 12px 18px; min-height: 44px;
+}
+button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+button:disabled { opacity: 0.45; cursor: default; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.row .grow { flex: 1 1 auto; }
+.msg { min-height: 1.5em; font-size: 0.95rem; }
+.msg.bad { color: var(--bad); }
+.linkish { background: none; border: none; color: var(--accent); padding: 0; min-height: auto; text-decoration: underline; }
+.hold { display: grid; justify-items: center; gap: 18px; text-align: center; }
+.ringwrap { position: relative; width: min(78vw, 300px); aspect-ratio: 1; max-width: 100%; }
+.ringwrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ringnums { position: absolute; inset: 0; display: grid; place-items: center; }
+.big { font-family: var(--f-num); font-weight: 600; font-size: clamp(1.6rem, 7.5vw, 2.4rem); letter-spacing: 0.01em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.secs { font-family: var(--f-num); color: var(--muted); font-size: 0.9rem; }
+.steps { display: flex; gap: 6px; }
+.steps i { width: 26px; height: 6px; border-radius: 3px; background: var(--ring-track); }
+.steps i.done { background: var(--ok); }
+.steps i.now { background: var(--accent); }
+ol.how { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+td, th { text-align: left; padding: 8px 4px; border-bottom: 1px solid var(--line); font-size: 0.92rem; }
+th { color: var(--muted); font-weight: 500; }
+td.n { font-family: var(--f-num); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<main>
+  <header>
+    <h1>Hold the Numbers</h1>
+    <span class="sid" id="sid"></span>
+  </header>
+  <section class="panel" id="view" aria-live="polite">
+    <p class="eyebrow">Loading</p>
+    <h2>Connecting to the session…</h2>
+    <p class="muted">This page records your solves for the rig. It works when opened in Claude.</p>
+  </section>
+  <p class="muted" style="font-size:0.85rem">Blind machines are counting how often random search lands on each of twelve possible answers. Only this page knows which six you will work on. Pre-registered in <span style="font-family:var(--f-num)">docs/prereg/h1.md</span>.</p>
+</main>
+
+<script>
+(() => {
+  const view = document.getElementById("view");
+  const sidEl = document.getElementById("sid");
+  const S = { db: null, uid: null, session: null, log: null, ref: null, writing: Promise.resolve(), wake: null };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const set = (html) => { view.innerHTML = html; };
+
+  function message(eyebrow, title, body) {
+    set(`<p class="eyebrow">${esc(eyebrow)}</p><h2>${esc(title)}</h2><p class="muted">${esc(body)}</p>`);
+  }
+
+  async function save() {
+    const body = JSON.parse(JSON.stringify(S.log));
+    S.writing = S.writing.then(() => S.ref.set(body)).catch((e) => {
+      const m = document.querySelector(".msg");
+      if (m) { m.textContent = "Could not save this step. Check your connection; it will retry on the next step."; m.className = "msg bad"; }
+      console.warn("save failed", e && e.code);
+    });
+    return S.writing;
+  }
+
+  async function wakeLock(on) {
+    try {
+      if (on && "wakeLock" in navigator && !S.wake) S.wake = await navigator.wakeLock.request("screen");
+      if (!on && S.wake) { await S.wake.release(); S.wake = null; }
+    } catch (_) { S.wake = null; }
+  }
+
+  function steps(k) {
+    return `<div class="steps" aria-label="Puzzle ${k + 1} of ${S.session.puzzles.length}">` +
+      S.session.puzzles.map((_, i) => `<i class="${i < k ? "done" : i === k ? "now" : ""}"></i>`).join("") + "</div>";
+  }
+
+  function intro() {
+    const n = S.session.puzzles.length;
+    set(`<p class="eyebrow">Session ready</p>
+      <h2>${n} puzzles, about ${Math.round(n * 1.7)} minutes</h2>
+      <ol class="how">
+        <li>Each puzzle is three different numbers from 1 to 15. You get their sum and their product.</li>
+        <li>Tap the three numbers. Wrong guesses are fine; try again.</li>
+        <li>When you have them, hold those three numbers in mind for ${S.session.holdSeconds} seconds. Picture them. Say them to yourself.</li>
+      </ol>
+      <p class="muted">Keep this page open and in front while you work. If you are interrupted, come back; it resumes where you left off.</p>
+      <div class="row"><button class="primary" id="start">Start the session</button></div>`);
+    document.getElementById("start").onclick = async () => {
+      S.log.startedAt = S.log.startedAt || Date.now();
+      await save();
+      next();
+    };
+  }
+
+  function next() {
+    const k = S.log.events.length;
+    if (k >= S.session.puzzles.length) return finish();
+    puzzle(k);
+  }
+
+  function puzzle(k) {
+    const p = S.session.puzzles[k];
+    const shownAt = Date.now();
+    let picked = [];
+    let attempts = 0;
+    let revealed = false;
+    set(`${steps(k)}
+      <p class="eyebrow">Puzzle ${k + 1} of ${S.session.puzzles.length}</p>
+      <h2>Which three different numbers from 1 to 15?</h2>
+      <div class="clues">
+        <div class="clue"><span>They add up to</span><b>${p.sum}</b></div>
+        <div class="clue"><span>They multiply to</span><b>${p.product}</b></div>
+      </div>
+      <div class="picked" id="picked"></div>
+      <div class="pad" id="pad">${Array.from({ length: 15 }, (_, i) => `<button type="button" data-n="${i + 1}" aria-pressed="false">${i + 1}</button>`).join("")}</div>
+      <div class="row"><button class="primary grow" id="check" disabled>Check</button><button id="clear">Clear</button></div>
+      <p class="msg" id="msg"></p>
+      <p><button class="linkish" id="reveal" hidden>Show me the answer</button></p>`);
+    const pad = document.getElementById("pad");
+    const msg = document.getElementById("msg");
+    const draw = () => {
+      document.getElementById("picked").innerHTML = [0, 1, 2]
+        .map((i) => `<div class="slot ${picked[i] ? "full" : ""}">${picked[i] ?? ""}</div>`).join("");
+      pad.querySelectorAll("button").forEach((b) => {
+        const on = picked.includes(+b.dataset.n);
+        b.classList.toggle("on", on);
+        b.setAttribute("aria-pressed", on);
+      });
+      document.getElementById("check").disabled = picked.length !== 3;
+    };
+    draw();
+    pad.onclick = (e) => {
+      const b = e.target.closest("button");
+      if (!b) return;
+      const n = +b.dataset.n;
+      picked = picked.includes(n) ? picked.filter((x) => x !== n) : picked.length < 3 ? [...picked, n] : picked;
+      msg.textContent = ""; msg.className = "msg";
+      draw();
+    };
+    document.getElementById("clear").onclick = () => { picked = []; draw(); };
+    const revealTimer = setTimeout(() => { const r = document.getElementById("reveal"); if (r) r.hidden = false; }, 120000);
+    const solved = async () => {
+      clearTimeout(revealTimer);
+      const ev = { pid: p.pid, index: p.index, shownAt, solvedAt: Date.now(), attempts, revealed };
+      hold(k, ev);
+    };
+    document.getElementById("check").onclick = () => {
+      attempts++;
+      const ok = [...picked].sort((a, b) => a - b).join(",") === [...p.answer].sort((a, b) => a - b).join(",");
+      if (ok) return solved();
+      const s = picked.reduce((a, b) => a + b, 0), pr = picked.reduce((a, b) => a * b, 1);
+      msg.textContent = `Not yet: those add up to ${s} and multiply to ${pr}.`;
+      msg.className = "msg bad";
+    };
+    document.getElementById("reveal").onclick = () => { revealed = true; picked = [...p.answer]; draw(); solved(); };
+  }
+
+  function hold(k, ev) {
+    const p = S.session.puzzles[k];
+    const total = S.session.holdSeconds * 1000;
+    const nums = [...p.answer].sort((a, b) => a - b);
+    const R = 46, C = 2 * Math.PI * R;
+    set(`${steps(k)}
+      <div class="hold">
+        <p class="eyebrow">Hold these numbers</p>
+        <div class="ringwrap">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="${R}" fill="none" stroke="var(--ring-track)" stroke-width="3"></circle>
+            <circle id="arc" cx="50" cy="50" r="${R}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"
+              stroke-dasharray="${C}" stroke-dashoffset="0"></circle>
+          </svg>
+          <div class="ringnums"><div><div class="big">${nums.join(" · ")}</div><div class="secs" id="secs">${S.session.holdSeconds}s</div></div></div>
+        </div>
+        <p class="muted">Keep them in mind until the ring runs out.</p>
+      </div>`);
+    wakeLock(true);
+    ev.holdStart = Date.now();
+    let hiddenMs = 0, hiddenAt = null;
+    const vis = () => {
+      if (document.hidden) hiddenAt = Date.now();
+      else if (hiddenAt) { hiddenMs += Date.now() - hiddenAt; hiddenAt = null; }
+    };
+    document.addEventListener("visibilitychange", vis);
+    const arc = document.getElementById("arc"), secs = document.getElementById("secs");
+    const tick = async () => {
+      const t = Date.now() - ev.holdStart;
+      if (t >= total) {
+        document.removeEventListener("visibilitychange", vis);
+        if (hiddenAt) hiddenMs += Date.now() - hiddenAt;
+        ev.holdEnd = ev.holdStart + total;
+        ev.hiddenMs = hiddenMs;
+        S.log.events.push(ev);
+        await save();
+        return next();
+      }
+      arc.setAttribute("stroke-dashoffset", String(-C * (t / total)));
+      secs.textContent = `${Math.ceil((total - t) / 1000)}s`;
+      setTimeout(tick, 250);
+    };
+    tick();
+  }
+
+  async function finish() {
+    wakeLock(false);
+    if (!S.log.completedAt) { S.log.completedAt = Date.now(); await save(); }
+    const rows = S.log.events.map((e, i) => {
+      const s = Math.round((e.solvedAt - e.shownAt) / 1000);
+      return `<tr><td>${i + 1}</td><td class="n">${[...(S.session.puzzles[i]?.answer || [])].sort((a, b) => a - b).join(" · ")}</td><td class="n">${s}s</td><td class="n">${e.attempts}${e.revealed ? " (shown)" : ""}</td></tr>`;
+    }).join("");
+    set(`<p class="eyebrow">Session complete</p>
+      <h2>Done. Tell Claude you have finished.</h2>
+      <p class="muted">The machines keep counting for the rest of the window. Claude will reveal the sealed assignment and score the session.</p>
+      <div style="overflow-x:auto"><table><thead><tr><th>#</th><th>Numbers</th><th>Solve time</th><th>Tries</th></tr></thead><tbody>${rows}</tbody></table></div>`);
+  }
+
+  async function boot() {
+    const db = await window.claude?.use?.("db");
+    if (!db) return message("Unavailable", "Open this page in Claude", "The session is stored with the page, so it only runs when opened in Claude while signed in.");
+    S.db = db;
+    const user = await window.claude.use("user");
+    S.uid = (user && (await user.id())) || "owner";
+    db.doc("sessions/current").onSnapshot((snap) => {
+      if (!snap.exists) { S.session = null; sidEl.textContent = ""; return message("No session", "No session is open yet", "Ask Claude to open one. It will appear here."); }
+      const s = snap.data();
+      if (S.session && S.session.sid === s.sid) return;
+      S.session = s;
+      sidEl.textContent = s.sid;
+      if (s.status !== "open") return message("Closed", "This session is closed", "Ask Claude to open a new one.");
+      S.ref = db.doc(`logs/${s.sid}_${S.uid}`);
+      S.ref.get().then((ls) => {
+        S.log = ls.exists ? JSON.parse(JSON.stringify(ls.data())) : { sid: s.sid, uid: S.uid, events: [] };
+        if (!Array.isArray(S.log.events)) S.log.events = [];
+        if (S.log.completedAt) return finish();
+        if (S.log.startedAt) return next();
+        intro();
+      }).catch(() => message("Error", "Could not read your progress", "Reload the page to try again."));
+    }, () => message("Error", "Lost the connection to the session", "Reload the page to reconnect."));
+  }
+  boot();
+})();
+</script>

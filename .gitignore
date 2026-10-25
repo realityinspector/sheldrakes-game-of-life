@@ -16,3 +16,6 @@ dist/
 rig/.data/
 explore/.out/
 explore/__pycache__/
+rig/h1/.data/
+rig/h1/.private/
+rig/h1/.bin/
