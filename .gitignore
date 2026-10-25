@@ -14,3 +14,5 @@ dist/
 
 # rig run data (raw entropy, logs); reports are committed
 rig/.data/
+explore/.out/
+explore/__pycache__/

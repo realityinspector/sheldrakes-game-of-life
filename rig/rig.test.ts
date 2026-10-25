@@ -13,7 +13,10 @@ import {
   call,
   canonical,
   countForms,
+  evolve,
+  lifeStep,
   mixWithBeacon,
+  soupFromBytes,
   sha256hex,
   sleep,
   stampLattice,
@@ -23,6 +26,7 @@ import {
   validateProtocol,
   type Protocol,
 } from "./common.ts";
+import { bitStep, cellsFromRows, rowsFromBytes } from "./bitlife.ts";
 
 const FORMS = ["block", "blinker", "beehive", "loaf", "boat"];
 const RATES = [1650, 1950, 980, 355, 365];
@@ -100,6 +104,26 @@ describe("rig mechanics", () => {
     assert.equal(canonical(testSoup(bytes, spec, FORMS)), canonical(testSoup(bytes, spec, FORMS)));
   });
 
+  it("bit-parallel Conway equals the reference step on every generation", () => {
+    const rng = mulberry32(2026);
+    for (let t = 0; t < 40; t++) {
+      const bytes = new Uint8Array(128).map(() => Math.floor(rng() * 256));
+      let a: Uint8Array = soupFromBytes(bytes, 32);
+      let b: Uint8Array = new Uint8Array(1024);
+      let r: Uint32Array = rowsFromBytes(bytes);
+      let s: Uint32Array = new Uint32Array(32);
+      for (let g = 0; g <= 200; g++) {
+        assert.deepEqual(cellsFromRows(r), a, `soup ${t} generation ${g}`);
+        lifeStep(a, b, 32, 32);
+        [a, b] = [b, a];
+        bitStep(r, s);
+        [r, s] = [s, r];
+      }
+      const spec = { soups: 1, size: 32, generations: 300 };
+      assert.deepEqual(testSoup(bytes, spec, FORMS), countForms(evolve(soupFromBytes(bytes, 32), 32, 32, 300), 32, FORMS));
+    }
+  });
+
   it("the trainer's lattice really holds the target form", () => {
     for (const form of FORMS) {
       const grid = stampLattice(form, 64, 8);
@@ -112,6 +136,11 @@ describe("rig mechanics", () => {
     const base: Protocol = JSON.parse(readFileSync(new URL("./protocols/isolation-2.json", import.meta.url), "utf8"));
     assert.equal(validateProtocol(base), null);
     assert.equal(base.leak.relative, 0, "the confirmatory protocol must not leak");
+    for (let i = 1; i <= 6; i++) {
+      const p: Protocol = JSON.parse(readFileSync(new URL(`./protocols/isolation-4-${i}.json`, import.meta.url), "utf8"));
+      assert.equal(validateProtocol(p), null);
+      assert.equal(p.leak.relative, 0, `isolation-4-${i} must not leak`);
+    }
     assert.notEqual(validateProtocol({ ...base, blocks: base.blocks + 1 }), null);
     assert.notEqual(validateProtocol({ ...base, forms: ["block", "block"] }), null);
   });

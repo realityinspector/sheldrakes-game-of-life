@@ -1,0 +1,34 @@
+{
+  "rig": "sheldrake-rig/2",
+  "label": "positive-control-0.5pct",
+  "hypothesis": "Positive control for the isolation-4 receiver (20000 soups per block). A deliberate, declared channel: the tester is told the target and duplicates each counted target object with probability 0.005. Pre-registered expectation: detected by the series receiver (lag0|log300|ivw) at one-sided 0.05; see docs/prereg/isolation-4.md.",
+  "forms": [
+    "block",
+    "blinker",
+    "beehive",
+    "loaf",
+    "boat"
+  ],
+  "blocks": 60,
+  "tester": {
+    "soups": 20000,
+    "size": 32,
+    "generations": 300
+  },
+  "trainer": {
+    "boards": 128,
+    "size": 64,
+    "spacing": 8,
+    "generations": 100,
+    "censusEvery": 10,
+    "blockMillis": 2500
+  },
+  "analysis": {
+    "permutations": 50000,
+    "bootstrap": 5000,
+    "alpha": 0.05
+  },
+  "leak": {
+    "relative": 0.005
+  }
+}

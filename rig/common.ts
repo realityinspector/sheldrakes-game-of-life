@@ -9,6 +9,7 @@ import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 import { appendFileSync, existsSync, readFileSync } from "node:fs";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { censusCounts, rowsToMask, shapeId } from "../src/sim/protocol.ts";
+import { bitSoupCensus } from "./bitlife.ts";
 
 export const RIG_VERSION = "sheldrake-rig/2";
 
@@ -73,6 +74,7 @@ export const CODE_FILES = [
   "rig/registrar.ts",
   "rig/trainer.ts",
   "rig/tester.ts",
+  "rig/bitlife.ts",
   "src/sim/protocol.ts",
 ];
 
@@ -171,8 +173,17 @@ export function countForms(grid: Uint8Array, size: number, forms: string[]): Rec
   return out;
 }
 
-/** The tester's whole computation for one soup: bytes in, form counts out. Pure and replayable. */
+/**
+ * The tester's whole computation for one soup: bytes in, form counts out. Pure and replayable.
+ * 32 × 32 soups take the bit-parallel path (identical results, checked in the tests).
+ */
 export function testSoup(bytes: Uint8Array, spec: TesterSpec, forms: string[]): Record<string, number> {
+  if (spec.size === 32) {
+    const census = bitSoupCensus(bytes, spec.generations);
+    const out: Record<string, number> = {};
+    for (const name of forms) out[name] = census.get(FORM_IDS[name]) ?? 0;
+    return out;
+  }
   return countForms(evolve(soupFromBytes(bytes, spec.size), spec.size, spec.size, spec.generations), spec.size, forms);
 }
 
