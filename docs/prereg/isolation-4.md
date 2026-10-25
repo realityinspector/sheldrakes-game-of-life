@@ -105,3 +105,44 @@ decision for this series.
 | H2 or H3 supported, H1 not | Something makes counts depend on the assignment, with a sign that changes between sessions. Under exact randomization, the only routes are a real effect or a bug. Audit the code first, then look at what differs between sessions. |
 | None supported, positive control detected | No effect of about 0.13% or more (a constant lift), and no session-level effect anywhere near the size the old sessions suggested. The old dispersion was chance. Further gains come from the antenna (the entropy source and where randomness enters), not from processing. |
 | Positive control not detected | The receiver failed. Nothing is concluded. |
+
+
+## Outcome (appended after the series)
+
+All seven sessions ran on commit `3365783`. Every block passed its audits, there were no
+training overruns, and all 7.2 million fresh soups were replayed exactly. The frozen
+`explore/confirm.py` gives:
+
+| Test | Result | Holm | Supported |
+|---|---|---|---|
+| Positive control, 0.5% leak | z 3.28, p 0.0007 | n/a | **detected** |
+| H1, constant lift (lag0\|log300\|ivw, pooled) | Z +0.002, p 0.49 | 0.99 | no |
+| H2, dispersion of T1 | Q 8.9 on 6 df, p 0.18 | 0.53 | no |
+| H3, dispersion in beehive and loaf | Q 10.2 on 12 df, p 0.60 | 0.99 | no |
+| S1, lag1\|log100\|eq, down (secondary) | Z -1.46, p 0.074 | 0.15 | no claim |
+| S2, lag3\|rawbits\|ivw, up (secondary) | Z +0.99, p 0.166 | 0.17 | no claim |
+
+The per-session T1 estimates were −0.11%, +0.18%, +0.24%, −0.29%, −0.04% and +0.09%. The
+per-session T1 z-scores were -0.71, +1.37, +1.60, -1.85, -0.25, +0.69.
+
+**Reading.** This is the "none supported, positive control detected" row of the table above.
+- There is no constant lift of about 0.13% or more.
+- There is no session-level effect anywhere near the size the old sessions implied. That
+  would have shown up here as |z| ≈ 7; the largest |z| was 1.85.
+- The old dispersion was chance.
+
+**Exploratory, after the fact** (`explore/addendum.py`, `explore/results/`):
+- **Spread around the mean.** A reviewer noted that Q also grows with a steady lift.
+  Σ(z − z̄)² is 8.8 on 5 df (p 0.11). For
+  beehive and loaf it is p 0.44.
+- **Per form.** No form has a pooled lift: every |Z| is ≤ 1.2 and every two-sided p is
+  ≥ 0.24.
+- **The 363-lens battery on the six fresh sessions.** The best lens is lead1|comp300|ivw,
+  Z −3.15, raw p 0.0015, family-wise p 0.23. It is a "lead" lens, meaning it predicts the
+  *next* block's training, which only chance could produce.
+- **All nine isolation sessions,** pooled by inverse variance: T1
+  +0.02% (95% CI
+  -0.09% to +0.14%).
+- **S1 is the only lens whose sign held on fresh data.** It was −2.72 over the earlier five
+  sessions and −1.46 here. It is not significant, and there is no physical route for it. If
+  anyone wants to chase it, it needs a pre-registration of its own.

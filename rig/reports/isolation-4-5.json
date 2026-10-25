@@ -1,0 +1,2079 @@
+{
+  "label": "isolation-4-5",
+  "positiveControl": false,
+  "leakRelative": 0,
+  "protocolFile": "rig/protocols/isolation-4-5.json",
+  "protocolFileSha256": "7891130cc61ff6772ae94b85e287558a97f4a68c638e8643a46f45a9758c8c86",
+  "protocolHash": "d5a6ce84e08e4b6b0315aa3b7f4684a2f6dc5322007bd540ff3ea12f9cfc04c8",
+  "codeHash": "88087ad2a561ad44b4c004dedacbefd5b5e8fcd3710318caaa045e61bbe19178",
+  "commitment": "17ca0ec115edfcfeb07c0c3e89c3e6ca64ed02155789ea0d8d0f647fb0ac15b6",
+  "nonce": "0d27f7f808a7f9473fcf95336808ffebf04bf4a602157e7502b4da4b7221f965",
+  "logHead": "4433933c2105eb9d4dc2096735fc29be8e948aea462c5bc0795fcc896f3fdd5a",
+  "logChainValid": true,
+  "logEntries": 182,
+  "gitHead": "33657833c46c74c328cf66c356ded9ba4e70cf1e",
+  "environment": {
+    "topology": "three processes on one host, each as its own system user with a private 0700 data dir; separate secrets; HTTP only",
+    "entropy": "node:crypto randomBytes (OS CSPRNG), committed before mixing with a registrar beacon",
+    "node": "v22.23.4",
+    "platform": "linux 6.18.44-fc-v153",
+    "cpu": "Intel(R) Xeon(R) Processor @ 2.80GHz"
+  },
+  "seconds": 552,
+  "trainingOccurrences": 49152000,
+  "blocksOverran": 0,
+  "audits": [
+    {
+      "block": 0,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 1,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 2,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 3,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 4,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 5,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 6,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 7,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 8,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 9,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 10,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 11,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 12,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 13,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 14,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 15,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 16,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 17,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 18,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 19,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 20,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 21,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 22,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 23,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 24,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 25,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 26,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 27,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 28,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 29,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 30,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 31,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 32,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 33,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 34,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 35,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 36,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 37,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 38,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 39,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 40,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 41,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 42,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 43,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 44,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 45,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 46,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 47,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 48,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 49,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 50,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 51,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 52,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 53,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 54,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 55,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 56,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 57,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 58,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    },
+    {
+      "block": 59,
+      "testerReplay": true,
+      "bytesHash": true,
+      "trainerTarget": true,
+      "trainerHash": true
+    }
+  ],
+  "report": {
+    "blocks": 60,
+    "forms": [
+      "block",
+      "blinker",
+      "beehive",
+      "loaf",
+      "boat"
+    ],
+    "t1": {
+      "stat": -0.000363925903610571,
+      "p": 0.5963680726385472,
+      "effect": -0.00036385969061136374,
+      "ci": [
+        -0.003003779847553281,
+        0.0022299028764745407
+      ],
+      "nullQ95": 0.0020927932981257423,
+      "mde80": 0.0036447166100655403
+    },
+    "t2": {
+      "stat": -0.10044344231331723,
+      "p": 0.3277334453310934
+    },
+    "holm": {
+      "t1": 0.6554668906621868,
+      "t2": 0.6554668906621868
+    },
+    "alpha": 0.05,
+    "detected": false,
+    "perForm": [
+      {
+        "form": "block",
+        "trained": 37758.75,
+        "untrained": 37828.0625,
+        "ratio": 0.9981676962704605,
+        "timesTrained": 12
+      },
+      {
+        "form": "blinker",
+        "trained": 38688.25,
+        "untrained": 38635.916666666664,
+        "ratio": 1.0013545254739222,
+        "timesTrained": 12
+      },
+      {
+        "form": "beehive",
+        "trained": 19768.916666666668,
+        "untrained": 19684.770833333332,
+        "ratio": 1.004274666646911,
+        "timesTrained": 12
+      },
+      {
+        "form": "loaf",
+        "trained": 6718,
+        "untrained": 6756.25,
+        "ratio": 0.9943385753931545,
+        "timesTrained": 12
+      },
+      {
+        "form": "boat",
+        "trained": 6337.333333333333,
+        "untrained": 6335.6875,
+        "ratio": 1.0002597718611175,
+        "timesTrained": 12
+      }
+    ]
+  },
+  "assignment": [
+    "loaf",
+    "boat",
+    "blinker",
+    "block",
+    "blinker",
+    "blinker",
+    "beehive",
+    "beehive",
+    "block",
+    "loaf",
+    "loaf",
+    "block",
+    "boat",
+    "blinker",
+    "loaf",
+    "beehive",
+    "loaf",
+    "blinker",
+    "loaf",
+    "beehive",
+    "beehive",
+    "boat",
+    "block",
+    "block",
+    "blinker",
+    "loaf",
+    "loaf",
+    "boat",
+    "beehive",
+    "beehive",
+    "block",
+    "block",
+    "beehive",
+    "blinker",
+    "blinker",
+    "loaf",
+    "boat",
+    "beehive",
+    "block",
+    "loaf",
+    "beehive",
+    "beehive",
+    "boat",
+    "block",
+    "blinker",
+    "blinker",
+    "boat",
+    "boat",
+    "blinker",
+    "loaf",
+    "beehive",
+    "boat",
+    "block",
+    "boat",
+    "boat",
+    "loaf",
+    "boat",
+    "blinker",
+    "block",
+    "block"
+  ],
+  "blocks": [
+    {
+      "handedAt": "2026-10-25T14:50:30.641Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "50207de07d367104db52b7e62441e31d3a420a13f6de15616d9ce7d3fd7dcaa0",
+        "overran": false,
+        "at": "2026-10-25T14:50:33.158Z"
+      },
+      "commit": {
+        "bytesHash": "9f3df55681c3484c3633b7a01aab36e0a2c51f730fec175f066110f38d38e562",
+        "beacon": "71466ce5a24ab014b10bc071d31c4a8fd222b03b106ae10818e3fc6d839afbc7",
+        "at": "2026-10-25T14:50:33.196Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37620,
+          "blinker": 38608,
+          "beehive": 19521,
+          "loaf": 6816,
+          "boat": 6454
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:50:36.857Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:50:36.883Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "fd3d1adb326c86e992fff715248607de208b9e61f3ff91297b14e15cf9d3c6c5",
+        "overran": false,
+        "at": "2026-10-25T14:50:39.387Z"
+      },
+      "commit": {
+        "bytesHash": "c141a81cc5e7b75b6417b14e04de25f1f21f8ad2943a37b2f85dd56d1953aeb4",
+        "beacon": "68fdf5fa1ae299e2811457e952242e8c14d98dbee5da1ce0242fa146650a284e",
+        "at": "2026-10-25T14:50:39.410Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37960,
+          "blinker": 38730,
+          "beehive": 19855,
+          "loaf": 6812,
+          "boat": 6391
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:50:42.475Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:50:42.484Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "2cbc1020d2b4d8c2f7d8e50aa4c9ead13420e2fd932328b780b0d907500b7b48",
+        "overran": false,
+        "at": "2026-10-25T14:50:44.989Z"
+      },
+      "commit": {
+        "bytesHash": "465c9af27e42b8b5e4a768421e69cdd4d55897ffa032b41c07f8fe2c825b7fe9",
+        "beacon": "6a36d36b3e021e8626ca775d0eaf51b648dcf9242c6d72941485cf5fea219bf3",
+        "at": "2026-10-25T14:50:45.021Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37716,
+          "blinker": 38774,
+          "beehive": 20073,
+          "loaf": 6752,
+          "boat": 6326
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:50:47.980Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:50:47.990Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "f577cb68ba91a695bf14b7695104cba53e4ec0e97a75ce655deb6aa7deeef3de",
+        "overran": false,
+        "at": "2026-10-25T14:50:50.494Z"
+      },
+      "commit": {
+        "bytesHash": "4dd126ce3b5026430ac4e03da9a290be3f948e678b30c2e1b92de5bcd23f7f24",
+        "beacon": "c624ee7578eb5e60750c6baa0dae8bc8f15a8c00ca605fd893166c4555d7b9af",
+        "at": "2026-10-25T14:50:50.513Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37796,
+          "blinker": 38307,
+          "beehive": 19738,
+          "loaf": 6854,
+          "boat": 6366
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:50:53.221Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:50:53.246Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "34597f1c0428d3948d488def5092a00a67cf52c996f9f6a19f61e3dd383ea5a6",
+        "overran": false,
+        "at": "2026-10-25T14:50:55.749Z"
+      },
+      "commit": {
+        "bytesHash": "ae0765d7ac5b92764442a7f1e147df671df9c7dfd21b787bb0397ce7ee37e2cd",
+        "beacon": "619334712792713fe06655a0e179b05bdf5abdb5778eddf4cc30b3f70b44cc09",
+        "at": "2026-10-25T14:50:55.782Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37982,
+          "blinker": 38506,
+          "beehive": 19621,
+          "loaf": 6713,
+          "boat": 6377
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:50:58.880Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:50:58.882Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "049921c6f9e73a72aa738a33e78f1085a8c9a5663ac4f85dc7ae9b0c238ea2a4",
+        "overran": false,
+        "at": "2026-10-25T14:51:01.393Z"
+      },
+      "commit": {
+        "bytesHash": "a2c04223f2d398bfc618e15488ca8ed2b9fb683106e9baa3573a5d9816d78b2b",
+        "beacon": "8e3fc398fd919cf40ed66d4b38daa954b38110d3efd15a24fc9d625064d34706",
+        "at": "2026-10-25T14:51:01.432Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37999,
+          "blinker": 39294,
+          "beehive": 19237,
+          "loaf": 6897,
+          "boat": 6210
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:04.337Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:04.351Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "145dabc1309a85c9f0fa64557c27a12c94145c5da3fb648a40b6f6544f4dc48b",
+        "overran": false,
+        "at": "2026-10-25T14:51:06.856Z"
+      },
+      "commit": {
+        "bytesHash": "46d89f973b57415f9fc44a1c226e9fadc98da58b3d3db45277e627490efa948b",
+        "beacon": "2d0bf26b3e001f63c8a90743e1e82146941cdbb48c982de6d0f70aa8178800cb",
+        "at": "2026-10-25T14:51:06.880Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38025,
+          "blinker": 38910,
+          "beehive": 19910,
+          "loaf": 6818,
+          "boat": 6245
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:10.122Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:10.132Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "28f4b0d248b98fb05894b6b6ee48b10d6c110551e6f9d2fda2ee9866344b6a8d",
+        "overran": false,
+        "at": "2026-10-25T14:51:12.642Z"
+      },
+      "commit": {
+        "bytesHash": "e786e111a06121da206ec9b6e9e7959679a227cb57c089eea7484671f91f2998",
+        "beacon": "0b417ca3824a8f18e9d02841b69a41669995a55d53fb562ac314ecba61927b15",
+        "at": "2026-10-25T14:51:12.670Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37750,
+          "blinker": 38207,
+          "beehive": 19645,
+          "loaf": 6844,
+          "boat": 6407
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:16.222Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:16.248Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "f51d828336100f897333f6c998c05b9717d2560959292fc095db81fedd659158",
+        "overran": false,
+        "at": "2026-10-25T14:51:18.752Z"
+      },
+      "commit": {
+        "bytesHash": "6ded354a4833d33bb9a1f65647aa41d32ebda82bd2c25645bf334d180846fefc",
+        "beacon": "32c5216ad906c0a6afe5fca7da5b2255b96949dc1964a8342538f5bfeb7111d2",
+        "at": "2026-10-25T14:51:18.767Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37628,
+          "blinker": 38849,
+          "beehive": 19277,
+          "loaf": 6892,
+          "boat": 6355
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:21.626Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:21.632Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "ec44420e976ac263493b5a7b68f4bebf35e7f2daf21a334c8e293c5e0fe496dd",
+        "overran": false,
+        "at": "2026-10-25T14:51:24.143Z"
+      },
+      "commit": {
+        "bytesHash": "d37b507842b524750f4a059148512acc7623ddae93aed45cd1e93b3032b63e38",
+        "beacon": "f758aa73d8ca5bc79d30b4500feee6b2bfb0f5a2c946a8bb485942ab689d7834",
+        "at": "2026-10-25T14:51:24.167Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38186,
+          "blinker": 38576,
+          "beehive": 19703,
+          "loaf": 6649,
+          "boat": 6377
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:27.126Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:27.140Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "c8fa716ee5bea75f7ea93f5918042bc6ae0722126e84ddc5eeac3f003a8f9080",
+        "overran": false,
+        "at": "2026-10-25T14:51:29.644Z"
+      },
+      "commit": {
+        "bytesHash": "da17aa77339f6fb03871731d5c35af742f6f0101c09858c7bb6a1c60c1645009",
+        "beacon": "bcb92bc95d1d26277ac3e534ad641dea628aa9180a6b807db340b99e53752f41",
+        "at": "2026-10-25T14:51:29.674Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38032,
+          "blinker": 38800,
+          "beehive": 19642,
+          "loaf": 6763,
+          "boat": 6372
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:32.758Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:32.791Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "fbf7ee96b1b695000bcf713b934ab1b1707682e36c4cd60e372b15f9ed1f855f",
+        "overran": false,
+        "at": "2026-10-25T14:51:35.294Z"
+      },
+      "commit": {
+        "bytesHash": "f45798549d05afc1392f5566dfce52b95b90b09bbacf90b17c7a340d1475ccab",
+        "beacon": "7f1066c6dc6bef2e59c115af2b6c9247a5a3c828c85c0feb6a9d7947d9ea9212",
+        "at": "2026-10-25T14:51:35.317Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38010,
+          "blinker": 38664,
+          "beehive": 19618,
+          "loaf": 6701,
+          "boat": 6276
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:38.589Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:38.616Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "d15a5dfaf039462ccd08ff04b995910065475a566680c645e62f6eb63ad36384",
+        "overran": false,
+        "at": "2026-10-25T14:51:41.120Z"
+      },
+      "commit": {
+        "bytesHash": "9117be2f35ccf13a0f8290e1b9ab0a2ee063c20f82538cafbbb85d763c0e6253",
+        "beacon": "df3076ac6bf61aab0b6a2fb55f934a465f27eb197f1ee5cb2e15bd700762eb83",
+        "at": "2026-10-25T14:51:41.135Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37750,
+          "blinker": 38721,
+          "beehive": 19914,
+          "loaf": 6878,
+          "boat": 6433
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:43.969Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:43.978Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "fe8b5396e573e37a90509f97984e5fa5fd7e99cd71e996533e77cb96e3e216cd",
+        "overran": false,
+        "at": "2026-10-25T14:51:46.482Z"
+      },
+      "commit": {
+        "bytesHash": "9296d7b01b178ba5422c65f20ccb3ba16e50f0be87e3a9fb253998498c6f13ee",
+        "beacon": "142c8b1a432cfea3b9ef0d881eaed9707c8b4b71a89e81b9fb026d973ca836c3",
+        "at": "2026-10-25T14:51:46.499Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37614,
+          "blinker": 37998,
+          "beehive": 19508,
+          "loaf": 6728,
+          "boat": 6418
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:49.588Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:49.612Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "6f161dcc82db815cf3fc4082f8b0867f0fd3a7db4612071d37628f64e02a12cc",
+        "overran": false,
+        "at": "2026-10-25T14:51:52.115Z"
+      },
+      "commit": {
+        "bytesHash": "81d1c53ee47290b5f2e6d6f4c07f74a1e573aec4ca62cc0b2be00da52967f6c4",
+        "beacon": "4f95253d65833548f002c72b147bb65436cc73f653284fa3ca443d2f3b15fb19",
+        "at": "2026-10-25T14:51:52.127Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37598,
+          "blinker": 39120,
+          "beehive": 19799,
+          "loaf": 6627,
+          "boat": 6300
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:51:54.714Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:51:54.729Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "1a04b7fa3a8aae913c35f4cebab39be0373e6262e4a7eb8253f4b01945caf0fe",
+        "overran": false,
+        "at": "2026-10-25T14:51:57.232Z"
+      },
+      "commit": {
+        "bytesHash": "fd0d85ba170b850068f361ee4b19c4479e22548e265ce35f2b425fbd05836937",
+        "beacon": "44053e9aeeeb511f652b848f7bf641ac51065fc20ca718199566479455980fb6",
+        "at": "2026-10-25T14:51:57.269Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37807,
+          "blinker": 38661,
+          "beehive": 19715,
+          "loaf": 6718,
+          "boat": 6396
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:00.198Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:00.215Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "efb1cc003554d921b1a7066f9ba52279bdc03df348880530ee90866948f9216f",
+        "overran": false,
+        "at": "2026-10-25T14:52:02.719Z"
+      },
+      "commit": {
+        "bytesHash": "68b55ac695f609210d55fe87d023838fab491a2bf8903e32c07b5e8e46a1d2cf",
+        "beacon": "5d8e0417ff83826f59abd13333fe7c4a6245476a1a3fe335b9d1feb1c3b99138",
+        "at": "2026-10-25T14:52:02.732Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37803,
+          "blinker": 38669,
+          "beehive": 19792,
+          "loaf": 6710,
+          "boat": 6312
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:05.987Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:05.999Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "be00b84c5eab2357f474d40ff0f92c5a45cc64de208dcd8d9e16ef1020e2d575",
+        "overran": false,
+        "at": "2026-10-25T14:52:08.505Z"
+      },
+      "commit": {
+        "bytesHash": "eda6825a7c9716923dcacdbebb5c6e1f9261e4bcc57f7e0406f330328bba6a41",
+        "beacon": "0057de054f21dd4a59de7487c9ac8d8f875676938a52dc9d3d9b882c88723350",
+        "at": "2026-10-25T14:52:08.544Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37451,
+          "blinker": 39268,
+          "beehive": 19743,
+          "loaf": 6787,
+          "boat": 6260
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:11.918Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:11.943Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "f6ed432f041308a3a39ae8ab11ec9b7cc2743ca0347a42a47bf42bf56ea5ad0b",
+        "overran": false,
+        "at": "2026-10-25T14:52:14.446Z"
+      },
+      "commit": {
+        "bytesHash": "bd9af2474efbc9a5911787a02e0eecbf95fdf81d8865e833346abeedab38585f",
+        "beacon": "083ac31a75eb7d93320b7f4ea546fcb76f3cf90d953ed142aa4c7afce284fe1b",
+        "at": "2026-10-25T14:52:14.477Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37847,
+          "blinker": 39156,
+          "beehive": 19880,
+          "loaf": 6731,
+          "boat": 6313
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:17.739Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:17.760Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "47ffb48dadc2fcbe2387ea21716dac47d65fa7be6790a3b2e8ec1d0761635bdb",
+        "overran": false,
+        "at": "2026-10-25T14:52:20.264Z"
+      },
+      "commit": {
+        "bytesHash": "e20063e280cf9a52a6d98a8eabfc7f5fc6484439b922b0ad4b00c7f28d24043c",
+        "beacon": "5ead997e0837b07ef2281506e5a4484725fac5cfacd483efe89fbc12f8c8fa12",
+        "at": "2026-10-25T14:52:20.285Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38158,
+          "blinker": 38954,
+          "beehive": 19764,
+          "loaf": 6836,
+          "boat": 6405
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:23.366Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:23.388Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "9dbe2099eb60b8c880ab1d8d7f9c6b6a3a0fc3e007b3359ba4c88dd388519a9c",
+        "overran": false,
+        "at": "2026-10-25T14:52:25.892Z"
+      },
+      "commit": {
+        "bytesHash": "a581cb87eba4e0c5428a5432682573d166e03c52dfdec70d36304a09616fba39",
+        "beacon": "b0c695ef8fd1b0c7152eaaedd55e5e9b836c2ba4549e9980949b049499271c1c",
+        "at": "2026-10-25T14:52:25.930Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37670,
+          "blinker": 38689,
+          "beehive": 20017,
+          "loaf": 6795,
+          "boat": 6289
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:28.993Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:29.010Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "efadd08cc98ef02d7694f1305f8a0e3f3f18295c650a6db576f1aadbd6ec4a74",
+        "overran": false,
+        "at": "2026-10-25T14:52:31.514Z"
+      },
+      "commit": {
+        "bytesHash": "62119c9ba62c0b95a45c9ccfa6245c5e9003c3f447e4bf37798bb6b320f64259",
+        "beacon": "63e24b3e871eb901ffb6db52865c84812807b13382c474de08d94d2c04097a1d",
+        "at": "2026-10-25T14:52:31.532Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37812,
+          "blinker": 38820,
+          "beehive": 19402,
+          "loaf": 6733,
+          "boat": 6378
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:35.006Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:35.007Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "0b6064d14b8a6577174e32890aa0c75667af173a4e8a994409172f887e7788df",
+        "overran": false,
+        "at": "2026-10-25T14:52:37.510Z"
+      },
+      "commit": {
+        "bytesHash": "f3e0af338e33d154d8612354ca8e4c29005062d392d33858f98503ccbdf477aa",
+        "beacon": "94c8a0e48cd57db83d17bc5c466c945b46141f960546f78a5c9ce43515244c63",
+        "at": "2026-10-25T14:52:37.528Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37607,
+          "blinker": 38230,
+          "beehive": 19740,
+          "loaf": 6736,
+          "boat": 6334
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:40.978Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:41.004Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "193e5a28b13d0a3c60bfc002f94d12d8f6fc556f7d0a7f559f25a2dd1c77e0a6",
+        "overran": false,
+        "at": "2026-10-25T14:52:43.506Z"
+      },
+      "commit": {
+        "bytesHash": "b7473d42ac687823df63f4d3399c2c07462eb5ba40ed4f70365a2b04aa6aedeb",
+        "beacon": "2f1a65dfda7525129c444d883054cf031ff852176b79c3c69b0c1c3df8ca5f22",
+        "at": "2026-10-25T14:52:43.545Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38027,
+          "blinker": 38657,
+          "beehive": 19787,
+          "loaf": 6756,
+          "boat": 6348
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:47.470Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:47.477Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "db25bd0f609b47b0418017945b2ea588e7ce0648124b6d2c85925ae5c228a3ee",
+        "overran": false,
+        "at": "2026-10-25T14:52:49.980Z"
+      },
+      "commit": {
+        "bytesHash": "9add2ddd2044dfb40fbd99166d807d163ea58a70183fa6c25506db925dcf5116",
+        "beacon": "1a73447004e96ef5e34cadc0a503414cccf78d04e16a408befbbd49aff57adb1",
+        "at": "2026-10-25T14:52:50.007Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37769,
+          "blinker": 38947,
+          "beehive": 20103,
+          "loaf": 6758,
+          "boat": 6373
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:53.038Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:53.060Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "5996df65388cea8203bbb86878f71ffd48756a5e8015f5cfd21dafd39bbba7cc",
+        "overran": false,
+        "at": "2026-10-25T14:52:55.565Z"
+      },
+      "commit": {
+        "bytesHash": "05a7bc2388c928ef4618a2f8703381cc156a69d63e7352010597d53b46d89529",
+        "beacon": "60aed4cb95e9f7a4e14416275be1fc34798c997ce309beb9abdb03bbb4df0feb",
+        "at": "2026-10-25T14:52:55.600Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38025,
+          "blinker": 39191,
+          "beehive": 19616,
+          "loaf": 6708,
+          "boat": 6300
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:52:58.624Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:52:58.645Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "86d00dc0392974df04eba2520c0128f08c3de89e79e477c1b90c62cfbb5287ae",
+        "overran": false,
+        "at": "2026-10-25T14:53:01.148Z"
+      },
+      "commit": {
+        "bytesHash": "b00e241c0358c92251c700dea219751db57696ad9914e49450b8efd88212e008",
+        "beacon": "5781618e1641c60ab768812dae38e50f039ddbf09aa03704ab16061ca0d4fb8e",
+        "at": "2026-10-25T14:53:01.185Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37870,
+          "blinker": 38609,
+          "beehive": 19428,
+          "loaf": 6581,
+          "boat": 6332
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:04.710Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:04.725Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "8f4900bf573a694ac0ef789efaaf16ca400f22791196a86384ab06323c9a5413",
+        "overran": false,
+        "at": "2026-10-25T14:53:07.228Z"
+      },
+      "commit": {
+        "bytesHash": "12cdb3a9ae3fd3e41abd9b78898305de394a30f54e63ef589592973ddd733d40",
+        "beacon": "21fe1f71eeb4a6e797e68bc3acf6b4c3d8c51bb19c918416993652eacad3d0c3",
+        "at": "2026-10-25T14:53:07.248Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37533,
+          "blinker": 38639,
+          "beehive": 19951,
+          "loaf": 6726,
+          "boat": 6313
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:10.229Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:10.241Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "768bfc75876bb81571f0a0846d50a1957191d033ff7a6441548dd347433d79a3",
+        "overran": false,
+        "at": "2026-10-25T14:53:12.745Z"
+      },
+      "commit": {
+        "bytesHash": "728a967fa9bd21e32c808fef97c3d33a8d3e0fa925a95fd43edcbc3c391c25fe",
+        "beacon": "0c5521ec2fb66a9744ccf0b7a2f70ef9ea980343fae54a758d6eb255b4d98183",
+        "at": "2026-10-25T14:53:12.783Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37596,
+          "blinker": 38763,
+          "beehive": 19899,
+          "loaf": 6649,
+          "boat": 6413
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:16.593Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:16.603Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "a80f1e2f3a7c4de0398f8101542879300d84e252ec77103bfaf028459c338107",
+        "overran": false,
+        "at": "2026-10-25T14:53:19.106Z"
+      },
+      "commit": {
+        "bytesHash": "ff8a38e7ea11e79caa4217e5b03432b65a662868172e74d78b6be49b8281b33f",
+        "beacon": "9a4dc24f7c59d577902ae270dce69df9d43f80f59e68e5876a317326b97bc3b5",
+        "at": "2026-10-25T14:53:19.135Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37119,
+          "blinker": 38422,
+          "beehive": 19758,
+          "loaf": 6753,
+          "boat": 6481
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:22.735Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:22.752Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "151855e359c7209c2190d811dd63bfcb7ccfacb52a252f379039811998980285",
+        "overran": false,
+        "at": "2026-10-25T14:53:25.254Z"
+      },
+      "commit": {
+        "bytesHash": "24a144acde54052cd987c121879479a6b595adea795e156bb6f80b9dafe295e6",
+        "beacon": "055afc36d49006f19d3a84d7c15e590fe589da031605e41c02318e063980cbda",
+        "at": "2026-10-25T14:53:25.288Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37469,
+          "blinker": 38368,
+          "beehive": 19795,
+          "loaf": 6735,
+          "boat": 6389
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:28.584Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:28.603Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "77fcf29c32a198d1d40991f1e26c47ea99d22bd04be1355ffe58ac99c51c01ad",
+        "overran": false,
+        "at": "2026-10-25T14:53:31.106Z"
+      },
+      "commit": {
+        "bytesHash": "37544a9ae3a3cc9a1ec75c1233d44266cc46e1a302749ac1eb5e8a06bb9e31d9",
+        "beacon": "cd94a888eef4f5fb99e7f6fbbfca351b98486b454eedfeb6635813a43ba9801f",
+        "at": "2026-10-25T14:53:31.136Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37712,
+          "blinker": 38628,
+          "beehive": 19529,
+          "loaf": 6720,
+          "boat": 6389
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:34.480Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:34.506Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "1d21725204ef05554b8852552b54c245cdcd076f9b514eafb230d99e534a77d8",
+        "overran": false,
+        "at": "2026-10-25T14:53:37.010Z"
+      },
+      "commit": {
+        "bytesHash": "044dc3f7e5f37317cf4f647f1f4871e86e9233e775c6ff2caca0c51af27e3cf2",
+        "beacon": "357eeef40a5028023aa60cdd0355a4259093d850399241853d0fefaf8a5cf45c",
+        "at": "2026-10-25T14:53:37.046Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37820,
+          "blinker": 38377,
+          "beehive": 19770,
+          "loaf": 6713,
+          "boat": 6241
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:40.010Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:40.018Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "bb934f42d8d34559c61e2e184c768a9bf6aaaae57017615e4bb09faaba16f9a5",
+        "overran": false,
+        "at": "2026-10-25T14:53:42.522Z"
+      },
+      "commit": {
+        "bytesHash": "c205ec3c5ef6c6327c6693a72699a146661e133251ab3315d3e5d10ab044ca42",
+        "beacon": "d652776d870da52b197413c3d2c28a78f94dbabb34432c81aa1bc967436c0e50",
+        "at": "2026-10-25T14:53:42.540Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37918,
+          "blinker": 38357,
+          "beehive": 19551,
+          "loaf": 6795,
+          "boat": 6246
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:45.855Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:45.859Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "a01d449b786aa1b2b0ce444904256c231ab74496d43772a85e45ac9a0890f4bd",
+        "overran": false,
+        "at": "2026-10-25T14:53:48.363Z"
+      },
+      "commit": {
+        "bytesHash": "74b2ec8ef0279f1e19cc02e92b865f12c1f8bbb15baafbf84480933b1077791c",
+        "beacon": "5f9029e004691fb8c5c62ae7659e1c351c0b839cd0ab7769ac37af03f23cd69b",
+        "at": "2026-10-25T14:53:48.402Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37797,
+          "blinker": 38665,
+          "beehive": 19917,
+          "loaf": 6698,
+          "boat": 6372
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:51.906Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:51.910Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "b34b035ae05a0a0e606b5fef89de272fbe991d1cad958b8a2297e6b9e953f50f",
+        "overran": false,
+        "at": "2026-10-25T14:53:54.413Z"
+      },
+      "commit": {
+        "bytesHash": "0d55f544566d09ce6493b391624378196acfc5efdf6fb4879179443a8897aab6",
+        "beacon": "780e04b56b192483207fba8d5d8e9bfd87b0f6a0a09aa4cc3ad9b386f9e141e7",
+        "at": "2026-10-25T14:53:54.436Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37588,
+          "blinker": 38496,
+          "beehive": 19735,
+          "loaf": 6691,
+          "boat": 6341
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:53:58.277Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:53:58.300Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "ef1ff15f9e82e2b674738e781c40cf5c1ef135fa5467661abf9cd75da66981fe",
+        "overran": false,
+        "at": "2026-10-25T14:54:00.803Z"
+      },
+      "commit": {
+        "bytesHash": "1c437f76c48994ebf0a536ce685a4d8a09bcd4283dcf28b7b7754ee263da5c45",
+        "beacon": "c5f7444ef3ce87f713291fab419cf88f8c027a723c3c845bdf03f7f56de3801e",
+        "at": "2026-10-25T14:54:00.832Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38383,
+          "blinker": 38413,
+          "beehive": 19707,
+          "loaf": 6687,
+          "boat": 6246
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:04.364Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:04.375Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "dd42b123a771d561eec148c22d4bdf570aaaed7498f2e544e2dcaa4421586b5a",
+        "overran": false,
+        "at": "2026-10-25T14:54:06.876Z"
+      },
+      "commit": {
+        "bytesHash": "42c2d83e7065dfb7d8fc5748583fe257fd1323b540c770ff005ebad49860543c",
+        "beacon": "a0d006a9b44a014c93b6f30519cfe5c6c21b66f94fe7bb2f52c6b15de7f7712a",
+        "at": "2026-10-25T14:54:06.899Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37827,
+          "blinker": 38525,
+          "beehive": 19756,
+          "loaf": 6739,
+          "boat": 6394
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:10.642Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:10.660Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "6310468317ccbd8564ad1b70e966da509bcd05b2f9dca455785c1e29e4ea2477",
+        "overran": false,
+        "at": "2026-10-25T14:54:13.164Z"
+      },
+      "commit": {
+        "bytesHash": "2ad4e82856d8c3c9a870969b116c7cf611182f159bb9114b2f22475b832211bd",
+        "beacon": "4e6f99517c5d05981714c67abd099accc2a1b353fa7b014e390d95e22c39bb0d",
+        "at": "2026-10-25T14:54:13.185Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37813,
+          "blinker": 39184,
+          "beehive": 19788,
+          "loaf": 6882,
+          "boat": 6449
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:16.389Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:16.402Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "73db212ae7ffb0470b0cc21b98ad008689061c52a2b81ec01ea039ed3d1e891e",
+        "overran": false,
+        "at": "2026-10-25T14:54:18.906Z"
+      },
+      "commit": {
+        "bytesHash": "9829402efc700c67eb9127029564dae9483014bfab467f050fd6091f36976b16",
+        "beacon": "498a16ba9514bb9fcdc20c07585d92d28db1982aafa3cdd50468ae503b100fe4",
+        "at": "2026-10-25T14:54:18.946Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37679,
+          "blinker": 38527,
+          "beehive": 19674,
+          "loaf": 6666,
+          "boat": 6184
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:22.477Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:22.491Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "521d6a1eb2ec7cdb9d1a75c9ab4a5330862f4d7cae46dee393665fdedb7ac0cb",
+        "overran": false,
+        "at": "2026-10-25T14:54:24.993Z"
+      },
+      "commit": {
+        "bytesHash": "d310127964bc543bd6a4454cebba9eae0abc9151506afedba3094a1b08475f6c",
+        "beacon": "4e9b2244108853381498ec7b6239dd49d3065ae4f4c309c23e8de8ae0919dc3c",
+        "at": "2026-10-25T14:54:25.016Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37704,
+          "blinker": 38151,
+          "beehive": 19639,
+          "loaf": 6671,
+          "boat": 6192
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:28.260Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:28.280Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "32d960ed3da93a01ad87e204f2086c05ac285e1eb0c2eac1939511766fbb0533",
+        "overran": false,
+        "at": "2026-10-25T14:54:30.784Z"
+      },
+      "commit": {
+        "bytesHash": "413a4ef7576cef8dca7f2133406fc08c5c57d701ec1fd97766e754176c800221",
+        "beacon": "f076d5d8b7500d298cb25f8ce67bacdea970d9abccbd342107f94784440902f5",
+        "at": "2026-10-25T14:54:30.812Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37873,
+          "blinker": 38393,
+          "beehive": 19723,
+          "loaf": 6651,
+          "boat": 6193
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:34.227Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:34.229Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "287a4dbcd78648f7638733d29cccec6b3dba295c3fb799419d6ab9a460b5b8fb",
+        "overran": false,
+        "at": "2026-10-25T14:54:36.732Z"
+      },
+      "commit": {
+        "bytesHash": "12e1e1fbcab7e1f0bfae278d648afa53f6522b0ff575cc2ba2e3a3291f5ca3f7",
+        "beacon": "4e8a64dfc8b3aa29a7dca3a96ba3d25245347699f94ec0aa56e337f74c973805",
+        "at": "2026-10-25T14:54:36.761Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37962,
+          "blinker": 38696,
+          "beehive": 19674,
+          "loaf": 6827,
+          "boat": 6299
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:39.943Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:39.946Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "3b96668d60c819621d1a9617f61da6bd71dd4d0986b9c389837da4ea90690895",
+        "overran": false,
+        "at": "2026-10-25T14:54:42.452Z"
+      },
+      "commit": {
+        "bytesHash": "55f59577f3a8632b5200d205995276f5c753a6db0269e67c122aff8d3ffcb864",
+        "beacon": "3f36b042c89d0d6d367ac5484dd8d6dc4549e5ad06706d93e46ceeac752bcd83",
+        "at": "2026-10-25T14:54:42.483Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37773,
+          "blinker": 39014,
+          "beehive": 19810,
+          "loaf": 6813,
+          "boat": 6493
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:45.406Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:45.407Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "a968982764137be0c1b024198311e65bf357ca59ce610c56f3beda9b66582ef9",
+        "overran": false,
+        "at": "2026-10-25T14:54:47.911Z"
+      },
+      "commit": {
+        "bytesHash": "9da90ffffe30322d656c7058704aa298ed5ec3b99098bd848313cc67d2e5ed7e",
+        "beacon": "59ffd8a3cd2f53e4012513c9cc0e1122e56e8d8ee0f92379c4fe1584ab6cd234",
+        "at": "2026-10-25T14:54:47.940Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38234,
+          "blinker": 38374,
+          "beehive": 19779,
+          "loaf": 6837,
+          "boat": 6317
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:50.753Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:50.773Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "40fc2cdd396338dfda882fc76aa4d5024bce154d635f68cf0c6c9d6f3d4cab1a",
+        "overran": false,
+        "at": "2026-10-25T14:54:53.276Z"
+      },
+      "commit": {
+        "bytesHash": "0a00a31f97a3f1098f1bbef0468b68c8b361f6cd3afe379adf5dcb65ab10eacf",
+        "beacon": "9ae4c78b7da496b9b6afdfb655653f03fa55e765458d714aa63c6af7fcb199c9",
+        "at": "2026-10-25T14:54:53.289Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37538,
+          "blinker": 38340,
+          "beehive": 19571,
+          "loaf": 6734,
+          "boat": 6391
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:54:56.198Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:54:56.220Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "a0c5d1b796b79af8ea773b7c345e7cb42bcb9642440228b153fd2398a0922391",
+        "overran": false,
+        "at": "2026-10-25T14:54:58.722Z"
+      },
+      "commit": {
+        "bytesHash": "c57de730577ced0cedb4e0e27a0ac27697d595fab64ff5ac6180aa857f4c74c0",
+        "beacon": "397d7d5130213132cdc85a156aa57b69cfebea0739dd1ace7c30882cc45452d1",
+        "at": "2026-10-25T14:54:58.755Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37854,
+          "blinker": 38230,
+          "beehive": 19626,
+          "loaf": 6713,
+          "boat": 6296
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:02.434Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:02.450Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "e3827e2cef635282d612a319ffc3f00ace6dd7255deffec7046ab2e1b590624d",
+        "overran": false,
+        "at": "2026-10-25T14:55:04.954Z"
+      },
+      "commit": {
+        "bytesHash": "7d29ad2c0f680c6359ca1ecb2e79b01b344c065d8d8ec85037befdb46f45c3bb",
+        "beacon": "2c5c5f8039273c13c1a7942574b4ba3dfce3ccf4819cbf0ff20f5d92f35ce874",
+        "at": "2026-10-25T14:55:04.982Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37858,
+          "blinker": 38955,
+          "beehive": 19708,
+          "loaf": 6838,
+          "boat": 6345
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:08.170Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:08.192Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "351bdc7eab8bded758cff7ec59b3e0bab4c0dac5dab3f30762ea2767dc8f1087",
+        "overran": false,
+        "at": "2026-10-25T14:55:10.697Z"
+      },
+      "commit": {
+        "bytesHash": "aa68232146928139beefc2ebee1f3f81ee9268fc3ae088dd68eff644365e3d62",
+        "beacon": "c1d400b81394b909ba32913a3ccb8ee3245aa2fbdaac154a53ceb513591e5260",
+        "at": "2026-10-25T14:55:10.723Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37865,
+          "blinker": 38614,
+          "beehive": 19544,
+          "loaf": 6753,
+          "boat": 6235
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:13.599Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:13.625Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "4df76dd9b17eb242a4f36cfbef3f233f07caa64710ec68d9e51c6d2e4af5bab4",
+        "overran": false,
+        "at": "2026-10-25T14:55:16.129Z"
+      },
+      "commit": {
+        "bytesHash": "cdde7f1db827240d021637bca6104bc29a3ff545ffb2fc3658fe618218bba1f1",
+        "beacon": "5e32912a4265e66dba5cbb7ea2b300e0b7b395c75adb9b4a8d21dd52fe1d1c59",
+        "at": "2026-10-25T14:55:16.149Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37727,
+          "blinker": 38496,
+          "beehive": 19373,
+          "loaf": 6763,
+          "boat": 6324
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:18.699Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:18.709Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "cdcd671961c3a7c497cca567d19c77c1d83738eb6c47ee1b46edcd05fce88941",
+        "overran": false,
+        "at": "2026-10-25T14:55:21.213Z"
+      },
+      "commit": {
+        "bytesHash": "ae47f2f120b47bb6fb52de1020470c5ac20f4edca84f3ec25faf157bc0f9c597",
+        "beacon": "910a0746a515dc03e97615c2ee58745f6af7d0968898fffe275cae1f5200c812",
+        "at": "2026-10-25T14:55:21.225Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38198,
+          "blinker": 38699,
+          "beehive": 19631,
+          "loaf": 6676,
+          "boat": 6232
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:24.187Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:24.209Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "dcb8093823248819834a67f13784c49dea582c4a11f06a6deeb845f700803f02",
+        "overran": false,
+        "at": "2026-10-25T14:55:26.711Z"
+      },
+      "commit": {
+        "bytesHash": "58af4c8f8cf97326d15b0bf8b7d946da4fdd417fc3c2507475c03ee0b840c392",
+        "beacon": "f9bdb1b57c817fd902d16c0463a260637ff98e6fca0e74e828b6992a557e4355",
+        "at": "2026-10-25T14:55:26.727Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38044,
+          "blinker": 38748,
+          "beehive": 19554,
+          "loaf": 6694,
+          "boat": 6323
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:30.031Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:30.033Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "a504cffa0dbca16cb63cc6c512e6ec7fad0271c3fb3a22a9c17b86ebd1a39cf6",
+        "overran": false,
+        "at": "2026-10-25T14:55:32.538Z"
+      },
+      "commit": {
+        "bytesHash": "b1ff2215c98042f8abf2f921b219dad79a3c87e4f370bd26c664f65b71fe9b9f",
+        "beacon": "aa45bebbd0486ef375f531287a2db2b4a97a5b5794bbe698dcce2cb9e2ec08d3",
+        "at": "2026-10-25T14:55:32.552Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37607,
+          "blinker": 38463,
+          "beehive": 19474,
+          "loaf": 6823,
+          "boat": 6218
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:36.190Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:36.197Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "028eb5b6f5acdf553b317744ff81aa9843c19157152b6aedbe636dcc5833f02e",
+        "overran": false,
+        "at": "2026-10-25T14:55:38.700Z"
+      },
+      "commit": {
+        "bytesHash": "1a5e409a98b71142725804b4fe48c457afe9fb5a17a92ab66159ff8dcfe453e3",
+        "beacon": "d3a8e67e6a13d28bb4afcdee08950f10e5ede3f157249aada7bda7e10f0be36f",
+        "at": "2026-10-25T14:55:38.737Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37699,
+          "blinker": 38403,
+          "beehive": 19716,
+          "loaf": 6637,
+          "boat": 6302
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:41.924Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:41.943Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "15e6d2e36c13b65b26fdb2c9abbbe72af3c34a237ea695560e92f62825fef312",
+        "overran": false,
+        "at": "2026-10-25T14:55:44.445Z"
+      },
+      "commit": {
+        "bytesHash": "09f5806a2cfeed5303e92128195563edebabd6b32502226f3d91ab099c4920ed",
+        "beacon": "c5f6cbd2c86b52c6e6f967a14830e6dbe9a4a894b45da4526c011ce986962d33",
+        "at": "2026-10-25T14:55:44.462Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37689,
+          "blinker": 38475,
+          "beehive": 19819,
+          "loaf": 6651,
+          "boat": 6324
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:47.815Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:47.818Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "30aa091f26400d2bb75f1aecfb4b43e45bc52278c2fce3a9d986980176cb596c",
+        "overran": false,
+        "at": "2026-10-25T14:55:50.321Z"
+      },
+      "commit": {
+        "bytesHash": "ab9af6587352b73450d5ccecbaca02a3dd715bcf3ea2d9b840c75ee8eee15b78",
+        "beacon": "7d1fe4c6a8dc2a37e36cc92bf35dab4bee1644a3ee0e16b0ecbaffa2a521ff1d",
+        "at": "2026-10-25T14:55:50.337Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37819,
+          "blinker": 38715,
+          "beehive": 19565,
+          "loaf": 6911,
+          "boat": 6264
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:53.721Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:53.722Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "a9eb13d1168d9f38f3b899b0d4623990eb52116b7db0d2c05b694cf75c683a7f",
+        "overran": false,
+        "at": "2026-10-25T14:55:56.224Z"
+      },
+      "commit": {
+        "bytesHash": "8005142762049d968fb86cdc4375a42a53cf776343ae4551a9e1e7dbdc83abcd",
+        "beacon": "a6dde906a9e96f87a0fa0e2438b2d78206d3ded1f63f8e35972b1142f32e451d",
+        "at": "2026-10-25T14:55:56.245Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37900,
+          "blinker": 38207,
+          "beehive": 19747,
+          "loaf": 6722,
+          "boat": 6398
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:55:59.341Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:55:59.344Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "a27dc2144dbd0afd4a5b31821c89ce84ee89f732112842a5494a63f80a7f3399",
+        "overran": false,
+        "at": "2026-10-25T14:56:01.853Z"
+      },
+      "commit": {
+        "bytesHash": "b1cf49f24e0b6697508d3c63681a8732c7e653d69a3fe4da4a7994512f61f7f7",
+        "beacon": "5bc6887f6934f5dd5c7a87299686634cff6f1e83cbc0c2316b13b079c9bf0f66",
+        "at": "2026-10-25T14:56:01.892Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 38079,
+          "blinker": 39122,
+          "beehive": 19739,
+          "loaf": 6753,
+          "boat": 6443
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:56:05.193Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:56:05.217Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "a20679558f69851ec6f096525a19c7f9aaa50a63049b955b08bce1e6266f4fcf",
+        "overran": false,
+        "at": "2026-10-25T14:56:07.722Z"
+      },
+      "commit": {
+        "bytesHash": "fcc3de7014ceb8ce0883c3e56aea3bb4c441496de5dd6ded6d6cb188c23c97e4",
+        "beacon": "b40f65755f97309ff1145869ce9cf37570faa51fa4998e1411c2bc8e2d04fc5c",
+        "at": "2026-10-25T14:56:07.757Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37828,
+          "blinker": 38357,
+          "beehive": 19825,
+          "loaf": 6771,
+          "boat": 6389
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:56:11.492Z"
+      }
+    },
+    {
+      "handedAt": "2026-10-25T14:56:11.499Z",
+      "trained": {
+        "occurrences": 819200,
+        "trainingHash": "9e727403bb2352fcd87512e3d9600f867106d666a858c5111389f073ccd816bb",
+        "overran": false,
+        "at": "2026-10-25T14:56:14.001Z"
+      },
+      "commit": {
+        "bytesHash": "75cfc461dc4ffb635ffa3fcad38ce6240005c018e2cf0f6f190648e2fd02ce7e",
+        "beacon": "802b8adffa795ecb06c37c201861080dc8532f32625db7a3834baeb255e589a4",
+        "at": "2026-10-25T14:56:14.020Z"
+      },
+      "tested": {
+        "counts": {
+          "block": 37835,
+          "blinker": 39052,
+          "beehive": 19701,
+          "loaf": 6631,
+          "boat": 6378
+        },
+        "leakExtra": 0,
+        "at": "2026-10-25T14:56:16.980Z"
+      }
+    }
+  ]
+}

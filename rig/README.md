@@ -77,6 +77,26 @@ git history.
 | `positive-control-2pct-v2` | 2 | +2% declared | +1.49% (+0.27% to +2.72%) | 0.011 · detected |
 | `isolation-2` | 2 | none | +1.58% (+0.44% to +2.76%) | 0.0065 · anomaly |
 | `isolation-3` (pre-registered replication of isolation-2) | 2 | none | −0.70% (−1.94% to +0.56%) | 1.00 |
+| `positive-control-0.5pct` (20000 soups per block) | 2 | +0.5% declared | +0.35% (+0.11% to +0.59%) | 0.0048 · detected |
+| `isolation-4-1` … `-6` (20000 soups, pre-registered series) | 2 | none | −0.11, +0.18, +0.24, −0.29, −0.04, +0.09% (each ±~0.3%) | series: see below |
+
+**isolation-4: rebuilt receiver, fresh data** (`docs/prereg/isolation-4.md`).
+- **Reprocessing first.** All earlier recordings were reprocessed with a 363-lens battery
+  (`explore/`). No lens survived correction for the number tried.
+- **The rebuilt receiver:**
+  - inverse-variance weighting across forms;
+  - a bit-parallel tester (identical results), giving 20× the soups per block.
+- **Sensitivity.** The detectable effect fell from about 1.75% per session to about 0.4%
+  (T1) or 0.31% (weighted), and to about 0.13% pooled over six sessions.
+- **Series results:**
+  - **Positive control.** A declared 0.5% leak was detected.
+  - **H1, constant lift.** Pooled Z +0.002, p 0.49.
+  - **H2, session-level dispersion of T1.** Q 8.9 on 6 df, p 0.18.
+  - **H3, dispersion in beehive and loaf.** Q 10.2 on 12 df, p 0.60.
+  - None was supported. If the earlier session-to-session spread had been real at the size it
+    implied, the new receiver would have shown |z| ≈ 7. The largest |z| was 1.85.
+- **All nine isolation sessions,** pooled by inverse variance: +0.02% (95% CI −0.09% to
+  +0.14%).
 
 **What the runs show.**
 - **The rig can see a 2% effect.** Both declared 2% leaks were detected.
@@ -84,11 +104,12 @@ git history.
   (`docs/prereg/isolation-3.md`) did not.
 - **Across all three isolation runs there is no effect.** The estimates scatter around zero
   (−1.45%, +1.58%, −0.70%). A descriptive Stouffer combination gives z −0.21, p 0.58.
-- **Sensitivity.** Each run would have seen about +1.75% with 80% power.
+- **Sensitivity.** Each of those runs would have seen about +1.75% with 80% power. The
+  isolation-4 series pushes that to about 0.13% pooled, and still finds nothing.
 
-**Scope of the null.** No sign that making a form occur about 49 million times in one
-process biases which forms arise from OS entropy in another, on this host, at this
-sensitivity.
+**Scope of the null.** No sign that making a form occur about 49 million times per session
+in one process biases which forms arise from OS entropy in another, on this host, down to
+about ±0.1%.
 
 **Side channels in rig/1.** An independent review found channels the rig itself
 provided, all closed in rig/2:

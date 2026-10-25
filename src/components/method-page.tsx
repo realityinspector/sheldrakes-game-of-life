@@ -376,6 +376,16 @@ export function MethodPage() {
             readable files, form-dependent timing); the honest tester used none, and the hardened
             rig/2 closed them before runs two and three. Reports are in rig/reports.
           </p>
+          <p>
+            Then the receiver was rebuilt. Every earlier recording was replayed soup by soup and run
+            through 363 analyses (time lags, decay kernels, Fourier cross-spectra, early censuses,
+            the raw entropy bits); none survived correction for the number tried. Weighting forms by
+            their noise, and a bit-parallel tester running 20 times the soups, cut the detectable
+            effect from about 1.75% to about 0.13% over a pre-registered six-session series. A
+            deliberate 0.5% leak was detected; the six sessions without one pooled to Z = +0.002 (p
+            = 0.49), and the session-to-session spread that had looked unusual did not recur. All
+            nine isolation sessions together: +0.02% (95% CI −0.09% to +0.14%).
+          </p>
         </Section>
 
         <Section title="What certainty would require">

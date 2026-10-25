@@ -127,7 +127,8 @@ def session_lenses(d, rb, A):
             if r in forms:
                 Dg[:, :, j] += I[:, :, forms.index(r)]
     lenses["relatives|log300|eq"] = (rank_z(np.einsum("pbf,bf->p", Dg, Yg)), True)
-    lenses["relatives|log300|ivw"] = (rank_z(np.einsum("pbf,bf->p", Dg, Yg / Yg.var(axis=0))), True)
+    gv = Yg.var(axis=0)
+    lenses["relatives|log300|ivw"] = (rank_z(np.einsum("pbf,bf->p", Dg, Yg / np.where(gv > 0, gv, np.inf))), True)
     return lenses
 
 
@@ -144,7 +145,7 @@ def main():
         per_session[s] = session_lenses(d, rb, A)
         print(f"{s}: {len(per_session[s])} lenses", file=sys.stderr)
     results = {}
-    for subset_name, subset in (("all5", SESSIONS), ("iso3", SESSIONS[:3])):
+    for subset_name, subset in (("all", SESSIONS), ("first3", SESSIONS[:3])):
         names = sorted(set.intersection(*[set(per_session[s]) for s in subset]))
         Zc, Q, direc = [], [], []
         for n in names:
@@ -155,13 +156,13 @@ def main():
         Zc, Q, direc = np.array(Zc), np.array(Q), np.array(direc)
         T = np.where(direc[:, None], np.abs(Zc), Zc)  # evidence statistic per lens per draw
         Mx = T[:, 1:].max(axis=0)
-        adj = np.array([(Mx >= T[i, 0]).mean() for i in range(len(names))])
-        raw = np.array([(T[i, 1:] >= T[i, 0]).mean() for i in range(len(names))])
+        adj = np.array([(1 + (Mx >= T[i, 0]).sum()) / (P + 1) for i in range(len(names))])
+        raw = np.array([(1 + (T[i, 1:] >= T[i, 0]).sum()) / (P + 1) for i in range(len(names))])
         # dispersion family (directional lenses only)
         dn = [i for i in range(len(names)) if direc[i]]
         Qm = Q[dn][:, 1:].max(axis=0)
-        qadj = {names[i]: float((Qm >= Q[i, 0]).mean()) for i in dn}
-        qraw = {names[i]: float((Q[i, 1:] >= Q[i, 0]).mean()) for i in dn}
+        qadj = {names[i]: float((1 + (Qm >= Q[i, 0]).sum()) / (P + 1)) for i in dn}
+        qraw = {names[i]: float((1 + (Q[i, 1:] >= Q[i, 0]).sum()) / (P + 1)) for i in dn}
         rows = []
         for i, n in enumerate(names):
             rows.append(dict(lens=n, Z=float(Zc[i, 0]), raw_p=float(raw[i]), fw_p=float(adj[i]),
