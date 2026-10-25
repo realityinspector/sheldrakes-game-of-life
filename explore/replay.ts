@@ -13,6 +13,8 @@ import { bitStep, cellsFromRows, rowsFromBytes } from "../rig/bitlife.ts";
 import { censusCounts } from "../src/sim/protocol.ts";
 
 const [dir, out] = process.argv.slice(2);
+/** RAW=1: run the tester's raw bytes without the beacon mix (the counts then will not match the report). */
+const RAW = process.env.RAW === "1";
 const regDir = join(dir, "registrar");
 const sessionFile = readdirSync(regDir).find((f) => f.startsWith("session-"));
 if (!sessionFile) throw new Error("no session file");
@@ -34,7 +36,7 @@ const lines: string[] = [];
 const t0 = Date.now();
 for (let b = 0; b < blocks.length; b++) {
   const raw = readFileSync(join(dir, "tester", `block-${b}.bin`));
-  const beacon: string | undefined = blocks[b].commit?.beacon; // rig/1 had no beacon
+  const beacon: string | undefined = RAW ? undefined : blocks[b].commit?.beacon; // rig/1 had no beacon
   const soups: unknown[] = [];
   const sum: Record<string, number> = Object.fromEntries(protocol.forms.map((f: string) => [f, 0]));
   for (let i = 0; i < spec.soups; i++) {
@@ -60,7 +62,7 @@ for (let b = 0; b < blocks.length; b++) {
     }
     soups.push(rec);
   }
-  for (const f of protocol.forms) {
+  for (const f of RAW ? [] : protocol.forms) {
     if (sum[f] !== blocks[b].tested.counts[f]) throw new Error(`block ${b} ${f}: replay ${sum[f]} != recorded ${blocks[b].tested.counts[f]}`);
   }
   lines.push(JSON.stringify({ block: b, target: assignment[b], leakExtra: blocks[b].tested.leakExtra ?? 0, recorded: blocks[b].tested.counts, soups }));
@@ -68,4 +70,4 @@ for (let b = 0; b < blocks.length; b++) {
 }
 writeFileSync(out, lines.join("\n") + "\n");
 writeFileSync(out.replace(/\.jsonl$/, ".meta.json"), JSON.stringify({ label: protocol.label, protocol, assignment, forms: protocol.forms, formIds: FORM_IDS, blocks: blocks.map((x: { handedAt: string; trained: unknown; commit: unknown; tested: unknown }) => ({ handedAt: x.handedAt, trained: x.trained, commitAt: (x.commit as { at: string } | undefined)?.at ?? null, testedAt: (x.tested as { at: string }).at })), report: s.report }));
-console.log(`${protocol.label} done, all ${blocks.length} blocks match the recorded counts`);
+console.log(RAW ? `${protocol.label} done (raw bytes, no beacon)` : `${protocol.label} done, all ${blocks.length} blocks match the recorded counts`);
