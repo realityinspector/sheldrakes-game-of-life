@@ -1,0 +1,106 @@
+{
+ "sid": "h1-20261025-173905-7dee",
+ "created": "2026-10-25T17:39:05Z",
+ "N": 455,
+ "pool": [
+  {
+   "index": 76,
+   "triple": [
+    1,
+    10,
+    11
+   ]
+  },
+  {
+   "index": 126,
+   "triple": [
+    2,
+    6,
+    9
+   ]
+  },
+  {
+   "index": 132,
+   "triple": [
+    2,
+    6,
+    15
+   ]
+  },
+  {
+   "index": 200,
+   "triple": [
+    3,
+    7,
+    9
+   ]
+  },
+  {
+   "index": 202,
+   "triple": [
+    3,
+    7,
+    11
+   ]
+  },
+  {
+   "index": 211,
+   "triple": [
+    3,
+    8,
+    13
+   ]
+  },
+  {
+   "index": 257,
+   "triple": [
+    4,
+    7,
+    11
+   ]
+  },
+  {
+   "index": 270,
+   "triple": [
+    4,
+    9,
+    11
+   ]
+  },
+  {
+   "index": 271,
+   "triple": [
+    4,
+    9,
+    12
+   ]
+  },
+  {
+   "index": 321,
+   "triple": [
+    5,
+    10,
+    12
+   ]
+  },
+  {
+   "index": 403,
+   "triple": [
+    8,
+    9,
+    14
+   ]
+  },
+  {
+   "index": 451,
+   "triple": [
+    12,
+    13,
+    14
+   ]
+  }
+ ],
+ "trained_count": 6,
+ "commitment": "c220f6ad98de4dceff7870dad93b199600aa84e172a338b8b44baf6bb85f69e5",
+ "protocol_sha256": "dd85893189b0f12a39a87d2ee6e9f473a2d82cc9b5128f206a405b60803b2cd6"
+}
