@@ -15,3 +15,12 @@ entropy and sealed before the session. The full protocol and analysis are in
 | `page/hold-the-numbers.html` | The person's page, published as an artifact. It gets only the six trained puzzles. |
 | `analyze.py` | Scores one session, or the whole series. |
 | `sessions/`, `results/` | Public session files (pool and commitment, plus the assignment after the reveal) and their scores. |
+
+## Sessions
+
+| Session | Human | Trained lift, rdseed (MDE) | Trained lift, urandom (MDE) | Hold windows (rdseed / urandom) | Verdict |
+|---|---|---|---|---|---|
+| `h1-20261025-173905-7dee` | 6/6 solved first try, every hold complete | −0.027% (0.033%), p 0.94 | +0.0003% (0.006%), p 0.44 | +0.04% p 0.21 / −0.01% p 0.85 | not detected |
+
+The series is scored with `analyze.py series` and is read as a result only from the fifth
+session on.

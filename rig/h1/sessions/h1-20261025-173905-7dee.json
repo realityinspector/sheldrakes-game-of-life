@@ -102,5 +102,16 @@
  ],
  "trained_count": 6,
  "commitment": "c220f6ad98de4dceff7870dad93b199600aa84e172a338b8b44baf6bb85f69e5",
- "protocol_sha256": "dd85893189b0f12a39a87d2ee6e9f473a2d82cc9b5128f206a405b60803b2cd6"
+ "protocol_sha256": "dd85893189b0f12a39a87d2ee6e9f473a2d82cc9b5128f206a405b60803b2cd6",
+ "revealed": {
+  "order": [
+   451,
+   202,
+   126,
+   211,
+   76,
+   257
+  ],
+  "nonce": "12f8c944518a5d0c08f5371013744b2596eba756a0e61f48e345ce11ce836edb"
+ }
 }
